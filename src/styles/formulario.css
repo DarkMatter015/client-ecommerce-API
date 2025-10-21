@@ -1,0 +1,44 @@
+main {
+    margin-top: 0 !important;
+}
+
+/* a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+a:hover {
+    color: var(--text-color-hover);
+    opacity: 0.9;
+} */
+
+#container-content {
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+}
+
+#content {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.link-home {
+    width: fit-content;
+}
+
+.link-home:hover {
+    opacity: 0.75;
+}
+
+#image-background-forms {
+    width: 350px;
+    min-height: 350px;
+    max-height: 100vh;
+}
+
+label {
+    font-size: 1.0rem;
+}
