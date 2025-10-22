@@ -1,109 +1,205 @@
-import React, { useEffect, useState } from "react";
-import { Menubar } from "primereact/menubar";
-import type { MenuItem } from "primereact/menuitem";
-import { Avatar } from "primereact/avatar";
+import React, { useState } from "react";
 import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/hooks/use-auth";
-import { InputSwitch } from "primereact/inputswitch";
+import { Sidebar } from "primereact/sidebar";
+import { Menu } from "primereact/menu";
+import { useRef } from "react";
+
+import "@/components/top-menu/index.css";
 
 const TopMenu: React.FC = () => {
   const navigate = useNavigate();
-  const user = "user@email.com";
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    return localStorage.getItem("theme") === "dark";
-  });
-  const { authenticated, handleLogout } = useAuth();
-
-  useEffect(() => {
-    const themeLink = document.getElementById("theme-link") as HTMLLinkElement;
-    themeLink.href = darkMode
-      ? "https://unpkg.com/primereact/resources/themes/lara-dark-blue/theme.css"
-      : "https://unpkg.com/primereact/resources/themes/lara-light-blue/theme.css";
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-
-  const handleLogoutClick = () => {
-    handleLogout();
-    navigate("/login");
-  };
-
-  const items: MenuItem[] = authenticated
-    ? [
-        { label: "Home", icon: "pi pi-home", command: () => navigate("/") },        
-      ]
-    : [];
-
-  const start = (
-    <div
-      className="flex align-items-center gap-2 cursor-pointer"
-      onClick={() => navigate("/")}
-    >
-      <img
-        src="/assets/images/utfpr-logo-nb.png"
-        alt="Logo"
-        height={32}
-        style={{ objectFit: "contain" }}
-      />
-      <span className="font-bold text-lg hidden sm:block">PW44S</span>
-    </div>
-  );
-
-  const end = (
-    <div className="flex align-items-center gap-3">
-      <div className="flex items-center gap-2">
-        <i
-          className={`pi pi-sun ${
-            darkMode ? "text-gray-400" : "text-yellow-500"
-          }`}
-          style={{ marginTop: "5px" }}
-        />
-        <InputSwitch
-          checked={darkMode}
-          onChange={(e) => setDarkMode(e.value ?? false)}
-        />
-        <i
-          className={`pi pi-moon ${
-            darkMode ? "text-blue-300" : "text-gray-400"
-          }`}
-          style={{ marginTop: "5px" }}
-        />
-      </div>
-
-      {authenticated && (
-        <>
-          <span className="font-semibold hidden sm:block">{user}</span>
-          <Avatar
-            image="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Caleb"
-            shape="square"
-          />
-          <Button
-            icon="pi pi-sign-out"
-            className="p-button-text"
-            onClick={handleLogoutClick}
-          />
-        </>
-      )}
-    </div>
-  );
-
+  const menuRef = useRef<Menu>(null);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+    
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        width: "100%",
-        zIndex: 1000,
-        backgroundColor: "var(--surface-ground)",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      }}
-      className="fixed top-0 left-0 w-full z-50"
-    >
-      <Menubar model={items} start={start} end={end} />
-    </div>
-  );
+    <>
+      <nav className="navbar fixed top-0 start-0 w-full z-3 shadow-2" aria-label="Navegação principal">
+        <div className="flex justify-content-between align-items-center m-2">
+          <a className="navbar-brand flex align-items-center" href="/" onClick={(e) => { e.preventDefault(); navigate('/') }}>
+            <img width="100" src="/assets/images/logo/logo_riffhouse_red.png" alt="Logo Riffhouse"/>
+          </a>
+
+          {/* Menu para mobile */}
+          <Button
+            icon="pi pi-bars"
+            className="p-button-text lg:hidden"
+            aria-label="Menu navegação"
+            onClick={() => setSidebarVisible(true)}
+          />
+
+          {/* Menu principal - Desktop */}
+          <div className="hidden lg:flex flex-grow-1 justify-content-between align-items-center">
+            <ul className="flex list-none m-0 p-0 gap-1 align-items-center">
+              <li>
+                <Button
+                  label="Home"
+                  className="p-button-text"
+                  onClick={() => navigate('/#home')}
+                />
+              </li>
+              <li>
+                <Button
+                  label="Produtos"
+                  className="p-button-text"
+                  onClick={() => navigate('/#produtos')}
+                />
+              </li>
+              <li>
+                <Button
+                  label="Avaliações"
+                  className="p-button-text"
+                  onClick={() => navigate('/#testimonials')}
+                />
+              </li>
+              <li>
+                <Button
+                  label="Sobre Nós"
+                  className="p-button-text"
+                  onClick={() => navigate('/#about')}
+                />
+              </li>
+            </ul>
+
+            {/* Formulário de busca */}
+            <form className="flex align-items-center justify-content-between gap-2 mx-4 header-search-form" role="search">
+              <InputText
+                name="search"
+                className="w-12rem"
+                type="search"
+                placeholder="Buscar produtos..."
+                aria-label="Pesquisar"
+              />
+              <Button
+                icon="pi pi-search"
+                className="p-button-text"
+                type="submit"
+                aria-label="Pesquisar"
+              />
+            </form>
+
+            {/* Ícones do usuário */}
+            <div className="flex align-items-center gap-3">
+              <Button
+                icon="pi pi-shopping-cart"
+                className="p-button-text"
+                onClick={() => navigate('/carrinho')}
+                badge="0"
+                aria-label="Ver carrinho"
+              />
+              <Button
+                icon="pi pi-user"
+                className="p-button-text"
+                onClick={(e) => menuRef.current?.toggle(e)}
+                aria-label="Menu do usuário"
+              />
+            </div>
+          </div>
+
+          {/* Menu dropdown do usuário */}
+          <Menu
+            ref={menuRef}
+            model={[
+              {
+                label: 'Entrar',
+                icon: 'pi pi-sign-in',
+                command: () => navigate('/login')
+              },
+              {
+                label: 'Cadastrar-se',
+                icon: 'pi pi-user-plus',
+                command: () => navigate('/register')
+              }
+            ]}
+            popup
+          />
+        </div>
+      </nav>
+
+      {/* Sidebar para mobile */}
+      <Sidebar
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
+        className="mobile-menu"
+        position="right"
+        blockScroll
+        aria-label="Menu de navegação móvel"
+      >
+        <div className="flex flex-column gap-3">
+          <div className="flex flex-column gap-2">
+            <h3>Menu</h3>
+            <Button
+              label="Home"
+              className="p-button-text w-full justify-content-start"
+              onClick={() => { navigate('/#home'); setSidebarVisible(false); }}
+            />
+            <Button
+              label="Produtos"
+              className="p-button-text w-full justify-content-start"
+              onClick={() => { navigate('/#produtos'); setSidebarVisible(false); }}
+            />
+            <Button
+              label="Avaliações"
+              className="p-button-text w-full justify-content-start"
+              onClick={() => { navigate('/#testimonials'); setSidebarVisible(false); }}
+            />
+            <Button
+              label="Sobre Nós"
+              className="p-button-text w-full justify-content-start"
+              onClick={() => { navigate('/#about'); setSidebarVisible(false); }}
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            <h3>Conta</h3>
+            <Button
+              icon="pi pi-sign-in"
+              label="Entrar"
+              className="p-button-text w-full justify-content-start"
+              onClick={() => { navigate('/login'); setSidebarVisible(false); }}
+            />
+            <Button
+              icon="pi pi-user-plus"
+              label="Cadastrar-se"
+              className="p-button-text w-full justify-content-start"
+              onClick={() => { navigate('/register'); setSidebarVisible(false); }}
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            <h3>Carrinho</h3>
+            <Button
+              icon="pi pi-shopping-cart"
+              label="Ver Carrinho"
+              badge="0"
+              className="p-button-text w-full justify-content-start"
+              onClick={() => { navigate('/carrinho'); setSidebarVisible(false); }}
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            <h3>Buscar</h3>
+            <form className="flex gap-2 header-search-form" role="search" onSubmit={() => setSidebarVisible(false)}>
+              <InputText
+                name="search"
+                className="w-full"
+                type="search"
+                placeholder="Buscar produtos..."
+                aria-label="Pesquisar"
+              />
+              <Button
+                icon="pi pi-search"
+                className="p-button-text"
+                type="submit"
+                aria-label="Pesquisar"
+              />
+            </form>
+          </div>
+        </div>
+      </Sidebar>
+    </>
+    );
 };
 
 export default TopMenu;

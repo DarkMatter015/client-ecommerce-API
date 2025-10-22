@@ -1,0 +1,125 @@
+.product-page {
+  padding: 1rem;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.breadcrumb a:hover {
+    color: var(--text-color-hover);
+}
+
+.product-image {
+    height: 400px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.product-image img {
+    max-height: 380px;
+    max-width: 400px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.banner {
+    height: 90px;
+    width: 90px;
+    background-color: #fff;
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+.banner img {
+    max-height: 70px;
+    max-width: 70px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+}
+.banner:hover, .banner.active {
+    border-color: var(--green, #27ae60);
+    box-shadow: 0 2px 8px 0 rgba(39,174,96,0.10);
+}
+
+.container a {
+    color: var(--primary-color);
+}
+
+.container a:hover {
+    color: var(--primary-color-darker-hover);
+    opacity: 0.9;
+}
+
+.price-discount {
+    color: var(--green);
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#comprar {
+    background-color: var(--green);
+    font-weight: 600;
+    color: var(--white);
+}
+
+#comprar:hover {
+    background-color: var(--green-hover);
+}
+
+#cep {
+    min-height: 40px;
+}
+
+.input-group-text {
+    background-color: var(--gray-bg);
+    color: var(--text-color);
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.input-group-text:hover {
+    background-color: var(--gray-bg-hover);
+    color: var(--text-color-hover);
+}
+
+@media screen {
+    .product-image img {
+        max-width: 300px;
+    }
+}
+
+/* small helpers */
+.thumbnails {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.w-6rem {
+  width: 6rem !important;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input-group .p-inputtext {
+  flex: 1 1 auto;
+}

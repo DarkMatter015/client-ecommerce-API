@@ -1,0 +1,279 @@
+/* BREADCUMB */
+.breadcrumb a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.breadcrumb a:hover {
+    color: var(--text-color-hover);
+}
+
+/* CARD PRODUTOS */
+.product-item {
+    background-color: #ffffff;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+}
+
+.product-item .descricao p{
+    margin: 0;
+}
+
+.btn-excluir-cart {
+    padding: 0.3rem !important;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,0.1) !important;
+
+    font-size: 0.8rem;
+}
+
+.product-item .banner:hover img {
+    transform: scale(1.05);
+}
+
+.product-item .banner {
+    min-height: 130px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.product-item img {
+    max-height: 100px;
+    max-width: 100px;
+    width: auto;
+    height: auto;
+    transition: transform 0.1s ease-in;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    color: green;
+    font-weight: bold;
+}
+
+.input-quantidade, .input-group {
+    max-width: 250px;
+}
+
+#btn-editar-endereco {
+    border-radius: 50%;
+    padding: 0.2rem;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    background-color: transparent;
+    border: none;
+}
+
+#btn-editar-endereco:hover, #btn-excluir-endereco:hover {
+    background-color: var(--gray-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#btn-excluir-endereco {
+    border-radius: 50%;
+    padding: 0.2rem;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    background-color: transparent;
+    border: none;
+}
+
+@media (max-width: 990px) {
+    .product-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    .product-item img {
+        margin-bottom: 10px;
+    }
+    .product-item > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-item > div:nth-child(3) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .summary-card {
+        margin-top: 20px;
+    }
+    .banner-content h1 {
+        font-size: 1.5rem;
+    }
+    .banner-content p {
+        font-size: 0.9rem;
+    }
+}
+@media (max-width: 576px) {
+    .banner-content h1 {
+        font-size: 1.2rem;
+    }
+    .banner-content p {
+        font-size: 0.8rem;
+    }
+
+    form .input-group i, form .form-label, form input{
+        font-size: 0.8rem !important;
+    }
+    
+    form .text-danger, form .text-success, form #senha-requisitos li {
+        font-size: 0.8rem;
+    }
+
+    #myModalEndereco .modal-content form div{
+        margin-top: 0.5rem;
+    }
+}
+
+
+.div-sumario {
+    top: 90px;;
+    max-height: calc(100vh - 83px);
+    z-index: 1;
+}
+
+.address-card {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.summary-card {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.summary-card h2 {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.summary-card p {
+    margin-bottom: 0rem;
+    font-size: 1.1rem;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#quantidadeTotal {
+    font-size: 1.1rem;
+    color: #555;
+    font-weight: 500;
+}
+#subtotal {
+    font-size: 1.15rem;
+    color: #222;
+    font-weight: 600;
+}
+#descontos {
+    font-size: 1.1rem;
+    color: #1e7e34;
+    font-weight: 500;
+}
+#total {
+    font-size: 1.5rem;
+    color: #008000;
+    font-weight: bold;
+    background: #f8f8f8;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+}
+
+ h3 {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.form-select {
+    font-size: 1rem;
+    border-radius: 5px;
+    color: #444;
+    max-width: fit-content;
+}
+
+.form-select:focus {
+    border-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 5px 2px var(--box-shadow);
+}
+
+.form-select option {
+    font-size: 1rem;
+    color: #444;
+    max-width: fit-content;
+}
+
+.summary-card .btn-success {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+.summary-card .btn-secondary {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 8px;
+}
+
+@media (max-width: 768px) {
+    .summary-card {
+        border-radius: 10px;
+    }
+    #total {
+        font-size: 1.2rem;
+    }
+}
+
+
+/* MODAL FINALIZACAO DE COMPRA */
+    /* .modal {
+        display: block !important; /* Esconde o modal por padrão 
+        position: fixed;
+        z-index: 1000;
+        
+        width: fit-content !important;
+        height: fit-content !important;
+        transition: all 0.3s ease;
+    } */
+
+  #myModalEndereco .modal-content {
+    max-width: 90%;
+    right: 50%;
+    transform: translateX(50%);
+    margin-bottom: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #myModalEndereco .modal-dialog{
+    z-index: 1040;
+  }
+
+  @media screen and (max-width: 768px) {
+    #myModalEndereco .modal-content {
+      max-width: 80%;
+    }
+  }

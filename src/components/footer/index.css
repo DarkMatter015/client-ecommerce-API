@@ -1,0 +1,65 @@
+.footer-container {
+    background-color: var(--primary-color);
+    color: var(--white);
+    position: relative;
+    /* margin-top: 5rem !important; */
+}
+
+.footer-container img.w-full {
+    width: 100%;
+    position: absolute;
+    top: -500px;
+    left: 0;
+}
+
+.footer-container .logo-footer {
+    width: 150px;
+    height: auto;
+}
+
+.footer-container p {
+    margin: 0.5rem 0;
+    color: var(--white);
+}
+
+.footer-container a {
+    text-decoration: none;
+}
+
+.footer-container a p {
+    color: var(--white);
+    transition: opacity 0.2s;
+}
+
+.footer-container a:hover p {
+    opacity: 0.8;
+}
+
+.footer-container .pagamentos {
+    gap: 0.5rem;
+}
+
+.footer-container .pagamentos img {
+    transition: transform 0.2s;
+}
+
+.footer-container .pagamentos img:hover {
+    transform: scale(1.1);
+}
+
+.footer-container .social-media-buttons {
+    gap: 1rem;
+}
+
+.footer-container .social-media-buttons a {
+    color: var(--white);
+    transition: opacity 0.2s;
+}
+
+.footer-container .social-media-buttons a:hover {
+    opacity: 0.8;
+}
+
+.footer-container .social-media-buttons .pi {
+    font-size: 1.5rem;
+}

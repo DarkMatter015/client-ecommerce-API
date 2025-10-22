@@ -1,6 +1,5 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 
 import App from "@/App.tsx";
 
@@ -13,14 +12,7 @@ import "primeicons/primeicons.css"; //icons
 import "primeflex/primeflex.css"; //flex utilities
 import { AuthProvider } from "@/context/AuthContext";
 
-const themeId = "theme-link";
-const themeHref =
-  "https://unpkg.com/primereact/resources/themes/lara-light-blue/theme.css";
-const link = document.createElement("link");
-link.id = themeId;
-link.rel = "stylesheet";
-link.href = themeHref;
-document.head.appendChild(link);
+import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
