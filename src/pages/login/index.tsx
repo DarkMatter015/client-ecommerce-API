@@ -102,7 +102,7 @@ export const LoginPage = () => {
     <div className="flex align-items-center justify-content-center min-h-screen">
       <Toast ref={toast} />
 
-      <div className="h-auto bg-white lg:h-screen col-10 lg:col-7 p-4 shadow-2 border-round mx-auto">
+      <div className="lg:min-h-screen bg-white col-10 lg:col-7 p-4 shadow-2 border-round flex flex-column xl:justify-content-center">
         <header className="text-center">
           <Link to="/" aria-label="Ir para página inicial">
             <img
