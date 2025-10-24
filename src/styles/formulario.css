@@ -12,13 +12,13 @@ a:hover {
     opacity: 0.9;
 } */
 
-#container-content {
+.container-content {
     min-height: 100vh;
     width: 100vw;
     margin: 0;
 }
 
-#content {
+.content {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -33,7 +33,7 @@ a:hover {
     opacity: 0.75;
 }
 
-#image-background-forms {
+.image-background-forms {
     width: 350px;
     min-height: 350px;
     max-height: 100vh;
@@ -41,4 +41,9 @@ a:hover {
 
 label {
     font-size: 1.0rem;
+}
+
+.form-control:focus {
+    border-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 5px 2px var(--box-shadow);
 }

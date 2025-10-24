@@ -1,153 +1,221 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { classNames } from "primereact/utils";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-// import { Card } from "primereact/card";
-import { Link, useNavigate } from "react-router-dom";
-import type { AuthenticationResponse, IUserLogin } from "@/commons/types";
-import AuthService from "@/services/auth-service";
 import { Toast } from "primereact/toast";
-import { useAuth } from  "@/context/hooks/use-auth"; // adicionar a importação do hook useAuth
 
-import '@/styles/formulario.css';
-import { classNames } from "primereact/utils";
+import type { AuthenticationResponse, IUserLogin } from "@/commons/types";
+import { useAuth } from "@/context/hooks/use-auth";
+import AuthService from "@/services/auth-service";
+
+import "@/styles/formulario.css";
+
+// Constantes
+const FORM_DEFAULT_VALUES: IUserLogin = {
+  email: "",
+  password: "",
+};
+
+const VALIDATION_RULES = {
+  email: {
+    required: "Email é obrigatório",
+    pattern: {
+      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+      message: "Email inválido",
+    },
+  },
+  password: {
+    required: "Senha é obrigatória",
+    minLength: {
+      value: 6,
+      message: "A senha deve ter no mínimo 6 caracteres",
+    },
+  },
+} as const;
+
+const TOAST_MESSAGES = {
+  success: {
+    severity: "success" as const,
+    summary: "Sucesso",
+    detail: "Login efetuado com sucesso.",
+    life: 3000,
+  },
+  error: {
+    severity: "error" as const,
+    summary: "Erro",
+    detail: "Falha ao efetuar login. Verifique suas credenciais e tente novamente.",
+    life: 3000,
+  },
+} as const;
+
+const NAVIGATION_DELAY = 1000;
 
 export const LoginPage = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<IUserLogin>({ defaultValues: { email: "", password: "" } });  
-  const navigate = useNavigate();
-  const { login } = AuthService;
-  const toast = useRef<Toast>(null);
-  const [loading, setLoading] = useState(false);
+    formState: { isSubmitting },
+  } = useForm<IUserLogin>({ 
+    defaultValues: FORM_DEFAULT_VALUES,
+    mode: "onBlur",
+  });
 
-  const { handleLogin } =  useAuth(); // A função handleLogin será utilizada para atualizar o contexto com o usuário autenticado.
-  const onSubmit = async (userLogin: IUserLogin) => {
-    setLoading(true);
-    try {
-      const response = await login(userLogin);
-      if (response.success === true && response.data) {
-        const authenticationResponse = response.data as AuthenticationResponse; // Define o objeto com token após a autenticação
-        handleLogin(authenticationResponse); // o contexto é atualizado com os dados da autenticação
-        toast.current?.show({
-          severity: "success",
-          summary: "Sucesso",
-          detail: "Login efetuado com sucesso.",
-          life: 3000,
-        });
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } else {
-        toast.current?.show({
-          severity: "error",
-          summary: "Erro",
-          detail: "Falha ao efetuar login.",
-          life: 3000,
-        });
+  const navigate = useNavigate();
+  const toast = useRef<Toast>(null);
+  const { handleLogin } = useAuth();
+
+  const showToast = useCallback(
+    (type: keyof typeof TOAST_MESSAGES) => {
+      toast.current?.show(TOAST_MESSAGES[type]);
+    },
+    []
+  );
+
+  const onSubmit = useCallback(
+    async (userLogin: IUserLogin) => {
+      try {
+        const response = await AuthService.login(userLogin);
+
+        if (response.success && response.data) {
+          const authenticationResponse = response.data as AuthenticationResponse;
+          handleLogin(authenticationResponse);
+          showToast("success");
+
+          setTimeout(() => {
+            navigate("/", { replace: true });
+          }, NAVIGATION_DELAY);
+        } else {
+          showToast("error");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        showToast("error");
       }
-    } catch {
-      toast.current?.show({
-        severity: "error",
-        summary: "Erro",
-        detail: "Falha ao efetuar login.",
-        life: 3000,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [handleLogin, navigate, showToast]
+  );
+
   return (
-      <div className="flex align-items-center justify-content-center min-h-screen">
+    <div className="flex align-items-center justify-content-center min-h-screen">
       <Toast ref={toast} />
 
-      <div className="h-auto bg-white lg:h-screen col-10 lg:col-7 p-4 shadow-2 border-round mx-auto ">
-        <div className="text-center">
-          <Link to="/">
-            <img src="/assets/images/logo/logo_riffhouse_red.png" alt="Logo" id="logo" className="w-12rem" />
+      <div className="h-auto bg-white lg:h-screen col-10 lg:col-7 p-4 shadow-2 border-round mx-auto">
+        <header className="text-center">
+          <Link to="/" aria-label="Ir para página inicial">
+            <img
+              src="/assets/images/logo/logo_riffhouse_red.png"
+              alt="Logo Riff House"
+              className="w-12rem"
+            />
           </Link>
-          <div className="text-900 text-5xl font-medium mb-3 mt-5">Entre na Sua Conta</div>
-        </div>
-      
-        <form className="p-fluid flex flex-column gap-4" onSubmit={handleSubmit(onSubmit)} autoComplete="on">
+          <h1 className="text-900 text-5xl font-medium mb-3 mt-5">
+            Entre na Sua Conta
+          </h1>
+        </header>
 
-          <div className="field input-group">
-            <label htmlFor="email">Email</label>
-              <Controller
-                name="email"
-                control={control}
-                rules={{
-                  required: 'Email é obrigatório',
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Email inválido'
-                  }
-                }}
-                render={({ field, fieldState }) => (
-                  <InputText 
-                    id={field.name} 
+        <form
+          className="p-fluid flex flex-column gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+          autoComplete="on"
+          noValidate
+        >
+          <div>
+            <label htmlFor="email" className="block mb-2">
+              Email
+            </label>
+            <Controller
+              name="email"
+              control={control}
+              rules={VALIDATION_RULES.email}
+              render={({ field, fieldState }) => (
+                <>
+                  <InputText
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="seu@email.com"
+                    aria-describedby="email-error"
+                    aria-invalid={!!fieldState.error}
+                    className={classNames({ "p-invalid": fieldState.error })}
                     {...field}
-                    className={classNames({ 'p-invalid': fieldState.error }, "form-control")}
                   />
-                )}
-              />
-              
-            {errors.email && <small className="p-error">{errors.email.message}</small>}
+                  {fieldState.error && (
+                    <small id="email-error" className="p-error block mt-1">
+                      {fieldState.error.message}
+                    </small>
+                  )}
+                </>
+              )}
+            />
           </div>
 
-          <div className="field input-group">
-            <label htmlFor="password">Senha</label>
-              <Controller
-                name="password"
-                control={control}
-                rules={{ 
-                  required: 'Senha é obrigatória',
-                  minLength: {
-                    value: 6,
-                    message: 'A senha deve ter no mínimo 6 caracteres'
-                  }
-                }}
-                render={({ field, fieldState }) => (
-                  <Password 
-                    id={field.name} 
-                    {...field}
-                    className={classNames({ 'p-invalid': fieldState.error }, "form-control")}
+          <div>
+            <label htmlFor="password" className="block mb-2">
+              Senha
+            </label>
+            <Controller
+              name="password"
+              control={control}
+              rules={VALIDATION_RULES.password}
+              render={({ field, fieldState }) => (
+                <>
+                  <Password
+                    id="password"
+                    autoComplete="current-password"
+                    placeholder="Digite sua senha"
+                    aria-describedby="password-error"
+                    aria-invalid={!!fieldState.error}
+                    className={classNames({ "p-invalid": fieldState.error })}
                     toggleMask
                     feedback={false}
+                    {...field}
                   />
-                )}
-              />
-              
-            {errors.password && <small className="p-error">{errors.password.message}</small>}
+                  {fieldState.error && (
+                    <small id="password-error" className="p-error block mt-1">
+                      {fieldState.error.message}
+                    </small>
+                  )}
+                </>
+              )}
+            />
           </div>
 
-          <Button 
-            label="Entrar" 
+          <Button
+            label="Entrar"
             type="submit"
-            className="w-full btn-default text-2xl" 
-            loading={loading}
-            id="login-btn"
+            className="w-full btn-default text-2xl"
+            loading={isSubmitting}
             disabled={isSubmitting}
+            aria-label="Entrar na conta"
           />
 
           <div className="text-center flex flex-column lg:flex-row justify-content-center align-items-center gap-3">
-            <span className="text-lg">Não tem uma conta? </span>
-            <Link to="/register" className="btn-outline text-xl">Cadastre-se</Link>
+            <span className="text-lg">Não tem uma conta?</span>
+            <Link
+              to="/register"
+              className="btn-outline text-xl"
+              aria-label="Ir para página de cadastro"
+            >
+              Cadastre-se
+            </Link>
           </div>
         </form>
       </div>
 
-      <div className="hidden lg:flex col-5 align-items-center justify-content-center">
-        <img 
-          src="/assets/images/login/fundo_login.svg" 
-          className="max-w-30rem" 
-          alt="Imagem de Cadastro" 
-          id="image-background-forms"
+      <aside
+        className="hidden lg:flex col-5 align-items-center justify-content-center"
+        aria-hidden="true"
+      >
+        <img
+          src="/assets/images/login/fundo_login.svg"
+          className="image-background-forms"
+          alt="mulher sentada dando boas vindas"
+          role="presentation"
         />
-      </div>
-    </div> 
+      </aside>
+    </div>
   );
 };

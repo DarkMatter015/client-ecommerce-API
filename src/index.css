@@ -39,12 +39,7 @@ main {
     display: block;
 }
 
-/* INPUTS FORMS */
 
-.form-control:focus {
-    border-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 0px 5px 2px var(--box-shadow);
-}
 
 /* BOTOES */
 /* BOTÃO VERMELHO PADRÃO */
