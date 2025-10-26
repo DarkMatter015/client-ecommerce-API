@@ -11,7 +11,7 @@ import type { AuthenticationResponse, IUserLogin } from "@/commons/types";
 import { useAuth } from "@/context/hooks/use-auth";
 import AuthService from "@/services/auth-service";
 
-import "@/styles/formulario.css";
+import "@/styles/form.css";
 
 // Constantes
 const FORM_DEFAULT_VALUES: IUserLogin = {

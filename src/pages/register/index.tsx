@@ -10,7 +10,7 @@ import { Toast } from "primereact/toast";
 import type { IUserRegister } from "@/commons/types";
 import AuthService from "@/services/auth-service";
 
-import "@/styles/formulario.css";
+import "@/styles/form.css";
 
 // Constantes
 const FORM_DEFAULT_VALUES: IUserRegister = {

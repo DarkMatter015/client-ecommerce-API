@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "primereact/sidebar";
 import { Menu } from "primereact/menu";
-import "@/components/top-menu/index.css";
+import "./top-menu.style.css";
 
 const TopMenu: React.FC = () => {
   const navigate = useNavigate();

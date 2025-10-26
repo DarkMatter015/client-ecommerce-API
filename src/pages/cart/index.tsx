@@ -5,7 +5,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import './index.css';
+import './cart.style.css';
 
 /* ===========================
    TYPES & INTERFACES

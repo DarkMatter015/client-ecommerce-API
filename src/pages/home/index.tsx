@@ -1,6 +1,10 @@
 import React from 'react';
 import { Button } from 'primereact/button';
-import './index.css';
+import './home.style.css';
+import { useEffect, useState } from 'react';
+import type { Product } from '../../commons/types/product';
+import { getProducts } from '../../services/product-service';
+import { CardProduct } from '@/components/card-product';
 
 /*
     Refatorado: HomePage dividido em pequenas seções (Hero, Products, Testimonials, About)
@@ -21,14 +25,14 @@ const Hero: React.FC = () => {
                 <p className="hero-subtitle">Instrumentos musicais de qualidade para músicos apaixonados. Encontre o seu som na RiffHouse.</p>
 
                 <div className="hero-actions">
-                    <Button className="btn-outline" onClick={() => document.getElementById('produtos')?.scrollIntoView({ behavior: 'smooth' })}>Ver Produtos</Button>
+                    <Button className="btn-outline" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>Ver Products</Button>
                     <Button className="btn-outline" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>Sobre Nós</Button>
                 </div>
 
                 <div className="social-media-buttons">
-                    <a className="p-link" href="#" aria-label="Facebook"><i className="pi pi-facebook" /></a>
-                    <a className="p-link" href="#" aria-label="Instagram"><i className="pi pi-instagram" /></a>
-                    <a className="p-link" href="#" aria-label="Whatsapp"><i className="pi pi-whatsapp" /></a>
+                    <a className="p-link" href="#" aria-label="Facebook" title='facebook'><i className="pi pi-facebook" /></a>
+                    <a className="p-link" href="#" aria-label="Instagram" title='instagram'><i className="pi pi-instagram" /></a>
+                    <a className="p-link" href="#" aria-label="Whatsapp" title='whatsapp'><i className="pi pi-whatsapp" /></a>
                 </div>
             </div>
 
@@ -40,16 +44,42 @@ const Hero: React.FC = () => {
 };
 
 const Products: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await getProducts(0, 10);
+                // response is a Page<Product>
+                setProducts(response.content);
+            } catch (err) {
+                setError('Erro ao carregar products. Por favor, tente novamente mais tarde.');
+                console.error('Erro ao buscar products:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    if (loading) return <div className="loading">Carregando products...</div>;
+    if (error) return <div className="error">{error}</div>;
+
     return (
-        <section id="produtos" className="section produtos-section">
+        <section id="products" className="section products-section">
             <div className="section-inner">
                 <div className="section-header">
-                    <h2 className="section-title left">Produtos</h2>
-                    <p className="section-subtitle left">Os melhores produtos feitos para você!</p>
+                    <h2 className="section-title">Products</h2>
+                    <p className="section-subtitle">Os melhores products feitos para você!</p>
                 </div>
 
-                <div id="produtos-container" className="produtos-grid" role="grid" aria-label="Grade de produtos">
-                    {/* Produtos serão carregados dinamicamente aqui */}
+                <div id="products-container" className="products-grid" role="grid" aria-label="Grade de products">
+                        {products.map((product) => (
+                            <CardProduct key={product.id} product={product} />
+                        ))}
                 </div>
             </div>
         </section>
@@ -66,7 +96,7 @@ const Testimonials: React.FC = () => {
 
                 <div className="testimonials-content">
                     <h2 className="section-title">Avaliações</h2>
-                    <p className="section-subtitle">O que nossos clientes acham dos nossos produtos</p>
+                    <p className="section-subtitle">O que nossos clientes acham dos nossos products</p>
 
                     <div className="feedbacks">
                         <article className="card-feedback">
@@ -83,7 +113,7 @@ const Testimonials: React.FC = () => {
                             <div className="feedback-body">
                                 <strong>Aline Silveira</strong>
                                 <div className="rating" aria-hidden>★★★★★</div>
-                                <p>Excelente atendimento e variedade incrível de produtos musicais. Comprei minha guitarra e chegou antes do prazo!</p>
+                                <p>Excelente atendimento e variedade incrível de products musicais. Comprei minha guitarra e chegou antes do prazo!</p>
                             </div>
                         </article>
                     </div>
@@ -100,7 +130,7 @@ const About: React.FC = () => (
         <div className="section-inner">
             <div className="about-text">
                 <h2 className='section-title'>Sobre a RiffHouse</h2>
-                <p>Na RiffHouse, acreditamos que um instrumento musical não é apenas uma ferramenta, mas uma extensão da alma de quem toca. Nascemos da vontade de unir arte, autenticidade e experiência sonora, criando um espaço onde músicos encontram mais do que produtos — encontram identidade.</p>
+                <p>Na RiffHouse, acreditamos que um instrumento musical não é apenas uma ferramenta, mas uma extensão da alma de quem toca. Nascemos da vontade de unir arte, autenticidade e experiência sonora, criando um espaço onde músicos encontram mais do que products — encontram identidade.</p>
                 <p>Nossa loja é um tributo à expressão criativa. Cada guitarra, violão ou acessório carrega consigo história, estilo e personalidade, pensados nos mínimos detalhes para transformar cada nota tocada em algo memorável.</p>
             </div>
             <div className="about-image">
