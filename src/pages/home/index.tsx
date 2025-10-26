@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
                 <p className="hero-subtitle">Instrumentos musicais de qualidade para músicos apaixonados. Encontre o seu som na RiffHouse.</p>
 
                 <div className="hero-actions">
-                    <Button className="btn-outline" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>Ver Products</Button>
+                    <Button className="btn-outline" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>Ver Produtos</Button>
                     <Button className="btn-outline" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>Sobre Nós</Button>
                 </div>
 
@@ -55,8 +55,8 @@ const Products: React.FC = () => {
                 // response is a Page<Product>
                 setProducts(response.content);
             } catch (err) {
-                setError('Erro ao carregar products. Por favor, tente novamente mais tarde.');
-                console.error('Erro ao buscar products:', err);
+                setError('Erro ao carregar produtos. Por favor, tente novamente mais tarde.');
+                console.error('Erro ao buscar produtos:', err);
             } finally {
                 setLoading(false);
             }
@@ -72,11 +72,11 @@ const Products: React.FC = () => {
         <section id="products" className="section products-section">
             <div className="section-inner">
                 <div className="section-header">
-                    <h2 className="section-title">Products</h2>
-                    <p className="section-subtitle">Os melhores products feitos para você!</p>
+                    <h2 className="section-title">Produtos</h2>
+                    <p className="section-subtitle">Os melhores produtos feitos para você!</p>
                 </div>
 
-                <div id="products-container" className="products-grid" role="grid" aria-label="Grade de products">
+                <div id="products-container" className="products-grid" role="grid" aria-label="Grade de produtos">
                         {products.map((product) => (
                             <CardProduct key={product.id} product={product} />
                         ))}
@@ -96,7 +96,7 @@ const Testimonials: React.FC = () => {
 
                 <div className="testimonials-content">
                     <h2 className="section-title">Avaliações</h2>
-                    <p className="section-subtitle">O que nossos clientes acham dos nossos products</p>
+                    <p className="section-subtitle">O que nossos clientes acham dos nossos produtos</p>
 
                     <div className="feedbacks">
                         <article className="card-feedback">
@@ -113,12 +113,16 @@ const Testimonials: React.FC = () => {
                             <div className="feedback-body">
                                 <strong>Aline Silveira</strong>
                                 <div className="rating" aria-hidden>★★★★★</div>
-                                <p>Excelente atendimento e variedade incrível de products musicais. Comprei minha guitarra e chegou antes do prazo!</p>
+                                <p>Excelente atendimento e variedade incrível de produtos musicais. Comprei minha guitarra e chegou antes do prazo!</p>
                             </div>
                         </article>
                     </div>
 
-                    <button className="btn-outline mt-3">Ver mais Avaliações</button>
+                    <div>
+                        <Button className="btn-outline mt-3">
+                            Ver mais Avaliações
+                        </Button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -130,7 +134,7 @@ const About: React.FC = () => (
         <div className="section-inner">
             <div className="about-text">
                 <h2 className='section-title'>Sobre a RiffHouse</h2>
-                <p>Na RiffHouse, acreditamos que um instrumento musical não é apenas uma ferramenta, mas uma extensão da alma de quem toca. Nascemos da vontade de unir arte, autenticidade e experiência sonora, criando um espaço onde músicos encontram mais do que products — encontram identidade.</p>
+                <p>Na RiffHouse, acreditamos que um instrumento musical não é apenas uma ferramenta, mas uma extensão da alma de quem toca. Nascemos da vontade de unir arte, autenticidade e experiência sonora, criando um espaço onde músicos encontram mais do que produtos — encontram identidade.</p>
                 <p>Nossa loja é um tributo à expressão criativa. Cada guitarra, violão ou acessório carrega consigo história, estilo e personalidade, pensados nos mínimos detalhes para transformar cada nota tocada em algo memorável.</p>
             </div>
             <div className="about-image">

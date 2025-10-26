@@ -10,10 +10,6 @@ import { getProductById } from '@/services/product-service';
 import type { Product } from '@/commons/types/product';
 
 /* ===========================
-   TYPES & MOCK DATA
-   =========================== */
-
-/* ===========================
    HELPERS
    =========================== */
 const formatCurrency = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
