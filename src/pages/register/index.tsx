@@ -224,7 +224,7 @@ export const RegisterPage = () => {
                 <>
                   <div className="p-inputgroup w-full">
                     <Password
-                      id="password"
+                      inputId="password"
                       autoComplete="new-password"
                       placeholder="Digite uma senha forte"
                       aria-describedby="password-error"
@@ -265,7 +265,7 @@ export const RegisterPage = () => {
                 <>
                   <div className="p-inputgroup w-full">
                     <Password
-                      id="confirmPassword"
+                      inputId="confirmPassword"
                       autoComplete="new-password"
                       placeholder="Digite a senha novamente"
                       aria-describedby="confirmPassword-error"

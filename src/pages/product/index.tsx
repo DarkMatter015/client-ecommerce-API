@@ -1,36 +1,17 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react';
 import './product.style.css';
 import { Button } from 'primereact/button';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getProductById } from '@/services/product-service';
+import type { Product } from '@/commons/types/product';
 
 /* ===========================
    TYPES & MOCK DATA
    =========================== */
-type Product = {
-  id: number;
-  nome: string;
-  marca?: string;
-  categoria?: string;
-  preco: number;
-  descricao: string;
-  imagem: string;
-  miniaturas?: string[];
-};
-
-const SAMPLE_PRODUCT: Product = {
-  id: 1,
-  nome: 'Guitarra Exemplo',
-  marca: 'Fender',
-  categoria: 'Guitarras',
-  preco: 1999.99,
-  descricao: 'Uma guitarra de exemplo com som incrível e acabamento premium. Ideal para estúdio e shows.',
-  imagem: '/assets/images/home/person1.jfif',
-  miniaturas: ['/assets/images/home/person1.jfif', '/assets/images/home/person2.jfif']
-};
 
 /* ===========================
    HELPERS
@@ -42,22 +23,34 @@ const formatCurrency = (value: number) => value.toLocaleString('pt-BR', { minimu
    =========================== */
 const ProductPage: React.FC = () => {
   const navigate = useNavigate();
+  const params = useParams();
+  const idParam = params.id;
   const toast = useRef<Toast | null>(null);
+  const [produto, setProduto] = useState<Product>({} as Product);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [produto] = useState<Product>(SAMPLE_PRODUCT);
   const [quantity, setQuantity] = useState<number>(1);
   const [cep, setCep] = useState<string>('');
-  const [mainImage, setMainImage] = useState<string>(produto.imagem);
+  const [mainImage, setMainImage] = useState<string>(produto.urlImage);
   const [zoomVisible, setZoomVisible] = useState(false);
 
-  const thumbnails = useMemo(() => [produto.imagem, ...(produto.miniaturas ?? [])], [produto]);
+  // thumbnails: ensure we always pass an array of image urls
+  const thumbnails = useMemo(() => {
+    const arr: string[] = [];
+    if (produto.urlImage) arr.push(produto.urlImage);
+    // if future data has an array field like 'miniaturas', include them
+    const mini = (produto as any).miniaturas;
+    if (Array.isArray(mini)) arr.push(...mini);
+    return arr;
+  }, [produto]);
 
-  const pricePerUnit = useMemo(() => produto.preco, [produto.preco]);
+  const pricePerUnit = useMemo(() => produto.price, [produto.price]);
 
   const handleAddToCart = useCallback(() => {
     // TODO: integrate with cart context or service
-    toast.current?.show({ severity: 'success', summary: 'Adicionado', detail: `${produto.nome} adicionado ao carrinho`, life: 2000 });
-  }, [produto.nome]);
+    toast.current?.show({ severity: 'success', summary: 'Adicionado', detail: `${produto.name} adicionado ao carrinho`, life: 2000 });
+  }, [produto.name]);
 
   const handleBuyNow = useCallback(() => {
     // placeholder: add to cart then navigate
@@ -68,6 +61,36 @@ const ProductPage: React.FC = () => {
     // todo: replace with API call
     alert(`Calculando frete para CEP: ${cep}`);
   }, [cep]);
+  
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!idParam) {
+        setError('ID do produto não encontrado na URL');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await getProductById(idParam);
+        setProduto(response);
+      } catch (err) {
+        setError('Erro ao carregar produto. Por favor, tente novamente mais tarde.');
+        console.error('Erro ao buscar produto:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    setMainImage(produto.urlImage);
+    fetchProduct();
+  }, [idParam, produto.urlImage]);
+
+  if (loading) return <div className="loading">Carregando produtos ...</div>;
+  if (error) return <div className="error">{error}</div>;
+
+
+  
+
+  
 
   const handleThumbnailKey = (e: React.KeyboardEvent, src: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -83,8 +106,8 @@ const ProductPage: React.FC = () => {
       <div className="container">
         <div className="grid">
           <div className="col-12 lg:col-6 flex flex-column align-items-center">
-            <div className="product-image border" role="img" aria-label={`Imagem do produto ${produto.nome}`} onClick={() => setZoomVisible(true)}>
-              <img id="main-image" src={mainImage} alt={produto.nome} />
+            <div className="product-image border" role="img" aria-label={`Imagem do produto ${produto.name}`} onClick={() => setZoomVisible(true)}>
+              <img id="main-image" src={mainImage} alt={produto.name} />
             </div>
 
             <div className="thumbnails" role="list" aria-label="Miniaturas do produto">
@@ -97,11 +120,11 @@ const ProductPage: React.FC = () => {
                     className={`banner thumbnail-image ${isActive ? 'active' : ''}`}
                     tabIndex={0}
                     aria-pressed={isActive}
-                    aria-label={`Selecionar imagem ${idx + 1}`}
+                    aria-label={`Selecionar urlImage ${idx + 1}`}
                     onClick={() => setMainImage(src)}
                     onKeyDown={(e) => handleThumbnailKey(e, src)}
                   >
-                    <img src={src} alt={`${produto.nome} miniatura ${idx + 1}`} title={produto.nome} />
+                    <img src={src} alt={`${produto.name} miniatura ${idx + 1}`} title={produto.name} />
                   </div>
                 );
               })}
@@ -109,8 +132,8 @@ const ProductPage: React.FC = () => {
           </div>
 
           <div className="col-12 lg:col-6 mt-0">
-            <h1 className="product-title">{produto.nome}</h1>
-            <p className="mb-0"><i>{produto.marca} - {produto.categoria}</i></p>
+            <h1 className="product-title">{produto.name}</h1>
+            <p className="mb-0"><i>{produto.name} - {produto.category.name}</i></p>
             <div className="mb-2 h6">
               <span className="text-warning h4" aria-hidden>★★★★★</span>
               <span className="sr-only">5 de 5 estrelas</span>
@@ -127,7 +150,7 @@ const ProductPage: React.FC = () => {
 
             <div className="mb-3">
               <label htmlFor="quantity" className="form-label"><strong>Quantidade</strong></label>
-              <InputNumber id="quantity" value={quantity} onValueChange={(e) => setQuantity(e.value ?? 1)} showButtons inputClassName="w-6rem" min={1} aria-label="Quantidade" />
+              <InputNumber inputId='quantity' value={quantity} onValueChange={(e) => setQuantity(e.value ?? 1)} showButtons inputClassName="w-6rem" min={1} aria-label="Quantidade" />
             </div>
 
             <div className="mb-3 mt-3">
@@ -147,14 +170,14 @@ const ProductPage: React.FC = () => {
 
           <div className="col-12">
             <h4><strong>Descrição</strong></h4>
-            <p>{produto.descricao}</p>
+            <p>{produto.description}</p>
           </div>
         </div>
       </div>
 
-      <Dialog header={produto.nome} visible={zoomVisible} style={{ width: '90vw', maxWidth: '800px' }} onHide={() => setZoomVisible(false)}>
+      <Dialog header={produto.name} visible={zoomVisible} style={{ width: '90vw', maxWidth: '800px' }} onHide={() => setZoomVisible(false)}>
         <div style={{ textAlign: 'center' }}>
-          <img src={mainImage} alt={produto.nome} style={{ maxWidth: '100%', height: 'auto' }} />
+          <img src={mainImage} alt={produto.name} style={{ maxWidth: '100%', height: 'auto' }} />
         </div>
       </Dialog>
     </div>

@@ -163,7 +163,7 @@ export const LoginPage = () => {
               render={({ field, fieldState }) => (
                 <>
                   <Password
-                    id="password"
+                    inputId="password"
                     autoComplete="current-password"
                     placeholder="Digite sua senha"
                     aria-describedby="password-error"

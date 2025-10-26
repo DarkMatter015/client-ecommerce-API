@@ -65,7 +65,7 @@ const Products: React.FC = () => {
         fetchProducts();
     }, []);
 
-    if (loading) return <div className="loading">Carregando products...</div>;
+    if (loading) return <div className="loading">Carregando produtos ...</div>;
     if (error) return <div className="error">{error}</div>;
 
     return (
