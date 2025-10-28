@@ -51,8 +51,8 @@ const Products: React.FC = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
+                // fazer uma paginação de produtos ou "carregar mais" para buscar mais produtos
                 const response = await getProducts(0, 10);
-                // response is a Page<Product>
                 setProducts(response.content);
             } catch (err) {
                 setError('Erro ao carregar produtos. Por favor, tente novamente mais tarde.');
@@ -65,9 +65,6 @@ const Products: React.FC = () => {
         fetchProducts();
     }, []);
 
-    if (loading) return <div className="loading">Carregando produtos ...</div>;
-    if (error) return <div className="error">{error}</div>;
-
     return (
         <section id="products" className="section products-section">
             <div className="section-inner">
@@ -75,6 +72,11 @@ const Products: React.FC = () => {
                     <h2 className="section-title">Produtos</h2>
                     <p className="section-subtitle">Os melhores produtos feitos para você!</p>
                 </div>
+
+                {loading ? <div className="loading">Carregando produtos ...</div> : null}
+                
+                {error ? <div className="error">{error} <i className='pi pi-exclamation-circle'></i> </div> : null}
+                
 
                 <div id="products-container" className="products-grid" role="grid" aria-label="Grade de produtos">
                         {products.map((product) => (

@@ -1,0 +1,7 @@
+.password-criteria-container .criteria-item.valid{
+    color: green;
+}
+
+.password-criteria-container .criteria-item.invalid{
+    color: red;
+}
