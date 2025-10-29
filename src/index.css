@@ -33,7 +33,7 @@ body {
     font-family: 'Sora', sans-serif;
 }
 
-main {
+.home-main {
     margin-top: 70px !important;
     min-height: 100vh;
     display: block;

@@ -4,7 +4,7 @@ import Footer from "../footer";
 
 export function Layout() {
   const location = useLocation();
-  const isHome = location.pathname === '/' || location.pathname === '/home';
+  const isHome = location.pathname != '/login' && location.pathname != '/register';
 
   return (
     <>

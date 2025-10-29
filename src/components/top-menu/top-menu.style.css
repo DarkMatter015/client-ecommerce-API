@@ -47,8 +47,6 @@
 .navbar-logo {
   display: flex;
   align-items: center;
-  text-decoration: none;
-  flex-shrink: 0;
 }
 
 .logo-image {
@@ -80,6 +78,7 @@
 
 .menu-link {
   background: transparent;
+  text-decoration: none;
   border: none;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
