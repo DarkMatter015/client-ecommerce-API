@@ -6,6 +6,7 @@ import { RequireAuth } from "@/components/require-auth";
 import { Layout } from "@/components/layout";
 import ProductPage from "@/pages/product";
 import CartPage from "@/pages/cart";
+import CheckoutPage from "@/pages/checkout";
 
 export function AppRoutes() {
   return (
@@ -22,10 +23,10 @@ export function AppRoutes() {
           <Route path="/produto/:id" element={<ProductPage />} />
 
           <Route path="/carrinho" element={<CartPage />} />
-
+          
+            <Route path="/finalizar" element={<CheckoutPage />} />
         {/* protected routes */}
         <Route element={<RequireAuth />}>
-            
         </Route>
       </Route>
     </Routes>

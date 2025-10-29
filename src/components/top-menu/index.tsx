@@ -45,6 +45,7 @@ const TopMenu: React.FC = () => {
   // Templates and search method following PrimeReact TemplateDemo pattern
   const panelFooterTemplate = () => {
     const total = filteredProducts.reduce((sum, g) => sum + g.items.length, 0);
+    if (!total) return null;
     return (
       <div className="py-2 px-3">{total} resultados encontrados</div>
     );
@@ -116,7 +117,6 @@ const TopMenu: React.FC = () => {
       try {
         const resp = await getAllProducts();
         if (!mounted) return;
-        // resp is Page<Product>
         setProducts(resp.content || []);
       } catch (err) {
         console.error('Erro ao carregar produtos para autocomplete', err);

@@ -11,6 +11,7 @@ import type { IUserRegister } from "@/commons/types";
 import AuthService from "@/services/auth-service";
 
 import "@/styles/form.css";
+import "./register.style.css";
 
 // Constantes
 const FORM_DEFAULT_VALUES: IUserRegister = {
@@ -19,6 +20,14 @@ const FORM_DEFAULT_VALUES: IUserRegister = {
   password: "",
   confirmPassword: "",
 };
+
+const PASSWORD_CRITERIA = [
+  { label: "Pelo menos 6 caracteres", regex: /.{6,}/ },
+  { label: "Pelo menos uma letra minúscula (a-z)", regex: /[a-z]/ },
+  { label: "Pelo menos uma letra maiúscula (A-Z)", regex: /[A-Z]/ },
+  { label: "Pelo menos um número (0-9)", regex: /\d/ },
+  { label: "Pelo menos um caractere especial (@, $, !, %, *, ?, &)", regex: /[@$!%*?&]/ },
+];
 
 const VALIDATION_RULES = {
   displayName: {
@@ -41,18 +50,11 @@ const VALIDATION_RULES = {
       value: 6,
       message: "A senha deve ter no mínimo 6 caracteres",
     },
-    validate: {
-      hasLower: (value: string) =>
-        /^(?=.*[a-z])/.test(value) ||
-        "A senha deve conter pelo menos uma letra minúscula",
-      hasUpper: (value: string) =>
-        /^(?=.*[A-Z])/.test(value) ||
-        "A senha deve conter pelo menos uma letra maiúscula",
-      hasNumber: (value: string) =>
-        /^(?=.*\d)/.test(value) || "A senha deve conter pelo menos um número",
-      hasSpecialChar: (value: string) =>
-        /^(?=.*[@$!%*?&])/.test(value) ||
-        "A senha deve conter pelo menos um caractere especial",
+    validate: (value: string) => {
+      for (const criteria of PASSWORD_CRITERIA) {
+        if (!criteria.regex.test(value)) return "A senha não atende a todos os critérios.";
+      }
+      return true;
     },
   },
 } as const;
@@ -82,7 +84,7 @@ export const RegisterPage = () => {
     watch,
   } = useForm<IUserRegister>({
     defaultValues: FORM_DEFAULT_VALUES,
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   const navigate = useNavigate();
@@ -227,7 +229,7 @@ export const RegisterPage = () => {
                       inputId="password"
                       autoComplete="new-password"
                       placeholder="Digite uma senha forte"
-                      aria-describedby="password-error"
+                      aria-describedby="password"
                       aria-invalid={!!fieldState.error}
                       className={classNames({ "p-invalid": fieldState.error }, "w-full")}
                       inputClassName="w-full"
@@ -239,11 +241,24 @@ export const RegisterPage = () => {
                       <i className="pi pi-lock" aria-hidden="true"></i>
                     </span>
                   </div>
+                  {/* Feedback visual da senha */}
                   {fieldState.error && (
-                    <small id="password-error" className="p-error block mt-1">
-                      {fieldState.error.message}
-                    </small>
+                    <div className="password-criteria-container mt-2">
+                    {PASSWORD_CRITERIA.map((criteria, index) => {
+                      const isValid = criteria.regex.test(passwordValue);
+                      return (
+                        <div key={index} className={`criteria-item ${isValid ? 'valid' : 'invalid'}`}>
+                          <i className={classNames('pi', {
+                            'pi-check-circle': isValid,
+                            'pi-times-circle': !isValid
+                          })} aria-hidden="true"></i>
+                          <span>{criteria.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
                   )}
+                  
                 </>
               )}
             />
