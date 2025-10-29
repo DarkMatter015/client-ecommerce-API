@@ -7,7 +7,8 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 
-import type { AuthenticationResponse, IUserLogin } from "@/commons/types";
+import type { IUserLogin } from "@/commons/types/form";
+import type { AuthenticationResponse } from "@/commons/types/auth";
 import { useAuth } from "@/context/hooks/use-auth";
 import AuthService from "@/services/auth-service";
 

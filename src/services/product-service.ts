@@ -1,4 +1,5 @@
-import type { Page, Product } from '../commons/types/product';
+import type { Product } from '../commons/types/product';
+import type { Page } from '../commons/types/types';
 import { api } from '../lib/axios';
 
 type ApiProduct = Record<string, any>;
