@@ -5,7 +5,7 @@ export interface IResponse {
     data?: object
 }
 
-export interface Page<T> {
+export interface IPage<T> {
     content: T[];
     totalElements: number;
     totalPages: number;

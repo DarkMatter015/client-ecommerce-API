@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import './home.style.css';
 import { useEffect, useState } from 'react';
-import type { Product } from '../../commons/types/product';
-import { getProducts } from '../../services/product-service';
+import type { IProduct } from '../../commons/types/product';
+import { getAllProductsPageable } from '../../services/product-service';
 import { CardProduct } from '@/components/card-product';
 
 /*
@@ -44,7 +44,7 @@ const Hero: React.FC = () => {
 };
 
 const Products: React.FC = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<IProduct[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -52,7 +52,7 @@ const Products: React.FC = () => {
         const fetchProducts = async () => {
             try {
                 // fazer uma paginação de produtos ou "carregar mais" para buscar mais produtos
-                const response = await getProducts(0, 10);
+                const response = await getAllProductsPageable(0, 10);
                 setProducts(response.content);
             } catch (err) {
                 setError('Erro ao carregar produtos. Por favor, tente novamente mais tarde.');

@@ -1,10 +1,10 @@
-import type { Product } from '../commons/types/product';
-import type { Page } from '../commons/types/types';
+import type { IProduct } from '../commons/types/product';
+import type { IPage } from '../commons/types/types';
 import { api } from '../lib/axios';
 
 type ApiProduct = Record<string, any>;
 
-const mapApiToProduct = (item: ApiProduct): Product => {
+const mapApiToProduct = (item: ApiProduct): IProduct => {
     return {
         id: item.id ?? item.ID ?? 0,
         name:  item.name ?? '',
@@ -15,7 +15,7 @@ const mapApiToProduct = (item: ApiProduct): Product => {
     };
 };
 
-const normalizePage = (data: any, page = 0, size = 10): Page<Product> => {
+const normalizePage = (data: any, page = 0, size = 10): IPage<IProduct> => {
     // If API returned an array
     if (Array.isArray(data)) {
         const content = data.map(mapApiToProduct);
@@ -66,7 +66,7 @@ const normalizePage = (data: any, page = 0, size = 10): Page<Product> => {
     };
 };
 
-export const getProducts = async (page = 0, size = 10): Promise<Page<Product>> => {
+export const getAllProductsPageable = async (page = 0, size = 10): Promise<IPage<IProduct>> => {
     try {
         const response = await api.get(`/products?page=${page}&size=${size}`);
         return normalizePage(response.data, page, size);
@@ -76,17 +76,7 @@ export const getProducts = async (page = 0, size = 10): Promise<Page<Product>> =
     }
 };
 
-export const getAllProducts = async (): Promise<Page<Product>> => {
-    try {
-        const response = await api.get(`/products`);
-        return normalizePage(response.data);
-    } catch (err) {
-            console.error('Erro ao buscar todos os produtos na rota /products', err);
-            return normalizePage([]);
-    }
-};
-
-export const getProductById = async (id: string): Promise<Product> => {
+export const getProductById = async (id: string): Promise<IProduct> => {
     try {
         const response = await api.get(`/products/${id}`);
         return response.data;

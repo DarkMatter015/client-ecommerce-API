@@ -8,7 +8,7 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 
 import type { IUserLogin } from "@/commons/types/form";
-import type { AuthenticationResponse } from "@/commons/types/auth";
+import type { IAuthenticationResponse } from "@/commons/types/auth";
 import { useAuth } from "@/context/hooks/use-auth";
 import AuthService from "@/services/auth-service";
 
@@ -81,7 +81,7 @@ export const LoginPage = () => {
         const response = await AuthService.login(userLogin);
 
         if (response.success && response.data) {
-          const authenticationResponse = response.data as AuthenticationResponse;
+          const authenticationResponse = response.data as IAuthenticationResponse;
           handleLogin(authenticationResponse);
           showToast("success");
 

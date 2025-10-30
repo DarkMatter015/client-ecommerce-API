@@ -7,7 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProductById } from '@/services/product-service';
-import type { Product } from '@/commons/types/product';
+import type { IProduct } from '@/commons/types/product';
 
 /* ===========================
    HELPERS
@@ -22,7 +22,7 @@ const ProductPage: React.FC = () => {
   const params = useParams();
   const idParam = params.id;
   const toast = useRef<Toast | null>(null);
-  const [produto, setProduto] = useState<Product>({} as Product);
+  const [produto, setProduto] = useState<IProduct>({} as IProduct);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

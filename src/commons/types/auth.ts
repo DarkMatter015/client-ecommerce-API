@@ -1,15 +1,15 @@
 // Interfaces para os dados de autenticação
-export interface Authorities {
+export interface IAuthorities {
   authority: string;
 }
 
-export interface AuthenticatedUser {
+export interface IAuthenticatedUser {
   email: string;
   displayName: string;
-  authorities: Authorities[];
+  authorities: IAuthorities[];
 }
 
-export interface AuthenticationResponse {
+export interface IAuthenticationResponse {
   token: string;
-  user: AuthenticatedUser;
+  user: IAuthenticatedUser;
 }

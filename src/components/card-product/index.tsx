@@ -1,8 +1,8 @@
-import type { Product } from "@/commons/types/product"
+import type { IProduct } from "@/commons/types/product"
 import { Link } from "react-router-dom"
 import "./card-product.style.css"
 
-export const CardProduct: React.FC<{ product: Product }> = ({ product }) => {
+export const CardProduct: React.FC<{ product: IProduct }> = ({ product }) => {
     return (
         <article key={product.id} className="card-product">
             <Link
