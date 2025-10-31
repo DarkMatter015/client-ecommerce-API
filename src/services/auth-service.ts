@@ -1,5 +1,5 @@
-import type { IUserRegister, IUserLogin } from "@/commons/types/form";
-import type { IResponse } from "@/commons/types/types";
+
+import type { IResponse, IUserLogin, IUserRegister, IUserResponse } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
 /**
@@ -55,8 +55,73 @@ const login = async (user: IUserLogin) => {
   return response;
 };
 
+const validateToken = async (token: string | null): Promise<IResponse> => {
+  if (!token) {
+    return {
+      status: 401,
+      success: false,
+      message: "Token ausente",
+    };
+  }
+
+  try {
+    const response = await api.get("/auth/validate", {
+      headers: { Authorization: `Bearer ${JSON.parse(token)}` },
+    });
+
+    return {
+      status: response.status,
+      success: true,
+      message: "Token válido",
+      data: response.data,
+    };
+  } catch (err: any) {
+    const status = err?.response?.status ?? 500;
+    const message =
+      status === 401
+        ? "Token inválido ou expirado"
+        : "Erro ao validar o token";
+
+    return {
+      status,
+      success: false,
+      message,
+      data: err?.response?.data ?? null,
+    };
+  }
+};
+
+const getUser = async (): Promise<IUserResponse | IResponse> => {
+
+  try {
+    const response = await api.get("/users");
+
+    return {
+      id: response.data.id,
+      email: response.data.email,
+      displayName: response.data.displayName,
+    };
+  } catch (err: any) {
+    const status = err?.response?.status ?? 500;
+    const message =
+      status === 401
+        ? "Usuário não encontrado"
+        : "Erro ao buscar o usuário";
+
+    return {
+      status,
+      success: false,
+      message,
+      data: err?.response?.data ?? null,
+    };
+  }
+};
+
+
 const AuthService = {
   signup,
-  login,
+  login, 
+  validateToken, 
+  getUser
 };
 export default AuthService;

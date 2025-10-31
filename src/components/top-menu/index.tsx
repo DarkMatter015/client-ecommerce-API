@@ -1,16 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Sidebar } from "primereact/sidebar";
 import { Menu } from "primereact/menu";
 import "./top-menu.style.css";
 
 import { AutoComplete } from 'primereact/autocomplete';
-import { getAllProducts } from '@/services/product-service';
-import type { Product } from '@/commons/types/product';
+import { getAllProductsPageable } from '@/services/product-service';
+import type { IProduct } from '@/commons/types/types';
+import { CartContext } from "@/context/CartContext";
 
 interface ProductGroup {
   label: string;
-  items: Product[];
+  items: IProduct[];
 }
 
 const TopMenu: React.FC = () => {
@@ -18,6 +19,8 @@ const TopMenu: React.FC = () => {
   const location = useLocation();
   const menuRef = useRef<Menu>(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const { cartMetrics } = use(CartContext);
 
   const scrollToSection = (hash: string) => {
     const element = document.getElementById(hash);
@@ -37,10 +40,10 @@ const TopMenu: React.FC = () => {
     }
   }, [location.pathname, location.hash]);
   
-  const cartItemsCount = 5;
-  const [products, setProducts] = useState<Product[]>([]);
+  const cartItemsCount = cartMetrics?.totalItems ? cartMetrics.totalItems : 0;
+  const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductGroup[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
   // Templates and search method following PrimeReact TemplateDemo pattern
   const panelFooterTemplate = () => {
@@ -51,7 +54,7 @@ const TopMenu: React.FC = () => {
     );
   };
 
-  const itemTemplate = (item: Product | null) => {
+  const itemTemplate = (item: IProduct | null) => {
     if (!item) return null;
     return (
       <div className="flex align-items-center">
@@ -69,7 +72,7 @@ const TopMenu: React.FC = () => {
     );
   };
 
-  const selectedItemTemplate = (item: Product | null) => {
+  const selectedItemTemplate = (item: IProduct | null) => {
     return item ? `${item.name}` : '';
   };
 
@@ -88,7 +91,7 @@ const TopMenu: React.FC = () => {
     window.clearTimeout(searchTimeout);
     searchTimeout = window.setTimeout(() => {
       const q = (event.query || '').toLowerCase();
-      let filtered: Product[] = [];
+      let filtered: IProduct[] = [];
       if (!q.trim().length) {
         filtered = [...products];
       } else {
@@ -97,7 +100,7 @@ const TopMenu: React.FC = () => {
 
       // group by category
       const groups: ProductGroup[] = [];
-      const map = new Map<string, Product[]>();
+      const map = new Map<string, IProduct[]>();
       filtered.forEach(p => {
         const cat = p.category?.name ?? 'Outros';
         if (!map.has(cat)) map.set(cat, []);
@@ -115,7 +118,7 @@ const TopMenu: React.FC = () => {
     let mounted = true;
     const load = async () => {
       try {
-        const resp = await getAllProducts();
+        const resp = await getAllProductsPageable();
         if (!mounted) return;
         setProducts(resp.content || []);
       } catch (err) {
@@ -203,8 +206,8 @@ const TopMenu: React.FC = () => {
                 completeMethod={search}
                 onChange={(e: any) => {
                   setSelectedProduct(e.value);
-                  if (e.value && (e.value as Product).id) {
-                    navigate(`/produto/${(e.value as Product).id}`);
+                  if (e.value && (e.value as IProduct).id) {
+                    navigate(`/produto/${(e.value as IProduct).id}`);
                   }
                 }}
                 itemTemplate={itemTemplate}
@@ -285,8 +288,8 @@ const TopMenu: React.FC = () => {
               completeMethod={search}
               onChange={(e: any) => {
                 setSelectedProduct(e.value);
-                if (e.value && (e.value as Product).id) {
-                  navigate(`/produto/${(e.value as Product).id}`);
+                if (e.value && (e.value as IProduct).id) {
+                  navigate(`/produto/${(e.value as IProduct).id}`);
                   setSidebarVisible(false);
                 }
               }}
