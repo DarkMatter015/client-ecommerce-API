@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import type { IAuthenticatedUser, IAuthenticationResponse } from "@/commons/types/auth";
+import type { IAuthenticatedUser, IAuthenticationResponse } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import AuthService from "@/services/auth-service";

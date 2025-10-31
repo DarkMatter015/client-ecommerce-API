@@ -1,6 +1,5 @@
-import type { IUserRegister, IUserLogin } from "@/commons/types/form";
-import type { IResponse } from "@/commons/types/types";
-import type { IUserResponse } from "@/commons/types/user";
+
+import type { IResponse, IUserLogin, IUserRegister, IUserResponse } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
 /**

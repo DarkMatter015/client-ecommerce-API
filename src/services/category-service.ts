@@ -1,4 +1,4 @@
-import type { ICategory } from "@/commons/types/category";
+import type { ICategory } from "@/commons/types/types";
 import type { IPage } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 

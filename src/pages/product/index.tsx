@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useEffect, useRef, useState, use } from 'react';
 import './product.style.css';
 import { Button } from 'primereact/button';
 import { InputNumber } from 'primereact/inputnumber';
@@ -7,7 +7,8 @@ import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProductById } from '@/services/product-service';
-import type { IProduct } from '@/commons/types/product';
+import type { IProduct } from '@/commons/types/types';
+import { CartContext } from '@/context/CartContext';
 
 /* ===========================
    HELPERS
@@ -31,6 +32,8 @@ const ProductPage: React.FC = () => {
   const [mainImage, setMainImage] = useState<string>(produto.urlImage);
   const [zoomVisible, setZoomVisible] = useState(false);
 
+  const { addItem } = use(CartContext)
+
   // thumbnails: ensure we always pass an array of image urls
   const thumbnails = useMemo(() => {
     const arr: string[] = [];
@@ -43,15 +46,21 @@ const ProductPage: React.FC = () => {
 
   const pricePerUnit = useMemo(() => produto.price, [produto.price]);
 
-  const handleAddToCart = useCallback(() => {
-    // TODO: integrate with cart context or service
+  const handleAddToCart = useCallback((product: IProduct, quantity: number) => {
+    addItem({
+      product,
+      quantity,
+    });
     toast.current?.show({ severity: 'success', summary: 'Adicionado', detail: `${produto.name} adicionado ao carrinho`, life: 2000 });
-  }, [produto.name]);
+  }, [produto.name, addItem]);
 
-  const handleBuyNow = useCallback(() => {
-    // placeholder: add to cart then navigate
+  const handleBuyNow = useCallback((product: IProduct, quantity: number) => {
+    addItem({
+      product,
+      quantity,
+    });
     navigate('/carrinho');
-  }, [navigate]);
+  }, [navigate, addItem]);
 
   const handleCalculateCep = useCallback(() => {
     // todo: replace with API call
@@ -151,14 +160,14 @@ const ProductPage: React.FC = () => {
   }
   
   
-  const ProductActions: React.FC<{ handleBuyNow: () => void; handleAddToCart: () => void}> =({
+  const ProductActions: React.FC<{ handleBuyNow: (product: IProduct, quantity: number) => void; handleAddToCart: (product: IProduct, quantity: number) => void}> =({
     handleBuyNow,
     handleAddToCart
    }) => {
     return (
       <div className="product-actions">
-          <Button className="btn-default w-full mb-2" onClick={handleBuyNow} aria-label="Comprar agora">Comprar</Button>
-          <Button className="btn-gray w-full" onClick={handleAddToCart} aria-label="Adicionar ao carrinho">Adicionar ao Carrinho</Button>
+          <Button className="btn-default w-full mb-2" onClick={() => handleBuyNow(produto, quantity)} aria-label="Comprar agora">Comprar</Button>
+          <Button className="btn-gray w-full" onClick={() => handleAddToCart(produto, quantity)} aria-label="Adicionar ao carrinho">Adicionar ao Carrinho</Button>
       </div>
     )
   }
@@ -199,7 +208,7 @@ const ProductPage: React.FC = () => {
           <div className="col-12 lg:col-6 mt-0">
             <ProductInfo product={produto} />
             <CalcFrete handleCalculateCep={handleCalculateCep}/>
-            <ProductActions handleBuyNow={handleBuyNow} handleAddToCart={handleAddToCart} />
+            <ProductActions handleBuyNow={() => handleBuyNow(produto, quantity)} handleAddToCart={() => handleAddToCart(produto, quantity)} />
           </div>
 
           <Description product={produto} />

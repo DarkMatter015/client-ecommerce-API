@@ -13,13 +13,16 @@ import "primeflex/primeflex.css"; //flex utilities
 import { AuthProvider } from "@/context/AuthContext";
 
 import "./index.css";
+import { CartProvider } from "./context/CartContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <PrimeReactProvider>
         <AuthProvider>
-          <App />
+          <CartProvider>
+            <App />
+          </CartProvider>
         </AuthProvider>
       </PrimeReactProvider>
     </BrowserRouter>

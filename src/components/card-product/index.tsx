@@ -1,10 +1,31 @@
-import type { IProduct } from "@/commons/types/product"
+import type { IItem, IProduct } from "@/commons/types/types"
 import { Link } from "react-router-dom"
 import "./card-product.style.css"
+import { use, useCallback, useRef } from "react"
+import { CartContext } from "@/context/CartContext"
+import { Toast } from "primereact/toast"
 
 export const CardProduct: React.FC<{ product: IProduct }> = ({ product }) => {
+
+    const { addItem } = use(CartContext);
+    const toast = useRef<Toast | null>(null);
+
+    const item = {
+        product,
+        quantity: 1,
+    } as IItem;
+
+    const handleaAddToCart = useCallback((product: IProduct, quantity: number) => {
+        addItem({
+            product,
+            quantity,
+        });
+        toast.current?.show({ severity: 'success', summary: 'Adicionado', detail: `${product.name} adicionado ao carrinho`, life: 2000 });
+    }, [addItem]);
+
     return (
         <article key={product.id} className="card-product">
+            <Toast ref={toast} />
             <Link
                 to={`/produto/${product.id}`}
                 className="card-image text-center"
@@ -43,7 +64,7 @@ export const CardProduct: React.FC<{ product: IProduct }> = ({ product }) => {
                 <button
                     className="btn-add-cart w-100"
                     data-id={product.id}
-                    onClick={() => { /* TODO: adicionar ao carrinho */ }}
+                    onClick={() => handleaAddToCart(product, 1)}
                 >
                     <i className="fa-solid fa-cart-plus"></i> Adicionar ao carrinho
                 </button>

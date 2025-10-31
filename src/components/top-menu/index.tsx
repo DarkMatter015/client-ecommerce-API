@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Sidebar } from "primereact/sidebar";
 import { Menu } from "primereact/menu";
@@ -6,7 +6,8 @@ import "./top-menu.style.css";
 
 import { AutoComplete } from 'primereact/autocomplete';
 import { getAllProductsPageable } from '@/services/product-service';
-import type { IProduct } from '@/commons/types/product';
+import type { IProduct } from '@/commons/types/types';
+import { CartContext } from "@/context/CartContext";
 
 interface ProductGroup {
   label: string;
@@ -18,6 +19,8 @@ const TopMenu: React.FC = () => {
   const location = useLocation();
   const menuRef = useRef<Menu>(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const { cartMetrics } = use(CartContext);
 
   const scrollToSection = (hash: string) => {
     const element = document.getElementById(hash);
@@ -37,7 +40,7 @@ const TopMenu: React.FC = () => {
     }
   }, [location.pathname, location.hash]);
   
-  const cartItemsCount = 5;
+  const cartItemsCount = cartMetrics?.totalItems ? cartMetrics.totalItems : 0;
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductGroup[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);

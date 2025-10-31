@@ -1,10 +1,13 @@
-import React, { useState, useMemo, useRef, useCallback } from "react";
+import React, {useRef, useCallback, use } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+
+import type { IItem } from "@/commons/types/types";
+import { CartContext } from "@/context/CartContext";
+
 import "./cart.style.css";
-import type { IOrderItemResponse } from "@/commons/types/orderItem";
 
 /* ===========================
    TYPES & INTERFACES
@@ -14,10 +17,9 @@ import type { IOrderItemResponse } from "@/commons/types/orderItem";
    CONSTANTS & MOCK DATA
 =========================== */
 
-const SAMPLE_CART: IOrderItemResponse[] = [
+const SAMPLE_CART: IItem[] = [
   {
     id: 1,
-    orderId: 1,
     product: {
       id: 1,
       name: "Guitarra sla",
@@ -34,7 +36,6 @@ const SAMPLE_CART: IOrderItemResponse[] = [
   },
   {
     id: 2,
-    orderId: 1,
     product: {
       id: 2,
       name: "Violão Caipira",
@@ -117,23 +118,7 @@ const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
 
-  // State
-  const [cart, setCart] = useState<IOrderItemResponse[]>(SAMPLE_CART);
-
-  // Computed values (memoized for performance)
-  const cartMetrics = useMemo(() => {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const total = cart.reduce(
-      (sum, item) => sum + item.totalPrice * item.quantity,
-      0
-    );
-    // TODO: ADICIONAR CAMPO DE CEP PARA CALCULAR FRETE COM OS PRODUTOS DO CARRINHO
-    // const frete = address ? SHIPPING_COST : 0;
-    // const total = subtotal - descontos + frete;
-
-    // return { totalItems, subtotal, descontos, frete, total };
-    return { totalItems, total };
-  }, [cart]);
+  const { cartItems, cartMetrics, deleteItem, handleUpdateQuantity  } = use(CartContext);
 
   /* ===========================
      TOAST HELPER
@@ -145,25 +130,17 @@ const CartPage: React.FC = () => {
   /* ===========================
      EVENT HANDLERS
   =========================== */
-  const handleUpdateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
 
-  const handleRemoveItem = (id: number, itemName: string) => {
+  const handleRemoveItem = (item: IItem) => {
     confirmDialog({
-      message: `Deseja realmente remover "${itemName}" do carrinho?`,
+      message: `Deseja realmente remover "${item.product.name}" do carrinho?`,
       header: "Confirmar Remoção",
       icon: "pi pi-exclamation-triangle",
       acceptLabel: "Sim, Remover",
       rejectLabel: "Cancelar",
       acceptClassName: "p-button-danger",
       accept: () => {
-        setCart((prev) => prev.filter((item) => item.id !== id));
+        deleteItem(item);
         showToast("itemRemoved");
       },
     });
@@ -178,23 +155,23 @@ const CartPage: React.FC = () => {
   };
 
   const handleFinalize = () => {
-    if (cart.length === 0) {
+    if (!cartItems || cartItems.length === 0) {
       showToast("emptyCart");
       return;
     }
 
-    navigate("/finalizar", { state: { cart } });
+    navigate("/finalizar", { state: { cartItems } });
   };
 
   /**
    * Componente para exibir um item individual do carrinho
    */
-  const ItemCart: React.FC<{ item: IOrderItemResponse }> = ({ item }) => {
+  const ItemCart: React.FC<{ item: IItem }> = ({ item }) => {
     return (
       <article key={item.id} className="cart-item">
         <button
           className="cart-item-image"
-          onClick={() => handleProductClick(item.id)}
+          onClick={() => handleProductClick(item.product.id)}
           aria-label={`Ver detalhes de ${item.product.name}`}
         >
           <img src={item.product.urlImage} alt={item.product.name} />
@@ -257,7 +234,7 @@ const CartPage: React.FC = () => {
 
           <button
             className="btn-remove"
-            onClick={() => handleRemoveItem(item.id, item.product.name)}
+            onClick={() => handleRemoveItem(item)}
             aria-label={`Remover ${item.product.name} do carrinho`}
           >
             <i className="pi pi-trash" aria-hidden="true"></i> Remover
@@ -306,7 +283,7 @@ const CartPage: React.FC = () => {
    * Componente para o resumo do carrinho e botão de finalização
    */
   const CartSummary: React.FC<{
-    cartMetrics: { totalItems: number; total: number };
+    cartMetrics: { totalItems: number; total: number } | undefined;
     onFinalize: () => void;
     cartLength: number;
   }> = ({ cartMetrics, onFinalize, cartLength }) => (
@@ -356,14 +333,14 @@ const CartPage: React.FC = () => {
       <div className="cart-container">
         {/* Products Section */}
         <section className="cart-products" aria-label="Produtos no carrinho">
-          <CartHeader totalItems={cartMetrics.totalItems} />
+          <CartHeader totalItems={cartMetrics ? cartMetrics.totalItems : 0} />
 
-          {cart.length === 0 ? (
+          {cartItems.length === 0 ? (
             <EmptyCart onContinueShopping={handleContinueShopping} />
           ) : (
             <>
               <div className="cart-items">
-                {cart.map((item) => (
+                {cartItems.map((item) => (
                   <ItemCart key={item.id} item={item} />
                 ))}
               </div>
@@ -383,7 +360,7 @@ const CartPage: React.FC = () => {
         <CartSummary
           cartMetrics={cartMetrics}
           onFinalize={handleFinalize}
-          cartLength={cart.length}
+          cartLength={cartItems.length}
         />
       </div>
     </div>
