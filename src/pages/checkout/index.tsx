@@ -10,6 +10,7 @@ import { CheckoutSummary } from '@/components/CheckoutSummary';
 import { CheckoutPaymentMethod } from '@/components/CheckoutPaymentMethod';
 import { AddressList } from '@/components/AddressList';
 import { api } from '@/lib/axios';
+import { ItemCartCheckout } from '@/components/ItemCartCheckout';
 
 
 const TOAST_MESSAGES = {
@@ -58,20 +59,9 @@ const TOAST_MESSAGES = {
 } as const;
 
 
-const formatCurrency = (value: number): string => {
-  return value.toLocaleString('pt-BR', { 
-    minimumFractionDigits: 2, 
-    maximumFractionDigits: 2 
-  });
-};
-
-const getItemCountText = (count: number): string => {
-  return count === 1 ? '1 item' : `${count} itens`;
-};
-
 const CheckoutPage: React.FC = () => {
 
-  const { cartItems, cartMetrics  } = use(CartContext);
+  const { cartItems, cartMetrics } = use(CartContext);
 
   const [payments, setPayments] = useState<IPayment[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<null>(null);
@@ -84,68 +74,68 @@ const CheckoutPage: React.FC = () => {
 
   useEffect(() => {
 
-      if (!cartItems || cartItems.length === 0) {
-        navigate('/carrinho');
-        return;
-      }
-
-      const fetchPayments = async () => {
-          try {
-              const response = await getAllPaymentsPageable(0, 10);
-              setPayments(response.content);
-          } catch (err) {
-              console.error('Erro ao buscar pagamentos:', err);
-          }
-      };
-      
-      const fetchAddress = async () => {
-          try {
-              const response = await getAllAddressesPageable(0, 10);
-              setAddresses(response.content);
-          } catch (err) {
-              console.error('Erro ao buscar endereços:', err);
-          }
-      };
-
-      fetchPayments();
-      fetchAddress();
-  }, [cartItems, navigate]);
-
-  
-  const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
-      toast.current?.show(TOAST_MESSAGES[type]);
-    }, []);
-
-  const handlePlaceOrder = async () => {
-    // TODO: API call to the backend to place the order
-    try {
-    const response = await api.post("/orders", {
-      orderItems: cartItems?.map(item => ({
-        productId: item.product.id,
-        quantity: item.quantity,
-      })),
-      address: selectedAddress,
-      paymentId: paymentMethod?.id,
-    });
-
-    if (response.status !== 201) {
-      throw new Error("Erro ao realizar o pedido")
+    if (!cartItems || cartItems.length === 0) {
+      navigate('/carrinho');
+      return;
     }
 
-    console.log('Pedido realizado:', { cartItems, selectedAddress, paymentMethod });
-    localStorage.removeItem("cartItems");
+    const fetchPayments = async () => {
+      try {
+        const response = await getAllPaymentsPageable(0, 10);
+        setPayments(response.content);
+      } catch (err) {
+        console.error('Erro ao buscar pagamentos:', err);
+      }
+    };
 
-    toast.current?.show({
-      severity: 'success',
-      summary: 'Pedido Confirmado!',
-      detail: 'Seu pedido foi realizado com sucesso e em breve será enviado.',
-      life: 4000,
-    });
+    const fetchAddress = async () => {
+      try {
+        const response = await getAllAddressesPageable(0, 10);
+        setAddresses(response.content);
+      } catch (err) {
+        console.error('Erro ao buscar endereços:', err);
+      }
+    };
+
+    fetchPayments();
+    fetchAddress();
+  }, [cartItems, navigate]);
+
+
+  const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
+    toast.current?.show(TOAST_MESSAGES[type]);
+  }, []);
+
+  const handlePlaceOrder = async () => {
+    try {
+      const response = await api.post("/orders", {
+        orderItems: cartItems?.map(item => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+        })),
+        address: selectedAddress,
+        paymentId: paymentMethod?.id,
+      });
+
+      if (response.status !== 201) {
+        throw new Error("Erro ao realizar o pedido")
+      }
+
+      console.log('Pedido realizado:', { cartItems, selectedAddress, paymentMethod });
+      // TODO: atualizar carrihno aqui
+      localStorage.removeItem("cartItems");
+
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Pedido Confirmado!',
+        detail: 'Seu pedido foi realizado com sucesso e em breve será enviado.',
+        life: 4000,
+      });
     } catch (error) {
       console.error('Erro ao realizar o pedido:', error);
     }
 
-    // Redirect to an order confirmation/thank you page after a delay
+    // TODO: Fazer redirecionamento para página de pedidos ou confirmação
     setTimeout(() => {
       // navigate('/meus-pedidos');
     }, 4000);
@@ -154,23 +144,24 @@ const CheckoutPage: React.FC = () => {
   const handleGoBack = () => {
     navigate('/carrinho');
   };
-  
-    const handleFinalize = () => {
-      if (!selectedAddress) {
-        showToast('noAddress');
-        return;
-      }
-      if (!paymentMethod) {
-        showToast('noPayment');
-        return;
-      }
 
-      handlePlaceOrder();
-    };
+  const handleFinalize = () => {
+    if (!selectedAddress) {
+      showToast('noAddress');
+      return;
+    }
+    if (!paymentMethod) {
+      showToast('noPayment');
+      return;
+    }
+
+    handlePlaceOrder();
+  };
 
   return (
     <div className="checkout-page">
       <Toast ref={toast} />
+
       <div className="checkout-container">
         <div className="checkout-details">
           {/* Step 1: Order Items */}
@@ -181,52 +172,42 @@ const CheckoutPage: React.FC = () => {
             </h3>
             <div className="order-item-list">
               {cartItems.map((item) => (
-                <article key={item.id} className="order-item" aria-label={item.product.name}>
-                  <div className="order-item-image">
-                    <img src={item.product.urlImage} alt={item.product.urlImage} />
-                  </div>
-                  <div className="order-item-details">
-                    <h4 className="order-item-name">{item.product.name}</h4>
-                    <p className="order-item-meta">{item.product.category.name}</p>
-                    <p className="order-item-quantity">Quantidade: {item.quantity}</p>
-                  </div>
-                  <div className="order-item-price">
-                    <span>{formatCurrency(item.totalPrice)}</span>
-                  </div>
-                </article>
+                <ItemCartCheckout
+                  key={item.id}
+                  item={item}
+                />
               ))}
             </div>
           </section>
 
           <div className="p-grid" style={{ gap: '1.5rem' }}>
             <div className="p-col-12 p-md-6">
-                <AddressList
-                  addresses={addresses}
-                  onSelectAddress={setSelectedAddress}
-                  selectedAddress={selectedAddress}
-                />
+              <AddressList
+                addresses={addresses}
+                onSelectAddress={setSelectedAddress}
+                selectedAddress={selectedAddress}
+              />
             </div>
             <div className="p-col-12 p-md-6">
-                <CheckoutPaymentMethod 
-                  payments={payments} 
-                  paymentMethod={paymentMethod} 
-                  setPaymentMethod={setPaymentMethod}
-                />
+              <CheckoutPaymentMethod
+                payments={payments}
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+              />
             </div>
           </div>
         </div>
 
-        <CheckoutSummary 
-          cartMetrics={cartMetrics} 
-          getItemCountText={getItemCountText} 
-          formatCurrency={formatCurrency} 
-          handlePlaceOrder={handleFinalize} 
-          handleGoBack={handleGoBack} 
-          selectedAddress={selectedAddress} 
+        <CheckoutSummary
+          cartMetrics={cartMetrics}
+          handlePlaceOrder={handleFinalize}
+          handleGoBack={handleGoBack}
+
+          selectedAddress={selectedAddress}
           paymentMethod={paymentMethod}
         />
-        
-      </div>      
+
+      </div>
     </div>
   );
 };

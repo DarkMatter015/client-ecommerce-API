@@ -1,23 +1,18 @@
 import React, { useCallback, useMemo, useEffect, useRef, useState, use } from 'react';
 import './product.style.css';
-import { Button } from 'primereact/button';
-import { InputNumber } from 'primereact/inputnumber';
-import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProductById } from '@/services/product-service';
 import type { IProduct } from '@/commons/types/types';
 import { CartContext } from '@/context/CartContext';
+import { ProductThumbnail } from '@/components/ProductThumbnail';
+import { ProductInfo } from '@/components/ProductInfo';
+import { CalcFrete } from '@/components/CalcFrete';
+import { ProductActions } from '@/components/ProductActions';
+import { ProductDescription } from '@/components/ProductDescription';
 
-/* ===========================
-   HELPERS
-   =========================== */
-const formatCurrency = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-/* ===========================
-   COMPONENT
-   =========================== */
 const ProductPage: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -66,7 +61,7 @@ const ProductPage: React.FC = () => {
     // todo: replace with API call
     alert(`Calculando frete para CEP: ${cep}`);
   }, [cep]);
-  
+
   useEffect(() => {
     const fetchProduct = async () => {
       if (!idParam) {
@@ -99,93 +94,6 @@ const ProductPage: React.FC = () => {
     }
   };
 
-  const Thumbnail: React.FC<{ product: IProduct, isActive: boolean, src: string, idx: number}> = ({ 
-    product,
-    isActive, 
-    src, 
-    idx
-  }) => {
-    return (
-      <div
-        key={idx}
-        role="listitem"
-        className={`banner thumbnail-image ${isActive ? 'active' : ''}`}
-        tabIndex={0}
-        aria-pressed={isActive}
-        aria-label={`Selecionar urlImage ${idx + 1}`}
-        onClick={() => setMainImage(src)}
-        onKeyDown={(e) => handleThumbnailKey(e, src)}
-      >
-        <img src={src} alt={`${product.name} miniatura ${idx + 1}`} title={product.name} />
-      </div>
-    );
-  }
-
-  const ProductInfo: React.FC<{ product: IProduct }> = ({ product }) => {
-    return (
-      <>
-        <div>
-          <h1 className="product-title">{product.name}</h1>
-          <p className="mb-0"><i>{product.name} - {product.category.name}</i></p>
-          <div className="mb-2 h6">
-            <span className="text-warning h4" aria-hidden>★★★★★</span>
-            <span className="sr-only">5 de 5 estrelas</span>
-            <span className="visually-hidden"> +500 avaliações</span>
-          </div>
-          <p>Código Nº: {product.id}</p>
-        </div>
-
-        <div className="product-price-section">
-          <div className="product-price">
-            <span className="price-label">Preço:</span>
-            <span className="price-value">R$ {formatCurrency(pricePerUnit)}</span>
-          </div>
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="quantity" className="form-label"><strong>Quantidade</strong></label>
-          <InputNumber inputId='quantity' value={quantity} onValueChange={(e) => setQuantity(e.value ?? 1)} showButtons inputClassName="w-6rem" min={1} aria-label="Quantidade" />
-        </div>
-      </>
-    );
-  };
-
-  const Description: React.FC<{ product: IProduct }> =({ product }) => {
-    return (
-      <div className="col-12">
-        <h4><strong>Descrição</strong></h4>
-        <p>{product.description}</p>
-      </div>
-    )
-  }
-  
-  
-  const ProductActions: React.FC<{ handleBuyNow: (product: IProduct, quantity: number) => void; handleAddToCart: (product: IProduct, quantity: number) => void}> =({
-    handleBuyNow,
-    handleAddToCart
-   }) => {
-    return (
-      <div className="product-actions">
-          <Button className="btn-default w-full mb-2" onClick={() => handleBuyNow(produto, quantity)} aria-label="Comprar agora">Comprar</Button>
-          <Button className="btn-gray w-full" onClick={() => handleAddToCart(produto, quantity)} aria-label="Adicionar ao carrinho">Adicionar ao Carrinho</Button>
-      </div>
-    )
-  }
-
-  const CalcFrete: React.FC<{ handleCalculateCep: () => void}> = ({
-    handleCalculateCep, 
-  }) => {
-    return (
-      <div className="mb-3 mt-3">
-        <label htmlFor="cep" className="form-label"><strong>Calcular Frete e Prazo</strong></label>
-        <div className="input-group mb-1">
-          <InputText type="text" id="cep" className="p-inputtext" name="cep" placeholder="Insira seu CEP" value={cep} onChange={(e) => setCep(e.currentTarget.value)} aria-label="CEP" />
-          <Button className="p-button-text" onClick={handleCalculateCep} aria-label="Calcular frete e prazo">Calcular</Button>
-        </div>
-        <a href="#" className="small">Não sei meu CEP</a>
-      </div>
-    )
-  }
 
   return (
     <div className="product-page">
@@ -200,22 +108,51 @@ const ProductPage: React.FC = () => {
 
             <div className="thumbnails" role="list" aria-label="Miniaturas do produto">
               {thumbnails.map((src, idx) => (
-                <Thumbnail idx={idx} isActive={src === mainImage} key={idx} src={src} product={produto} />
+                <ProductThumbnail
+                  setMainImage={setMainImage}
+                  handleThumbnailKey={handleThumbnailKey}
+                  idx={idx}
+                  isActive={src === mainImage}
+                  key={idx}
+                  src={src}
+                  product={produto}
+                />
               ))}
             </div>
           </div>
 
           <div className="col-12 lg:col-6 mt-0">
-            <ProductInfo product={produto} />
-            <CalcFrete handleCalculateCep={handleCalculateCep}/>
-            <ProductActions handleBuyNow={() => handleBuyNow(produto, quantity)} handleAddToCart={() => handleAddToCart(produto, quantity)} />
+            <ProductInfo
+              pricePerUnit={pricePerUnit}
+              quantity={quantity}
+              setQuantity={setQuantity}
+              product={produto}
+            />
+            <CalcFrete
+              cep={cep}
+              setCep={setCep}
+              handleCalculateCep={handleCalculateCep}
+            />
+            <ProductActions
+              produto={produto}
+              quantity={quantity}
+              handleBuyNow={() => handleBuyNow(produto, quantity)}
+              handleAddToCart={() => handleAddToCart(produto, quantity)}
+            />
           </div>
 
-          <Description product={produto} />
+          <ProductDescription
+            product={produto}
+          />
         </div>
       </div>
 
-      <Dialog header={produto.name} visible={zoomVisible} style={{ width: '90vw', maxWidth: '800px' }} onHide={() => setZoomVisible(false)}>
+      <Dialog
+        header={produto.name}
+        visible={zoomVisible}
+        style={{ width: '90vw', maxWidth: '800px' }}
+        onHide={() => setZoomVisible(false)}
+      >
         <div style={{ textAlign: 'center' }}>
           <img src={mainImage} alt={produto.name} style={{ maxWidth: '100%', height: 'auto' }} />
         </div>
