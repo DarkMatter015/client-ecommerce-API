@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("cartItems");
     delete api.defaults.headers.common["Authorization"];
 
     setAuthenticated(false);
@@ -54,17 +55,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const response = await AuthService.validateToken(storedToken);
 
         if (response.success && storedUser) {
-          const parsedUser = JSON.parse(storedUser);
-          setAuthenticatedUser(parsedUser);
-          setAuthenticated(true);
-          api.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+        const parsedUser = JSON.parse(storedUser);
+        setAuthenticatedUser(parsedUser);
+        setAuthenticated(true);
+        api.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
         } else {
-          // token inválido -> limpar sessão (sem navegar)
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          delete api.defaults.headers.common["Authorization"];
-          setAuthenticated(false);
-          setAuthenticatedUser(undefined);
+        // token inválido -> manter dados no localStorage para possível reautenticação, apenas desautenticar
+        console.warn("Token inválido ou expirado, mantendo dados para reautenticação");
+        setAuthenticated(false);
+        setAuthenticatedUser(undefined);
+        // Não remover do localStorage para permitir re-login automático ou manual
         }
       } catch (err) {
         // falha de rede ou erro inesperado: deixar não autenticado, mas não navegar

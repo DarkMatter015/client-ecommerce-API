@@ -65,9 +65,9 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
   }
 
   try {
-    const response = await api.get("/auth/validate", {
-      headers: { Authorization: `Bearer ${JSON.parse(token)}` },
-    });
+  const response = await api.get("/auth/validate", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
     return {
       status: response.status,

@@ -111,9 +111,6 @@ const getItemCountText = (count: number): string => {
   return count === 1 ? "1 item" : `${count} itens`;
 };
 
-/* ===========================
-   MAIN COMPONENT
-=========================== */
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
@@ -127,9 +124,6 @@ const CartPage: React.FC = () => {
     toast.current?.show(TOAST_MESSAGES[type]);
   }, []);
 
-  /* ===========================
-     EVENT HANDLERS
-  =========================== */
 
   const handleRemoveItem = (item: IItem) => {
     confirmDialog({

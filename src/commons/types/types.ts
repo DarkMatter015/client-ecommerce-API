@@ -53,6 +53,22 @@ export interface ICategory {
     name: string;
 }
 
+export interface IPayment {
+    id: number;
+    name: string;
+}
+
+export interface IAddress {
+    id: number;
+    street: string;
+    number: string;
+    complement: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    cep: string;
+}
+
 export interface IProduct {
     id: number;
     name: string;
