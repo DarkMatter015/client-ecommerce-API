@@ -20,13 +20,13 @@ export function AppRoutes() {
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
 
-          <Route path="/produto/:id" element={<ProductPage />} />
+            <Route path="/produto/:id" element={<ProductPage />} />
 
-          <Route path="/carrinho" element={<CartPage />} />
+            <Route path="/carrinho" element={<CartPage />} />
           
-            <Route path="/finalizar" element={<CheckoutPage />} />
         {/* protected routes */}
         <Route element={<RequireAuth />}>
+            <Route path="/finalizar" element={<CheckoutPage />} />
         </Route>
       </Route>
     </Routes>

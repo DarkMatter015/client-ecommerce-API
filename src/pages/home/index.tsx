@@ -2,16 +2,10 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import './home.style.css';
 import { useEffect, useState } from 'react';
-import type { IProduct } from '../../commons/types/product';
+import type { IProduct } from '../../commons/types/types';
 import { getAllProductsPageable } from '../../services/product-service';
 import { CardProduct } from '@/components/card-product';
 
-/*
-    Refatorado: HomePage dividido em pequenas seções (Hero, Products, Testimonials, About)
-    - Title adjusted so "Inspira" is rendered as a separate line visually
-    - Products section: left-aligned heading & subtitle; categories removed
-    - Testimonials: background image on left (desktop) + stacked cards on the right; image hidden on mobile
-*/
 
 const Hero: React.FC = () => {
     return (

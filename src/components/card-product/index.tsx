@@ -1,4 +1,4 @@
-import type { IItem, IProduct } from "@/commons/types/types"
+import type { IProduct } from "@/commons/types/types"
 import { Link } from "react-router-dom"
 import "./card-product.style.css"
 import { use, useCallback, useRef } from "react"
@@ -9,11 +9,6 @@ export const CardProduct: React.FC<{ product: IProduct }> = ({ product }) => {
 
     const { addItem } = use(CartContext);
     const toast = useRef<Toast | null>(null);
-
-    const item = {
-        product,
-        quantity: 1,
-    } as IItem;
 
     const handleaAddToCart = useCallback((product: IProduct, quantity: number) => {
         addItem({
