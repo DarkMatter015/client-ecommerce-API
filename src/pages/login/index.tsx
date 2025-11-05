@@ -7,12 +7,12 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 
-import type { IUserLogin } from "@/commons/types/form";
-import type { IAuthenticationResponse } from "@/commons/types/auth";
+
 import { useAuth } from "@/context/hooks/use-auth";
 import AuthService from "@/services/auth-service";
 
 import "@/styles/form.css";
+import type { IAuthenticationResponse, IUserLogin } from "@/commons/types/types";
 
 // Constantes
 const FORM_DEFAULT_VALUES: IUserLogin = {

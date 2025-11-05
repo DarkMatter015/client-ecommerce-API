@@ -1,4 +1,4 @@
-import React, {useRef, useCallback, use } from "react";
+import React, { useRef, useCallback, use } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
@@ -9,48 +9,12 @@ import { CartContext } from "@/context/CartContext";
 
 import "./cart.style.css";
 
-/* ===========================
-   TYPES & INTERFACES
-=========================== */
+import { CartSummary } from "@/components/CartSummary";
+import { CartHeader } from "@/components/CartHeader";
+import { EmptyCart } from "@/components/EmptyCart";
+import { ItemCart } from "@/components/ItemCart";
 
-/* ===========================
-   CONSTANTS & MOCK DATA
-=========================== */
 
-const SAMPLE_CART: IItem[] = [
-  {
-    id: 1,
-    product: {
-      id: 1,
-      name: "Guitarra sla",
-      description: "ela toca ",
-      price: 12,
-      urlImage: "teste.png",
-      category: {
-        id: 1,
-        name: "Guitarras",
-      },
-    },
-    totalPrice: 1200,
-    quantity: 10,
-  },
-  {
-    id: 2,
-    product: {
-      id: 2,
-      name: "Violão Caipira",
-      description: "Viola",
-      price: 500,
-      urlImage: "teste2.png",
-      category: {
-        id: 2,
-        name: "Violões",
-      },
-    },
-    totalPrice: 1000,
-    quantity: 2,
-  },
-];
 
 const TOAST_MESSAGES = {
   emptyCart: {
@@ -97,29 +61,14 @@ const TOAST_MESSAGES = {
   },
 } as const;
 
-/* ===========================
-   UTILITY FUNCTIONS
-=========================== */
-const formatCurrency = (value: number): string => {
-  return value.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-};
-
-const getItemCountText = (count: number): string => {
-  return count === 1 ? "1 item" : `${count} itens`;
-};
 
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
 
-  const { cartItems, cartMetrics, deleteItem, handleUpdateQuantity  } = use(CartContext);
+  const { cartItems, cartMetrics, deleteItem, handleUpdateQuantity } = use(CartContext);
 
-  /* ===========================
-     TOAST HELPER
-  =========================== */
+
   const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
     toast.current?.show(TOAST_MESSAGES[type]);
   }, []);
@@ -157,185 +106,31 @@ const CartPage: React.FC = () => {
     navigate("/finalizar", { state: { cartItems } });
   };
 
-  /**
-   * Componente para exibir um item individual do carrinho
-   */
-  const ItemCart: React.FC<{ item: IItem }> = ({ item }) => {
-    return (
-      <article key={item.id} className="cart-item">
-        <button
-          className="cart-item-image"
-          onClick={() => handleProductClick(item.product.id)}
-          aria-label={`Ver detalhes de ${item.product.name}`}
-        >
-          <img src={item.product.urlImage} alt={item.product.name} />
-        </button>
 
-        <div className="cart-item-details">
-          <h3 className="cart-item-name">{item.product.name}</h3>
-          <div className="cart-item-info">
-            {item.product.category.name && (
-              <span className="cart-item-meta">
-                <strong>Categoria:</strong> {item.product.category.name}
-              </span>
-            )}
-          </div>
-          <div className="cart-item-price-unit">
-            R$ {formatCurrency(item.product.price)}
-            <span className="per-unit">por unidade</span>
-          </div>
-        </div>
-
-        <div className="cart-item-actions">
-          <div className="cart-item-price">
-            <strong>R$ {formatCurrency(item.totalPrice)}</strong>
-          </div>
-
-          <div
-            className="quantity-control"
-            role="group"
-            aria-label="Controle de quantidade"
-          >
-            <button
-              className="quantity-btn"
-              onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-              disabled={item.quantity <= 1}
-              aria-label="Diminuir quantidade"
-            >
-              <i className="pi pi-minus" aria-hidden="true"></i>
-            </button>
-            <input
-              type="number"
-              className="quantity-input"
-              value={item.quantity}
-              min={1}
-              onChange={(e) =>
-                handleUpdateQuantity(
-                  item.id,
-                  Math.max(1, Number(e.target.value) || 1)
-                )
-              }
-              aria-label={`Quantidade de ${item.product.name}`}
-            />
-            <button
-              className="quantity-btn"
-              onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-              aria-label="Aumentar quantidade"
-            >
-              <i className="pi pi-plus" aria-hidden="true"></i>
-            </button>
-          </div>
-
-          <button
-            className="btn-remove"
-            onClick={() => handleRemoveItem(item)}
-            aria-label={`Remover ${item.product.name} do carrinho`}
-          >
-            <i className="pi pi-trash" aria-hidden="true"></i> Remover
-          </button>
-        </div>
-      </article>
-    );
-  };
-
-  /**
-   * Componente para exibir o estado de carrinho vazio
-   */
-  const EmptyCart: React.FC<{ onContinueShopping: () => void }> = ({
-    onContinueShopping,
-  }) => (
-    <div className="empty-cart" role="status">
-      <i className="pi pi-shopping-cart empty-cart-icon" aria-hidden="true"></i>
-      <p>Seu carrinho está vazio</p>
-      <Button
-        className="btn-default"
-        onClick={onContinueShopping}
-        aria-label="Ir para página de produtos"
-      >
-        <i className="pi pi-arrow-left me-2" aria-hidden="true"></i>
-        Ir às Compras
-      </Button>
-    </div>
-  );
-
-  /**
-   * Componente para o cabeçalho da seção de produtos do carrinho
-   */
-  const CartHeader: React.FC<{ totalItems: number }> = ({ totalItems }) => (
-    <div className="cart-products-header">
-      <h2>Meu Carrinho</h2>
-      <span
-        className="cart-count"
-        aria-label={`Total de ${getItemCountText(totalItems)}`}
-      >
-        {getItemCountText(totalItems)}
-      </span>
-    </div>
-  );
-
-  /**
-   * Componente para o resumo do carrinho e botão de finalização
-   */
-  const CartSummary: React.FC<{
-    cartMetrics: { totalItems: number; total: number } | undefined;
-    onFinalize: () => void;
-    cartLength: number;
-  }> = ({ cartMetrics, onFinalize, cartLength }) => (
-    <aside className="cart-summary" aria-label="Resumo da compra">
-      <div className="summary-sticky">
-        <section className="summary-card">
-          <h3>Resumo da Compra</h3>
-          <div className="summary-line">
-            <span>Total ({getItemCountText(cartMetrics.totalItems)})</span>
-            <span>R$ {formatCurrency(cartMetrics.total)}</span>
-          </div>
-
-          <div className="summary-line">
-            <span>Frete</span>
-            {/* <span>{cartMetrics.frete > 0 ? `R$ ${formatCurrency(cartMetrics.frete)}` : 'Calcular'}</span> */}
-          </div>
-          <div className="summary-divider" role="separator"></div>
-          <div className="summary-total">
-            <span>Total</span>
-            <span className="total-value">
-              R$ {formatCurrency(cartMetrics.total)}
-            </span>
-          </div>
-        </section>
-
-        <Button
-          className="btn-default btn-finalize w-full"
-          onClick={onFinalize}
-          disabled={cartLength === 0}
-          aria-label="Finalizar compra"
-        >
-          <i className="pi pi-check me-2" aria-hidden="true"></i>
-          Finalizar Compra
-        </Button>
-      </div>
-    </aside>
-  );
-
-  /* ===========================
-      RENDER
-   =========================== */
   return (
     <div className="cart-page">
       <Toast ref={toast} />
       <ConfirmDialog />
 
       <div className="cart-container">
-        {/* Products Section */}
         <section className="cart-products" aria-label="Produtos no carrinho">
           <CartHeader totalItems={cartMetrics ? cartMetrics.totalItems : 0} />
 
           {cartItems.length === 0 ? (
-            <EmptyCart onContinueShopping={handleContinueShopping} />
+            <EmptyCart
+              onContinueShopping={handleContinueShopping}
+            />
           ) : (
             <>
               <div className="cart-items">
                 {cartItems.map((item) => (
-                  <ItemCart key={item.id} item={item} />
+                  <ItemCart
+                    key={item.id}
+                    item={item}
+                    handleProductClick={handleProductClick}
+                    handleRemoveItem={handleRemoveItem}
+                    handleUpdateQuantity={handleUpdateQuantity}
+                  />
                 ))}
               </div>
 
@@ -350,11 +145,10 @@ const CartPage: React.FC = () => {
           )}
         </section>
 
-        {/* Summary Section */}
         <CartSummary
-          cartMetrics={cartMetrics}
+          cartLength={cartItems?.length || 0}
+          cartMetrics={cartMetrics || { totalItems: 0, total: 0 }}
           onFinalize={handleFinalize}
-          cartLength={cartItems.length}
         />
       </div>
     </div>

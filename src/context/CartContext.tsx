@@ -2,7 +2,7 @@ import type { IItem } from "@/commons/types/types";
 import { createContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 interface CartContextType {
-    cartItems?: [IItem], 
+    cartItems?: IItem[], 
     cartMetrics?: { totalItems: number, total: number }
     addItem: (item: IItem) => void, 
     deleteItem: (item: IItem) => void, 

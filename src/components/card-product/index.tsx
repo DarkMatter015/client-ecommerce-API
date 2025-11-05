@@ -5,7 +5,11 @@ import { use, useCallback, useRef } from "react"
 import { CartContext } from "@/context/CartContext"
 import { Toast } from "primereact/toast"
 
-export const CardProduct: React.FC<{ product: IProduct }> = ({ product }) => {
+export const CardProduct: React.FC<{ 
+    product: IProduct 
+}> = ({ 
+    product 
+}) => {
 
     const { addItem } = use(CartContext);
     const toast = useRef<Toast | null>(null);
