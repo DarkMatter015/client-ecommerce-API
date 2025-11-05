@@ -1,5 +1,8 @@
 import type { IProduct } from "@/commons/types/types";
 import { Button } from "primereact/button";
+import type React from "react";
+
+import "./productActions.style.css";
 
 export const ProductActions: React.FC<{
     produto: IProduct,

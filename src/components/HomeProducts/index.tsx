@@ -1,7 +1,9 @@
 import { getAllProductsPageable } from "@/services/product-service";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardProduct } from "../card-product";
 import type { IProduct } from "@/commons/types/types";
+
+import './homeProducts.style.css';
 
 export const HomeProducts: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);

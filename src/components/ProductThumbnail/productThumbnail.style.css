@@ -1,0 +1,21 @@
+.thumbnail-image {
+  width: 72px;
+  height: 72px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 6px;
+}
+.thumbnail-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+.thumbnail-image.active {
+  outline: 2px solid var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}

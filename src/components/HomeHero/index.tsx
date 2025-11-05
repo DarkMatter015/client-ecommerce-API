@@ -1,6 +1,9 @@
 import { scrollIntoView } from "@/utils/Utils";
 import { Button } from "primereact/button";
 
+import "./homeHero.style.css";
+import type React from "react";
+
 export const HomeHero: React.FC = () => {
     return (
         <section id="home" className="hero-section">

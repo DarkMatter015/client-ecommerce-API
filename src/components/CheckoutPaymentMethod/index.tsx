@@ -1,4 +1,5 @@
 import type { IPayment } from "@/commons/types/types"
+import type React from "react"
 
 export const CheckoutPaymentMethod: React.FC<{
     payments: IPayment[] | [],

@@ -1,5 +1,8 @@
 import { Button } from "primereact/button";
 
+import "./homeTestimonials.style.css";
+import type React from "react";
+
 export const HomeTestimonials: React.FC = () => {
     return (
         <section id="testimonials" className="section testimonials-section">

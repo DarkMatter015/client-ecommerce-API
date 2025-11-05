@@ -1,5 +1,6 @@
 import { formatCurrency, getItemCountText } from "@/utils/Utils";
 import { Button } from "primereact/button";
+import type React from "react";
 
 export const CartSummary: React.FC<{
     cartMetrics: { totalItems: number; total: number };

@@ -1,4 +1,8 @@
 import type { IProduct } from "@/commons/types/types";
+import type React from "react";
+
+import "./productThumbnail.style.css";
+
 
 export const ProductThumbnail: React.FC<{
     product: IProduct,

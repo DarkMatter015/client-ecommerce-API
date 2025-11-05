@@ -1,7 +1,7 @@
 import React from "react";
 import type { IAddress } from "@/commons/types/types";
 
-import "./address-list.style.css";
+import "./addressList.style.css";
 
 
 interface AddressListProps {

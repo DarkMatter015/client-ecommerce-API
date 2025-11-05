@@ -1,0 +1,25 @@
+.cart-products-header {
+  background: var(--cart-card-bg);
+  padding: var(--cart-item-padding);
+  border-radius: var(--cart-border-radius);
+  box-shadow: var(--cart-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-products-header h2 {
+  font-size: var(--cart-heading-size);
+  font-weight: 600;
+  margin: 0;
+  color: var(--cart-text-primary);
+}
+
+.cart-count {
+  font-size: 1rem;
+  color: var(--cart-text-secondary);
+  background: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+}

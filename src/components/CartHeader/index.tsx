@@ -1,4 +1,7 @@
 import { getItemCountText } from "@/utils/Utils";
+import type React from "react";
+
+import "./cartHeader.style.css";
 
 export const CartHeader: React.FC<{
     totalItems: number

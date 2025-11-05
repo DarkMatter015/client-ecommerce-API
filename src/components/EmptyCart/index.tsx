@@ -1,4 +1,7 @@
 import { Button } from "primereact/button";
+import type React from "react";
+
+import "./emptyCart.style.css";
 
 export const EmptyCart: React.FC<{
     onContinueShopping: () => void
