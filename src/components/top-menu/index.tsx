@@ -149,6 +149,11 @@ const TopMenu: React.FC = () => {
       label: "Cadastrar-se",
       icon: "pi pi-user-plus",
       command: () => navigate("/register")
+    },
+    {
+      label: "Meus Pedidos",
+      icon: "pi pi-box",
+      command: () => navigate("/pedidos")
     }
   ];
 

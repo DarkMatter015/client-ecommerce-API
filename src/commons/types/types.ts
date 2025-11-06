@@ -85,9 +85,15 @@ export interface IItem {
     quantity: number;
 }
 
-export interface IOrder {
+export interface IOrderRequest {
     id?: number;
     paymentId: number;
+    address: IAddress;
+    orderItems: IItem[]
+}
+export interface IOrderResponse {
+    id: number;
+    payment: IPayment;
     address: IAddress;
     orderItems: IItem[]
 }
