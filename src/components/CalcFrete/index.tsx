@@ -1,5 +1,8 @@
 import { Button } from "primereact/button"
 import { InputText } from "primereact/inputtext"
+import type React from "react"
+
+import "./calcFrete.style.css"
 
 export const CalcFrete: React.FC<{ 
     cep: string,

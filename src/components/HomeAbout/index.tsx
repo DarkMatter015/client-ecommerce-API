@@ -1,3 +1,6 @@
+import type React from "react";
+import "./homeAbout.style.css"
+
 export const HomeAbout: React.FC = () => (
     <section id="about" className="section about-section">
         <div className="section-inner">

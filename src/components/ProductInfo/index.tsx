@@ -1,6 +1,9 @@
 import type { IProduct } from "@/commons/types/types";
 import { formatCurrency } from "@/utils/Utils";
 import { InputNumber } from "primereact/inputnumber";
+import type React from "react";
+
+import "./productInfo.style.css";
 
 export const ProductInfo: React.FC<{
     product: IProduct,

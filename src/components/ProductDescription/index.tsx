@@ -1,4 +1,5 @@
 import type { IProduct } from "@/commons/types/types"
+import type React from "react"
 
 export const ProductDescription: React.FC<{ 
     product: IProduct 

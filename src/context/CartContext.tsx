@@ -6,7 +6,8 @@ interface CartContextType {
     cartMetrics?: { totalItems: number, total: number }
     addItem: (item: IItem) => void, 
     deleteItem: (item: IItem) => void, 
-    handleUpdateQuantity: (id: number, newQuantity: number) => void
+    handleUpdateQuantity: (id: number, newQuantity: number) => void,
+    cleanCart: () => void
 }
 
 interface CartProviderProps {
@@ -86,6 +87,11 @@ export function CartProvider({ children }: CartProviderProps ) {
         });
     };
 
+    const cleanCart = () => {
+        setCartItems([]);
+    };
+
+
     const handleUpdateQuantity = (id: number, newQuantity: number) => {
         if (newQuantity < 1) return;
         setCartItems((prev: IItem[]) =>
@@ -101,7 +107,8 @@ export function CartProvider({ children }: CartProviderProps ) {
       cartMetrics, 
       addItem, 
       deleteItem, 
-      handleUpdateQuantity
+      handleUpdateQuantity,
+      cleanCart
     }
     }>
     {children}

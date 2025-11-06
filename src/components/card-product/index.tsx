@@ -1,7 +1,7 @@
 import type { IProduct } from "@/commons/types/types"
 import { Link } from "react-router-dom"
 import "./card-product.style.css"
-import { use, useCallback, useRef } from "react"
+import React, { use, useCallback, useRef } from "react"
 import { CartContext } from "@/context/CartContext"
 import { Toast } from "primereact/toast"
 
