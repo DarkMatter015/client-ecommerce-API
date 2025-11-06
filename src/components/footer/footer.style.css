@@ -5,7 +5,7 @@
 :root {
   --footer-bg: var(--primary-color, #2c3e50);
   --footer-text: #ffffff;
-  --footer-text-secondary: rgba(255, 255, 255, 0.8);
+  --footer-text-secondary: rgba(255, 255, 255, 0.938);
   --footer-padding-mobile: 2rem 1rem;
   --footer-padding-tablet: 3rem 1.5rem;
   --footer-padding-desktop: 4rem 2rem;
