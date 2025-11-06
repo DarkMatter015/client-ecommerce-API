@@ -7,6 +7,7 @@ import { Layout } from "@/components/layout";
 import ProductPage from "@/pages/product";
 import CartPage from "@/pages/cart";
 import CheckoutPage from "@/pages/checkout";
+import OrdersPage from "@/pages/orders";
 
 export function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ export function AppRoutes() {
         {/* protected routes */}
         <Route element={<RequireAuth />}>
             <Route path="/finalizar" element={<CheckoutPage />} />
+            <Route path="/pedidos" element={<OrdersPage />} />
         </Route>
       </Route>
     </Routes>

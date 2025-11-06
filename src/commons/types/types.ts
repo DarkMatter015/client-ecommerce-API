@@ -84,3 +84,10 @@ export interface IItem {
     totalPrice?: number;
     quantity: number;
 }
+
+export interface IOrder {
+    id?: number;
+    paymentId: number;
+    address: IAddress;
+    orderItems: IItem[]
+}
