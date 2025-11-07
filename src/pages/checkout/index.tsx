@@ -121,9 +121,7 @@ const CheckoutPage: React.FC = () => {
         throw new Error("Erro ao realizar o pedido")
       }
 
-      console.log('Pedido realizado:', { cartItems, selectedAddress, paymentMethod });
-      // TODO: atualizar carrihno aqui
-      
+      console.log('Pedido realizado:', { cartItems, selectedAddress, paymentMethod });      
       
       toast.current?.show({
         severity: 'success',
@@ -134,16 +132,12 @@ const CheckoutPage: React.FC = () => {
 
       setTimeout(() => {
         cleanCart();
+        navigate("/pedidos")
       }, 4000);
       
     } catch (error) {
       console.error('Erro ao realizar o pedido:', error);
     }
-
-    // TODO: Fazer redirecionamento para página de pedidos ou confirmação
-    setTimeout(() => {
-      // navigate('/meus-pedidos');
-    }, 4000);
   };
 
   const handleGoBack = () => {
