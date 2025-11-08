@@ -1,6 +1,8 @@
 
-import type { IResponse, IUserLogin, IUserRegister, IUserResponse } from "@/commons/types/types";
+import type { IResponse, IUserLogin, IUserRegister } from "@/commons/types/types";
 import { api } from "@/lib/axios";
+
+const route = "/auth";
 
 /**
  * Função para realizar uma requisição HTTP para API para cadastrar um novo usuário
@@ -37,7 +39,7 @@ const signup = async (user: IUserRegister): Promise<IResponse> => {
 const login = async (user: IUserLogin) => {
   let response = {} as IResponse;
   try {
-    const data = await api.post("/login", user);
+    const data = await api.post(`${route}/login`, user);
     response = {
       status: data.status,
       success: true,
@@ -65,7 +67,7 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
   }
 
   try {
-  const response = await api.get("/auth/validate", {
+  const response = await api.get(`${route}/validate`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -91,37 +93,9 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
   }
 };
 
-const getUser = async (): Promise<IUserResponse | IResponse> => {
-
-  try {
-    const response = await api.get("/users");
-
-    return {
-      id: response.data.id,
-      email: response.data.email,
-      displayName: response.data.displayName,
-    };
-  } catch (err: any) {
-    const status = err?.response?.status ?? 500;
-    const message =
-      status === 401
-        ? "Usuário não encontrado"
-        : "Erro ao buscar o usuário";
-
-    return {
-      status,
-      success: false,
-      message,
-      data: err?.response?.data ?? null,
-    };
-  }
-};
-
-
 const AuthService = {
   signup,
   login, 
-  validateToken, 
-  getUser
+  validateToken
 };
 export default AuthService;
