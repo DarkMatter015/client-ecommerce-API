@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setAuthenticatedUser(undefined);
 
     // Navegar aqui é OK porque é uma ação explícita de logout
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   }, [navigate]);
 
   useEffect(() => {

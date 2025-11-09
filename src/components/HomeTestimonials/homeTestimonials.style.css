@@ -62,7 +62,7 @@
 .card-feedback {
   display: flex;
   gap: var(--gap-md);
-  align-items: flex-start;
+  align-items: center;
   background: var(--card-bg);
   padding: var(--gap-md);
   border-radius: 0.75rem;

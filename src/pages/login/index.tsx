@@ -196,7 +196,7 @@ export const LoginPage = () => {
           <div className="text-center flex flex-column lg:flex-row justify-content-center align-items-center gap-3">
             <span className="text-lg">Não tem uma conta?</span>
             <Link
-              to="/register"
+              to="/cadastro"
               className="btn-outline text-xl"
               aria-label="Ir para página de cadastro"
             >
