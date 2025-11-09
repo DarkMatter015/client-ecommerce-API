@@ -14,8 +14,6 @@ import { CartHeader } from "@/components/CartHeader";
 import { EmptyCart } from "@/components/EmptyCart";
 import { ItemCart } from "@/components/ItemCart";
 
-
-
 const TOAST_MESSAGES = {
   emptyCart: {
     severity: "warn" as const,
@@ -61,18 +59,16 @@ const TOAST_MESSAGES = {
   },
 } as const;
 
-
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
 
-  const { cartItems, cartMetrics, deleteItem, handleUpdateQuantity } = use(CartContext);
-
+  const { cartItems, cartMetrics, deleteItem, handleUpdateQuantity } =
+    use(CartContext);
 
   const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
     toast.current?.show(TOAST_MESSAGES[type]);
   }, []);
-
 
   const handleRemoveItem = (item: IItem) => {
     confirmDialog({
@@ -106,7 +102,6 @@ const CartPage: React.FC = () => {
     navigate("/finalizar", { state: { cartItems } });
   };
 
-
   return (
     <div className="cart-page">
       <Toast ref={toast} />
@@ -117,9 +112,7 @@ const CartPage: React.FC = () => {
           <CartHeader totalItems={cartMetrics ? cartMetrics.totalItems : 0} />
 
           {cartItems.length === 0 ? (
-            <EmptyCart
-              onContinueShopping={handleContinueShopping}
-            />
+            <EmptyCart onContinueShopping={handleContinueShopping} />
           ) : (
             <>
               <div className="cart-items">

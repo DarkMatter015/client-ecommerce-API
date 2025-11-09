@@ -1,5 +1,8 @@
-
-import type { IResponse, IUserLogin, IUserRegister } from "@/commons/types/types";
+import type {
+  IResponse,
+  IUserLogin,
+  IUserRegister,
+} from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
 const route = "/auth";
@@ -18,7 +21,7 @@ const signup = async (user: IUserRegister): Promise<IResponse> => {
       success: true,
       message: "Usuário cadastrado com sucesso",
       data: data.data,
-    };  
+    };
   } catch (err: any) {
     response = {
       status: err.response.status,
@@ -67,9 +70,9 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
   }
 
   try {
-  const response = await api.get(`${route}/validate`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    const response = await api.get(`${route}/validate`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     return {
       status: response.status,
@@ -80,9 +83,7 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
   } catch (err: any) {
     const status = err?.response?.status ?? 500;
     const message =
-      status === 401
-        ? "Token inválido ou expirado"
-        : "Erro ao validar o token";
+      status === 401 ? "Token inválido ou expirado" : "Erro ao validar o token";
 
     return {
       status,
@@ -95,7 +96,7 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
 
 const AuthService = {
   signup,
-  login, 
-  validateToken
+  login,
+  validateToken,
 };
 export default AuthService;
