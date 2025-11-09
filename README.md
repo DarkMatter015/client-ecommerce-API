@@ -1,6 +1,12 @@
 # RiffHouse Client — E-commerce com React + Vite
 
-Este é o repositório do **front-end** da RiffHouse, uma plataforma de e-commerce de instrumentos musicais. Desenvolvido com **React, TypeScript e Vite**, este projeto consome a [API RESTful RiffHouse](https://github.com/DarkMatter015/server-ecommerce) para fornecer uma experiência de compra completa e interativa.
+Este é o repositório do **front-end** da RiffHouse, uma plataforma de e-commerce de instrumentos musicais. Desenvolvido com **React, TypeScript e Vite**, este projeto consome a [API REST RiffHouse](https://github.com/DarkMatter015/server-ecommerce) para fornecer uma experiência de compra completa e interativa.
+
+---
+
+## 🎥 Demonstração do Projeto
+
+[![Assista à demonstração no YouTube](https://img.youtube.com/vi/NLZSjH3SSTU/0.jpg)](https://youtu.be/NLZSjH3SSTU)
 
 ---
 
