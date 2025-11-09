@@ -13,7 +13,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="login" element={<LoginPage />} />
-      <Route path="register" element={<RegisterPage />} />
+      <Route path="cadastro" element={<RegisterPage />} />
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}
