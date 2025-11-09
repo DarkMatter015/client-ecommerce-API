@@ -1,58 +1,62 @@
-import type { IOrderRequest, IOrderResponse, IPayment } from "@/commons/types/types";
+import type { IOrderResponse } from "@/commons/types/types";
 import { OrdersList } from "@/components/OrdersList";
 import { getAllOrdersPageable } from "@/services/order-service";
-import { getAllPaymentsPageable } from "@/services/payment-service";
 import type React from "react";
 import { useEffect, useState } from "react";
 
 const OrdersPage: React.FC = () => {
 
     const [orders, setOrders] = useState<IOrderResponse[]>([]);
-    const [payments, setPayments] = useState<IPayment[]>([]);
+    const [totalElements, setTotalElements] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const fetchOrders = async (page: number, size: number) => {
+        try {
+            setLoading(true);
+            const response = await getAllOrdersPageable(page, size);
+            if (response) {
+                setOrders(response.content);
+                setTotalElements(response.totalElements);
+                setCurrentPage(page);
+                setPageSize(size);
+            }
+        } catch (err) {
+            setError('Erro ao carregar pedidos. Por favor, tente novamente mais tarde.');
+            console.error('Erro ao buscar pedidos:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const response = await getAllOrdersPageable(0, 10);
-                if (response) {
-                    setOrders(response.content);
-                }
-            } catch (err) {
-                setError('Erro ao carregar pedidos. Por favor, tente novamente mais tarde.');
-                console.error('Erro ao buscar pedidos:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        
-        const fetchPayments = async () => {
-            try {
-                const response = await getAllPaymentsPageable(0, 10);
-                if (response) {
-                    setPayments(response.content);
-                }
-            } catch (err) {
-                setError('Erro ao carregar pagamentos. Por favor, tente novamente mais tarde.');
-                console.error('Erro ao buscar pagamentos:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
+        fetchOrders(0, 10);
+    }, []);
 
-        fetchOrders();
-        fetchPayments();
-    }, [])
+    const handlePageChange = (page: number, pageSize: number) => {
+        fetchOrders(page, pageSize);
+    };
 
+    if (loading) {
+        return <div className="orders-page">Carregando pedidos...</div>;
+    }
 
-    
+    if (error) {
+        return <div className="orders-page error">{error}</div>;
+    }
 
     return (
         <div className="orders-page">
-            <OrdersList orders={orders} />
-
+            <OrdersList 
+                orders={orders}
+                totalElements={totalElements}
+                currentPage={currentPage}
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 };

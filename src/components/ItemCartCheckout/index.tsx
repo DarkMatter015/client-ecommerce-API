@@ -18,7 +18,7 @@ export const ItemCartCheckout: React.FC<{
                     <p className="order-item-quantity">Quantidade: {item.quantity}</p>
                 </div>
                 <div className="order-item-price">
-                    <span>{formatCurrency(item.totalPrice)}</span>
+                    <span>R$ {formatCurrency(item.totalPrice)}</span>
                 </div>
             </article>
         );

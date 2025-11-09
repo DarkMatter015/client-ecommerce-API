@@ -4,12 +4,23 @@ import { Button } from 'primereact/button';
 import { Panel } from 'primereact/panel';
 import type { IItem, IOrderResponse } from '@/commons/types/types';
 import './orders-list.style.css';
+import { formatCurrency } from '@/utils/Utils';
 
 interface OrdersListProps {
     orders: IOrderResponse[];
+    totalElements: number;
+    currentPage: number;
+    pageSize: number;
+    onPageChange: (page: number, pageSize: number) => void;
 }
 
-export const OrdersList: React.FC<OrdersListProps> = ({ orders }) => {
+export const OrdersList: React.FC<OrdersListProps> = ({ 
+    orders, 
+    totalElements, 
+    currentPage, 
+    pageSize, 
+    onPageChange 
+}) => {
     const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
     const toggleRowExpansion = (orderId: number) => {
@@ -20,13 +31,6 @@ export const OrdersList: React.FC<OrdersListProps> = ({ orders }) => {
             newExpandedRows.add(orderId);
         }
         setExpandedRows(newExpandedRows);
-    };
-
-    const formatCurrency = (value: number): string => {
-        return value.toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        });
     };
 
     const itemTemplate = (order: IOrderResponse) => {
@@ -117,10 +121,14 @@ export const OrdersList: React.FC<OrdersListProps> = ({ orders }) => {
         );
     };
 
+    const handlePageChange = (event: any) => {
+        onPageChange(event.page, event.rows);
+    };
+
     return (
         <div className="orders-list-container">
             <h2>Meus Pedidos</h2>
-            {orders.length === 0 ? (
+            {totalElements === 0 ? (
                 <div className="no-orders">
                     <i className="pi pi-shopping-cart"></i>
                     <p>Nenhum pedido encontrado.</p>
@@ -130,7 +138,10 @@ export const OrdersList: React.FC<OrdersListProps> = ({ orders }) => {
                     value={orders}
                     itemTemplate={itemTemplate}
                     paginator
-                    rows={5}
+                    rows={pageSize}
+                    first={currentPage * pageSize}
+                    totalRecords={totalElements}
+                    onPage={handlePageChange}
                     emptyMessage="Nenhum pedido encontrado"
                     className="orders-dataview"
                 />

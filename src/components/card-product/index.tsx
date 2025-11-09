@@ -44,7 +44,7 @@ export const CardProduct: React.FC<{
                 </div>
 
                 <h3 className="card-title">{product.name}</h3>
-                <h4 className="mt-1">
+                <h4 className="mt-1 mb-0">
                     <span className="text-success">
                         R$ {product.price.toFixed(2).replace('.', ',')}
                     </span>

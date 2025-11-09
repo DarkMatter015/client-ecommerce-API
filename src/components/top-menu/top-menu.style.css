@@ -277,6 +277,88 @@
 }
 
 /* ===========================
+   SEÇÃO DE USUÁRIO
+=========================== */
+.navbar-user-section {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--navbar-border-radius);
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+  transition: var(--navbar-transition);
+  white-space: nowrap;
+  max-width: 250px;
+}
+
+.navbar-user-btn:hover {
+  background: var(--navbar-hover-bg);
+  color: #000;
+}
+
+.navbar-user-btn i {
+  font-size: 1.3rem;
+}
+
+.navbar-user-btn.authenticated {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.navbar-user-btn.authenticated:hover {
+  background: rgba(39, 174, 96, 0.1);
+}
+
+.user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.auth-text {
+  font-weight: 500;
+}
+
+/* Mobile User Info */
+.mobile-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  color: white;
+  border-radius: var(--navbar-border-radius);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.mobile-user-info i {
+  font-size: 1.5rem;
+}
+
+/* Mobile Auth Prompt */
+.mobile-auth-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobile-auth-prompt p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
+}
+
+/* ===========================
    BOTÃO MOBILE
 =========================== */
 .navbar-mobile-toggle {

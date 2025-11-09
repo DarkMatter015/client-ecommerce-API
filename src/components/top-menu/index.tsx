@@ -8,6 +8,7 @@ import { AutoComplete } from 'primereact/autocomplete';
 import { getAllProductsPageable } from '@/services/product-service';
 import type { IProduct } from '@/commons/types/types';
 import { CartContext } from "@/context/CartContext";
+import { AuthContext } from "@/context/AuthContext";
 
 interface ProductGroup {
   label: string;
@@ -19,6 +20,8 @@ const TopMenu: React.FC = () => {
   const location = useLocation();
   const menuRef = useRef<Menu>(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const { authenticated, authenticatedUser, handleLogout} = use(AuthContext);
 
   const { cartMetrics } = use(CartContext);
 
@@ -139,7 +142,20 @@ const TopMenu: React.FC = () => {
     { label: "Sobre Nós", path: "/", hash: "about", icon: "pi pi-info-circle" }
   ];
 
-  const userMenuItems = [
+  const userMenuItems = authenticated ? [
+    {
+      label: "Meus Pedidos",
+      icon: "pi pi-box",
+      command: () => navigate("/pedidos")
+    },
+    {
+      label: "Sair",
+      icon: "pi pi-sign-out",
+      command: () => {
+        handleLogout()
+      }
+    }
+  ] : [
     {
       label: "Entrar",
       icon: "pi pi-sign-in",
@@ -148,12 +164,7 @@ const TopMenu: React.FC = () => {
     {
       label: "Cadastrar-se",
       icon: "pi pi-user-plus",
-      command: () => navigate("/register")
-    },
-    {
-      label: "Meus Pedidos",
-      icon: "pi pi-box",
-      command: () => navigate("/pedidos")
+      command: () => navigate("/cadastro")
     }
   ];
 
@@ -244,13 +255,28 @@ const TopMenu: React.FC = () => {
               )}
             </button>
 
-            <button
-              className="navbar-icon-btn"
-              onClick={(e) => menuRef.current?.toggle(e)}
-              aria-label="Menu do usuário"
-            >
-              <i className="pi pi-user"></i>
-            </button>
+            <div className="navbar-user-section">
+              {authenticated ? (
+                <button
+                  className="navbar-user-btn authenticated"
+                  onClick={(e) => menuRef.current?.toggle(e)}
+                  aria-label="Menu do usuário"
+                  title={authenticatedUser?.displayName}
+                >
+                  <i className="pi pi-user"></i>
+                  <span className="user-name">{authenticatedUser?.displayName}</span>
+                </button>
+              ) : (
+                <button
+                  className="navbar-user-btn"
+                  onClick={(e) => menuRef.current?.toggle(e)}
+                  aria-label="Menu de autenticação"
+                >
+                  <i className="pi pi-user"></i>
+                  <span className="auth-text">Entre ou Cadastre-se</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Botão Mobile Menu */}
@@ -339,21 +365,48 @@ const TopMenu: React.FC = () => {
           {/* Conta Mobile */}
           <div className="mobile-menu-section">
             <h3 className="mobile-section-title">Conta</h3>
-            <nav className="mobile-nav">
-              {userMenuItems.map((item, index) => (
-                <button
-                  key={index}
-                  className="mobile-menu-item"
-                  onClick={() => {
-                    item.command?.();
-                    setSidebarVisible(false);
-                  }}
-                >
-                  <i className={item.icon}></i>
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </nav>
+            {authenticated ? (
+              <>
+                <div className="mobile-user-info">
+                  <i className="pi pi-user"></i>
+                  <span>{authenticatedUser?.displayName}</span>
+                </div>
+                <nav className="mobile-nav">
+                  {userMenuItems.map((item, index) => (
+                    <button
+                      key={index}
+                      className="mobile-menu-item"
+                      onClick={() => {
+                        item.command?.();
+                        setSidebarVisible(false);
+                      }}
+                    >
+                      <i className={item.icon}></i>
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                </nav>
+              </>
+            ) : (
+              <div className="mobile-auth-prompt">
+                <p>Faça login ou cadastre-se para acessar sua conta</p>
+                <nav className="mobile-nav">
+                  {userMenuItems.map((item, index) => (
+                    <button
+                      key={index}
+                      className="mobile-menu-item"
+                      onClick={() => {
+                        item.command?.();
+                        setSidebarVisible(false);
+                      }}
+                    >
+                      <i className={item.icon}></i>
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                </nav>
+              </div>
+            )}
           </div>
 
           {/* Carrinho Mobile */}

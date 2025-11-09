@@ -7,7 +7,7 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 
-import type { IUserRegister } from "@/commons/types/form";
+import type { IUserRegister } from "@/commons/types/types";
 import AuthService from "@/services/auth-service";
 
 import "@/styles/form.css";
