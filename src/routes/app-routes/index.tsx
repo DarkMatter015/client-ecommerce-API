@@ -12,23 +12,22 @@ import OrdersPage from "@/pages/orders";
 export function AppRoutes() {
   return (
     <Routes>
-        
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegisterPage />} />
 
-        <Route path="/" element={<Layout />}>
+      <Route path="/" element={<Layout />}>
         {/* public routes */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
 
-            <Route path="/produto/:id" element={<ProductPage />} />
+        <Route path="/produto/:id" element={<ProductPage />} />
 
-            <Route path="/carrinho" element={<CartPage />} />
-          
+        <Route path="/carrinho" element={<CartPage />} />
+
         {/* protected routes */}
         <Route element={<RequireAuth />}>
-            <Route path="/finalizar" element={<CheckoutPage />} />
-            <Route path="/pedidos" element={<OrdersPage />} />
+          <Route path="/finalizar" element={<CheckoutPage />} />
+          <Route path="/pedidos" element={<OrdersPage />} />
         </Route>
       </Route>
     </Routes>

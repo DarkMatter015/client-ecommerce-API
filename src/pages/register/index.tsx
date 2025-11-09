@@ -26,7 +26,10 @@ const PASSWORD_CRITERIA = [
   { label: "Pelo menos uma letra minúscula (a-z)", regex: /[a-z]/ },
   { label: "Pelo menos uma letra maiúscula (A-Z)", regex: /[A-Z]/ },
   { label: "Pelo menos um número (0-9)", regex: /\d/ },
-  { label: "Pelo menos um caractere especial (@, $, !, %, *, ?, &)", regex: /[@$!%*?&]/ },
+  {
+    label: "Pelo menos um caractere especial (@, $, !, %, *, ?, &)",
+    regex: /[@$!%*?&]/,
+  },
 ];
 
 const VALIDATION_RULES = {
@@ -52,7 +55,8 @@ const VALIDATION_RULES = {
     },
     validate: (value: string) => {
       for (const criteria of PASSWORD_CRITERIA) {
-        if (!criteria.regex.test(value)) return "A senha não atende a todos os critérios.";
+        if (!criteria.regex.test(value))
+          return "A senha não atende a todos os critérios.";
       }
       return true;
     },
@@ -91,12 +95,9 @@ export const RegisterPage = () => {
   const toast = useRef<Toast>(null);
   const passwordValue = watch("password");
 
-  const showToast = useCallback(
-    (type: keyof typeof TOAST_MESSAGES) => {
-      toast.current?.show(TOAST_MESSAGES[type]);
-    },
-    []
-  );
+  const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
+    toast.current?.show(TOAST_MESSAGES[type]);
+  }, []);
 
   const onSubmit = useCallback(
     async (data: IUserRegister) => {
@@ -170,7 +171,10 @@ export const RegisterPage = () => {
                     </span>
                   </div>
                   {fieldState.error && (
-                    <small id="displayName-error" className="p-error block mt-1">
+                    <small
+                      id="displayName-error"
+                      className="p-error block mt-1"
+                    >
                       {fieldState.error.message}
                     </small>
                   )}
@@ -231,7 +235,10 @@ export const RegisterPage = () => {
                       placeholder="Digite uma senha forte"
                       aria-describedby="password"
                       aria-invalid={!!fieldState.error}
-                      className={classNames({ "p-invalid": fieldState.error }, "w-full")}
+                      className={classNames(
+                        { "p-invalid": fieldState.error },
+                        "w-full"
+                      )}
                       inputClassName="w-full"
                       toggleMask
                       feedback={false}
@@ -244,21 +251,28 @@ export const RegisterPage = () => {
                   {/* Feedback visual da senha */}
                   {fieldState.error && (
                     <div className="password-criteria-container mt-2">
-                    {PASSWORD_CRITERIA.map((criteria, index) => {
-                      const isValid = criteria.regex.test(passwordValue);
-                      return (
-                        <div key={index} className={`criteria-item ${isValid ? 'valid' : 'invalid'}`}>
-                          <i className={classNames('pi', {
-                            'pi-check-circle': isValid,
-                            'pi-times-circle': !isValid
-                          })} aria-hidden="true"></i>
-                          <span>{criteria.label}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                      {PASSWORD_CRITERIA.map((criteria, index) => {
+                        const isValid = criteria.regex.test(passwordValue);
+                        return (
+                          <div
+                            key={index}
+                            className={`criteria-item ${
+                              isValid ? "valid" : "invalid"
+                            }`}
+                          >
+                            <i
+                              className={classNames("pi", {
+                                "pi-check-circle": isValid,
+                                "pi-times-circle": !isValid,
+                              })}
+                              aria-hidden="true"
+                            ></i>
+                            <span>{criteria.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
                   )}
-                  
                 </>
               )}
             />
@@ -285,7 +299,10 @@ export const RegisterPage = () => {
                       placeholder="Digite a senha novamente"
                       aria-describedby="confirmPassword-error"
                       aria-invalid={!!fieldState.error}
-                      className={classNames({ "p-invalid": fieldState.error }, "w-full")}
+                      className={classNames(
+                        { "p-invalid": fieldState.error },
+                        "w-full"
+                      )}
                       inputClassName="w-full"
                       toggleMask
                       feedback={false}
@@ -296,7 +313,10 @@ export const RegisterPage = () => {
                     </span>
                   </div>
                   {fieldState.error && (
-                    <small id="confirmPassword-error" className="p-error block mt-1">
+                    <small
+                      id="confirmPassword-error"
+                      className="p-error block mt-1"
+                    >
                       {fieldState.error.message}
                     </small>
                   )}

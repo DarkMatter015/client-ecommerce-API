@@ -1,6 +1,9 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import type { IAuthenticatedUser, IAuthenticationResponse } from "@/commons/types/types";
+import type {
+  IAuthenticatedUser,
+  IAuthenticationResponse,
+} from "@/commons/types/types";
 import { api } from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import AuthService from "@/services/auth-service";
@@ -8,7 +11,9 @@ import AuthService from "@/services/auth-service";
 interface AuthContextType {
   authenticated: boolean;
   authenticatedUser?: IAuthenticatedUser;
-  handleLogin: (authenticationResponse: IAuthenticationResponse) => Promise<any>;
+  handleLogin: (
+    authenticationResponse: IAuthenticationResponse
+  ) => Promise<any>;
   handleLogout: () => void;
 }
 
@@ -20,8 +25,9 @@ const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [authenticated, setAuthenticated] = useState(false);
-  const [authenticatedUser, setAuthenticatedUser] =
-    useState<IAuthenticatedUser | undefined>();
+  const [authenticatedUser, setAuthenticatedUser] = useState<
+    IAuthenticatedUser | undefined
+  >();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -34,7 +40,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setAuthenticated(false);
     setAuthenticatedUser(undefined);
 
-    // Navegar aqui é OK porque é uma ação explícita de logout
     navigate("/", { replace: true });
   }, [navigate]);
 
@@ -42,10 +47,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const validateUserSession = async () => {
       try {
         const storedUser = localStorage.getItem("user");
-        const storedToken = localStorage.getItem("token"); // token should be plain string
+        const storedToken = localStorage.getItem("token");
 
         if (!storedToken) {
-          // nenhum token => ficar não autenticado (mas sem navegar)
           setAuthenticated(false);
           setAuthenticatedUser(undefined);
           setLoading(false);
@@ -55,16 +59,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const response = await AuthService.validateToken(storedToken);
 
         if (response.success && storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        setAuthenticatedUser(parsedUser);
-        setAuthenticated(true);
-        api.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+          const parsedUser = JSON.parse(storedUser);
+          setAuthenticatedUser(parsedUser);
+          setAuthenticated(true);
+          api.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${storedToken}`;
         } else {
-        // token inválido -> manter dados no localStorage para possível reautenticação, apenas desautenticar
-        console.warn("Token inválido ou expirado, mantendo dados para reautenticação");
-        setAuthenticated(false);
-        setAuthenticatedUser(undefined);
-        // Não remover do localStorage para permitir re-login automático ou manual
+          // token inválido -> manter dados no localStorage para possível reautenticação, apenas desautenticar
+          console.warn(
+            "Token inválido ou expirado, mantendo dados para reautenticação"
+          );
+          setAuthenticated(false);
+          setAuthenticatedUser(undefined);
         }
       } catch (err) {
         // falha de rede ou erro inesperado: deixar não autenticado, mas não navegar
@@ -76,8 +83,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     };
 
-  validateUserSession();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    validateUserSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogin = async (
@@ -86,14 +93,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const { token, user } = authenticationResponse;
       localStorage.setItem("token", token);
-      
+
       localStorage.setItem("user", JSON.stringify(user));
-      
+
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       setAuthenticatedUser(user);
       setAuthenticated(true);
-    } catch (err){
+    } catch (err) {
       console.log("Erro no login: ", err);
       handleLogout();
     }
@@ -101,7 +108,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   if (loading) {
     return <div>Validando sessão ...</div>;
-  };
+  }
 
   return (
     <AuthContext.Provider

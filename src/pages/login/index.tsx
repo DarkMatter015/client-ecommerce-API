@@ -7,12 +7,14 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 
-
 import { useAuth } from "@/context/hooks/use-auth";
 import AuthService from "@/services/auth-service";
 
 import "@/styles/form.css";
-import type { IAuthenticationResponse, IUserLogin } from "@/commons/types/types";
+import type {
+  IAuthenticationResponse,
+  IUserLogin,
+} from "@/commons/types/types";
 
 // Constantes
 const FORM_DEFAULT_VALUES: IUserLogin = {
@@ -47,7 +49,8 @@ const TOAST_MESSAGES = {
   error: {
     severity: "error" as const,
     summary: "Erro",
-    detail: "Falha ao efetuar login. Verifique suas credenciais e tente novamente.",
+    detail:
+      "Falha ao efetuar login. Verifique suas credenciais e tente novamente.",
     life: 3000,
   },
 } as const;
@@ -59,7 +62,7 @@ export const LoginPage = () => {
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<IUserLogin>({ 
+  } = useForm<IUserLogin>({
     defaultValues: FORM_DEFAULT_VALUES,
     mode: "onBlur",
   });
@@ -68,12 +71,9 @@ export const LoginPage = () => {
   const toast = useRef<Toast>(null);
   const { handleLogin } = useAuth();
 
-  const showToast = useCallback(
-    (type: keyof typeof TOAST_MESSAGES) => {
-      toast.current?.show(TOAST_MESSAGES[type]);
-    },
-    []
-  );
+  const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
+    toast.current?.show(TOAST_MESSAGES[type]);
+  }, []);
 
   const onSubmit = useCallback(
     async (userLogin: IUserLogin) => {
@@ -81,7 +81,8 @@ export const LoginPage = () => {
         const response = await AuthService.login(userLogin);
 
         if (response.success && response.data) {
-          const authenticationResponse = response.data as IAuthenticationResponse;
+          const authenticationResponse =
+            response.data as IAuthenticationResponse;
           handleLogin(authenticationResponse);
           showToast("success");
 
