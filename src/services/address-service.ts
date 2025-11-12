@@ -45,3 +45,13 @@ export const getAddressById = async (id: string): Promise<IAddress | null> => {
     return null;
   }
 };
+
+export const createAddress = async (address: Partial<IAddress>): Promise<IAddress | null> => {
+  try {
+    const response = await api.post(route, address);
+    return mapApiToAddress(response.data);
+  } catch (err) {
+    console.error(`Erro ao criar o endereço na rota ${route}`, err);
+    return null;
+  }
+};

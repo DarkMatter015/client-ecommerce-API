@@ -60,12 +60,12 @@ export interface IPayment {
 
 export interface IAddress {
     id: number;
-    street: string;
-    number: string;
-    complement: string;
-    neighborhood: string;
-    city: string;
-    state: string;
+    street?: string;
+    number?: number | undefined;
+    complement?: string;
+    neighborhood?: string;
+    city?: string;
+    state?: string;
     cep: string;
 }
 

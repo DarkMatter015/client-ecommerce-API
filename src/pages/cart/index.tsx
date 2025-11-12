@@ -111,12 +111,12 @@ const CartPage: React.FC = () => {
         <section className="cart-products" aria-label="Produtos no carrinho">
           <CartHeader totalItems={cartMetrics ? cartMetrics.totalItems : 0} />
 
-          {cartItems.length === 0 ? (
+          {cartItems?.length === 0 ? (
             <EmptyCart onContinueShopping={handleContinueShopping} />
           ) : (
             <>
               <div className="cart-items">
-                {cartItems.map((item) => (
+                {cartItems?.map((item) => (
                   <ItemCart
                     key={item.id}
                     item={item}

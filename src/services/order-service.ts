@@ -1,4 +1,10 @@
-import type { IOrderResponse, IPage } from "@/commons/types/types";
+import type {
+  IAddress,
+  IItem,
+  IOrderResponse,
+  IPage,
+  IPayment,
+} from "@/commons/types/types";
 import { api } from "@/lib/axios";
 import { normalizePage } from "@/utils/Utils";
 
@@ -40,5 +46,25 @@ export const getOrderById = async (
       err
     );
     return null;
+  }
+};
+
+export const postOrder = async (
+  cartItems: IItem[] | undefined,
+  selectedAddress: IAddress | null,
+  paymentMethod: IPayment | null
+) => {
+  try {
+    const response = await api.post("/orders", {
+      orderItems: cartItems?.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      })),
+      address: selectedAddress,
+      paymentId: paymentMethod?.id,
+    });
+    return response;
+  } catch (err) {
+    console.error(`Erro ao realizar pedido na rota ${route}`, err);
   }
 };

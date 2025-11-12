@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type {
   IAuthenticatedUser,
@@ -30,18 +30,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   >();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-
-  const handleLogout = useCallback(() => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("cartItems");
-    delete api.defaults.headers.common["Authorization"];
-
-    setAuthenticated(false);
-    setAuthenticatedUser(undefined);
-
-    navigate("/", { replace: true });
-  }, [navigate]);
 
   useEffect(() => {
     const validateUserSession = async () => {
@@ -86,6 +74,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     validateUserSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("cartItems");
+    delete api.defaults.headers.common["Authorization"];
+
+    setAuthenticated(false);
+    setAuthenticatedUser(undefined);
+
+    navigate("/", { replace: true });
+  };
 
   const handleLogin = async (
     authenticationResponse: IAuthenticationResponse
