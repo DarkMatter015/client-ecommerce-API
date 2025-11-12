@@ -5,12 +5,14 @@ import "./checkout.style.css";
 import { getAllPaymentsPageable } from "@/services/payment-service";
 import type { IAddress, IPayment } from "@/commons/types/types";
 import { CartContext } from "@/context/CartContext";
-import { getAllAddressesPageable } from "@/services/address-service";
+import { getAllAddressesPageable, createAddress } from "@/services/address-service";
 import { CheckoutSummary } from "@/components/CheckoutSummary";
 import { CheckoutPaymentMethod } from "@/components/CheckoutPaymentMethod";
 import { AddressList } from "@/components/AddressList";
 import { ItemCartCheckout } from "@/components/ItemCartCheckout";
 import { postOrder } from "@/services/order-service";
+import { Button } from "primereact/button";
+import { RegisterAddressDialog } from "@/components/RegisterAddressDialog";
 
 const TOAST_MESSAGES = {
   noAddress: {
@@ -53,6 +55,18 @@ const CheckoutPage: React.FC = () => {
 
   const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<IAddress | null>(null);
+
+  const [showAddressDialog, setShowAddressDialog] = useState(false);
+  const [newAddress, setNewAddress] = useState<Partial<IAddress>>({
+    street: "",
+    number: undefined,
+    complement: "",
+    neighborhood: "",
+    city: "",
+    state: "",
+    cep: "",
+  });
+  const [savingAddress, setSavingAddress] = useState(false);
 
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
@@ -146,6 +160,61 @@ const CheckoutPage: React.FC = () => {
     handlePlaceOrder();
   };
 
+  const handleAddAddress = async () => {
+    if (!newAddress.street || !newAddress.number || !newAddress.city || !newAddress.state || !newAddress.cep) {
+      toast.current?.show({
+        severity: "warn",
+        summary: "Campos Obrigatórios",
+        detail: "Preencha todos os campos obrigatórios.",
+        life: 3000,
+      });
+      return;
+    }
+
+    try {
+      setSavingAddress(true);
+      const response = await createAddress(newAddress as IAddress);
+      if (response) {
+        setAddresses([...addresses, response]);
+        setSelectedAddress(response);
+        setShowAddressDialog(false);
+        setNewAddress({
+          street: "",
+          number: undefined,
+          complement: "",
+          neighborhood: "",
+          city: "",
+          state: "",
+          cep: "",
+        });
+        showToast("addressSaved");
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar endereço:", error);
+      toast.current?.show({
+        severity: "error",
+        summary: "Erro",
+        detail: "Erro ao adicionar o endereço. Tente novamente.",
+        life: 3000,
+      });
+    } finally {
+      setSavingAddress(false);
+    }
+  };
+
+  const handleAddressDialogHide = () => {
+    setShowAddressDialog(false);
+    setNewAddress({
+      street: "",
+      number: undefined,
+      complement: "",
+      neighborhood: "",
+      city: "",
+      state: "",
+      cep: "",
+    });
+  };
+
   return (
     <div className="checkout-page">
       <Toast ref={toast} />
@@ -170,6 +239,25 @@ const CheckoutPage: React.FC = () => {
 
           <div className="p-grid" style={{ gap: "1.5rem" }}>
             <div className="p-col-12 p-md-6">
+              <div style={{ marginBottom: "1rem" }}>
+                <Button
+                  label="Adicionar Novo Endereço"
+                  icon="pi pi-plus"
+                  onClick={() => setShowAddressDialog(true)}
+                  className="p-button-outlined"
+                  style={{ width: "100%" }}
+                />
+              </div>
+
+              <RegisterAddressDialog 
+                showAddressDialog={showAddressDialog}
+                handleAddressDialogHide={handleAddressDialogHide}
+                newAddress={newAddress}
+                setNewAddress={setNewAddress}
+                handleAddAddress={handleAddAddress}
+                savingAddress={savingAddress}
+              />
+              
               <AddressList
                 addresses={addresses}
                 onSelectAddress={setSelectedAddress}
