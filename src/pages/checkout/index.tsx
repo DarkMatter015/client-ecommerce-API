@@ -1,66 +1,51 @@
-import React, { use, useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Toast } from 'primereact/toast';
-import './checkout.style.css';
-import { getAllPaymentsPageable } from '@/services/payment-service';
-import type { IAddress, IPayment } from '@/commons/types/types';
-import { CartContext } from '@/context/CartContext';
-import { getAllAddressesPageable } from '@/services/address-service';
-import { CheckoutSummary } from '@/components/CheckoutSummary';
-import { CheckoutPaymentMethod } from '@/components/CheckoutPaymentMethod';
-import { AddressList } from '@/components/AddressList';
-import { api } from '@/lib/axios';
-import { ItemCartCheckout } from '@/components/ItemCartCheckout';
-
+import React, { use, useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Toast } from "primereact/toast";
+import "./checkout.style.css";
+import { getAllPaymentsPageable } from "@/services/payment-service";
+import type { IAddress, IPayment } from "@/commons/types/types";
+import { CartContext } from "@/context/CartContext";
+import { getAllAddressesPageable } from "@/services/address-service";
+import { CheckoutSummary } from "@/components/CheckoutSummary";
+import { CheckoutPaymentMethod } from "@/components/CheckoutPaymentMethod";
+import { AddressList } from "@/components/AddressList";
+import { ItemCartCheckout } from "@/components/ItemCartCheckout";
+import { postOrder } from "@/services/order-service";
 
 const TOAST_MESSAGES = {
-  emptyCart: {
-    severity: 'warn' as const,
-    summary: 'Carrinho Vazio',
-    detail: 'Seu carrinho está vazio. Adicione produtos para continuar.',
-    life: 3000,
-  },
   noAddress: {
-    severity: 'warn' as const,
-    summary: 'Endereço Necessário',
-    detail: 'Por favor, adicione um endereço de entrega.',
+    severity: "warn" as const,
+    summary: "Endereço Necessário",
+    detail: "Por favor, adicione um endereço de entrega.",
     life: 3000,
   },
   noPayment: {
-    severity: 'warn' as const,
-    summary: 'Método de Pagamento',
-    detail: 'Por favor, selecione um método de pagamento.',
+    severity: "warn" as const,
+    summary: "Método de Pagamento",
+    detail: "Por favor, selecione um método de pagamento.",
     life: 3000,
   },
   orderSuccess: {
-    severity: 'success' as const,
-    summary: 'Compra Finalizada',
-    detail: 'Seu pedido foi realizado com sucesso!',
+    severity: "success" as const,
+    summary: "Compra Finalizada",
+    detail: "Seu pedido foi realizado com sucesso!",
     life: 4000,
   },
   addressDeleted: {
-    severity: 'info' as const,
-    summary: 'Endereço Removido',
-    detail: 'O endereço foi removido com sucesso.',
+    severity: "info" as const,
+    summary: "Endereço Removido",
+    detail: "O endereço foi removido com sucesso.",
     life: 3000,
   },
   addressSaved: {
-    severity: 'success' as const,
-    summary: 'Endereço Salvo',
-    detail: 'Endereço salvo com sucesso!',
+    severity: "success" as const,
+    summary: "Endereço Salvo",
+    detail: "Endereço salvo com sucesso!",
     life: 3000,
-  },
-  itemRemoved: {
-    severity: 'info' as const,
-    summary: 'Produto Removido',
-    detail: 'O produto foi removido do carrinho.',
-    life: 3000,
-  },
+  }
 } as const;
 
-
 const CheckoutPage: React.FC = () => {
-
   const { cartItems, cartMetrics, cleanCart } = use(CartContext);
 
   const [payments, setPayments] = useState<IPayment[]>([]);
@@ -73,27 +58,30 @@ const CheckoutPage: React.FC = () => {
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
-
     if (!cartItems || cartItems.length === 0) {
-      navigate('/carrinho');
+      navigate("/carrinho");
       return;
     }
 
     const fetchPayments = async () => {
       try {
         const response = await getAllPaymentsPageable(0, 10);
-        setPayments(response.content);
+        if (response) {
+          setPayments(response.content);
+        }
       } catch (err) {
-        console.error('Erro ao buscar pagamentos:', err);
+        console.error("Erro ao buscar pagamentos:", err);
       }
     };
 
     const fetchAddress = async () => {
       try {
         const response = await getAllAddressesPageable(0, 10);
-        setAddresses(response.content);
+        if (response) {
+          setAddresses(response.content);
+        }
       } catch (err) {
-        console.error('Erro ao buscar endereços:', err);
+        console.error("Erro ao buscar endereços:", err);
       }
     };
 
@@ -101,56 +89,57 @@ const CheckoutPage: React.FC = () => {
     fetchAddress();
   }, [cartItems, navigate]);
 
-
   const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
     toast.current?.show(TOAST_MESSAGES[type]);
   }, []);
 
   const handlePlaceOrder = async () => {
     try {
-      const response = await api.post("/orders", {
-        orderItems: cartItems?.map(item => ({
-          productId: item.product.id,
-          quantity: item.quantity,
-        })),
-        address: selectedAddress,
-        paymentId: paymentMethod?.id,
-      });
+      const response = await postOrder(
+        cartItems,
+        selectedAddress,
+        paymentMethod
+      );
 
-      if (response.status !== 201) {
-        throw new Error("Erro ao realizar o pedido")
+      if (response?.status != 201) {
+        throw new Error("Erro ao realizar o pedido");
       }
-
-      console.log('Pedido realizado:', { cartItems, selectedAddress, paymentMethod });      
+      
+      console.log("Pedido realizado:", {
+        cartItems,
+        selectedAddress,
+        paymentMethod,
+      });
+      
       
       toast.current?.show({
-        severity: 'success',
-        summary: 'Pedido Confirmado!',
-        detail: 'Seu pedido foi realizado com sucesso e em breve será enviado.',
-        life: 4000,
+        severity: "success",
+        summary: "Pedido Confirmado!",
+        detail: "Seu pedido foi realizado com sucesso e em breve será enviado.",
+        life: 3000,
       });
 
+      cleanCart();
+
       setTimeout(() => {
-        cleanCart();
-        navigate("/pedidos")
-      }, 4000);
-      
+        navigate("/pedidos");
+      }, 3000);
     } catch (error) {
-      console.error('Erro ao realizar o pedido:', error);
+      console.error("Erro ao realizar o pedido:", error);
     }
   };
 
   const handleGoBack = () => {
-    navigate('/carrinho');
+    navigate("/carrinho");
   };
 
   const handleFinalize = () => {
     if (!selectedAddress) {
-      showToast('noAddress');
+      showToast("noAddress");
       return;
     }
     if (!paymentMethod) {
-      showToast('noPayment');
+      showToast("noPayment");
       return;
     }
 
@@ -164,22 +153,22 @@ const CheckoutPage: React.FC = () => {
       <div className="checkout-container">
         <div className="checkout-details">
           {/* Step 1: Order Items */}
-          <section className="checkout-card" aria-labelledby="order-items-heading">
+          <section
+            className="checkout-card"
+            aria-labelledby="order-items-heading"
+          >
             <h3 id="order-items-heading">
               <i className="pi pi-shopping-cart" aria-hidden="true"></i>
               Revise seus Itens
             </h3>
             <div className="order-item-list">
-              {cartItems.map((item) => (
-                <ItemCartCheckout
-                  key={item.id}
-                  item={item}
-                />
+              {cartItems?.map((item) => (
+                <ItemCartCheckout key={item.id} item={item} />
               ))}
             </div>
           </section>
 
-          <div className="p-grid" style={{ gap: '1.5rem' }}>
+          <div className="p-grid" style={{ gap: "1.5rem" }}>
             <div className="p-col-12 p-md-6">
               <AddressList
                 addresses={addresses}
@@ -201,11 +190,9 @@ const CheckoutPage: React.FC = () => {
           cartMetrics={cartMetrics}
           handlePlaceOrder={handleFinalize}
           handleGoBack={handleGoBack}
-
           selectedAddress={selectedAddress}
           paymentMethod={paymentMethod}
         />
-
       </div>
     </div>
   );

@@ -151,9 +151,7 @@ const TopMenu: React.FC = () => {
     {
       label: "Sair",
       icon: "pi pi-sign-out",
-      command: () => {
-        handleLogout()
-      }
+      command: () => handleLogout()
     }
   ] : [
     {
