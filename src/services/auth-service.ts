@@ -91,7 +91,7 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
       message,
       data: err?.response?.data ?? null,
     };
-  }
+  };
 };
 
 const AuthService = {

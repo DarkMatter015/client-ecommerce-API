@@ -8,6 +8,7 @@ import ProductPage from "@/pages/product";
 import CartPage from "@/pages/cart";
 import CheckoutPage from "@/pages/checkout";
 import OrdersPage from "@/pages/orders";
+import Profile from "@/pages/profile";
 
 export function AppRoutes() {
   return (
@@ -28,6 +29,7 @@ export function AppRoutes() {
         <Route element={<RequireAuth />}>
           <Route path="/finalizar" element={<CheckoutPage />} />
           <Route path="/pedidos" element={<OrdersPage />} />
+          <Route path="/perfil" element={<Profile />} />
         </Route>
       </Route>
     </Routes>
