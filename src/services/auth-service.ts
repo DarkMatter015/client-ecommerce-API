@@ -1,7 +1,9 @@
 import type {
+  IAuthenticatedUser,
   IResponse,
   IUserLogin,
   IUserRegister,
+  IUserResponse,
 } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
@@ -94,9 +96,31 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
   };
 };
 
+const updateProfile = async (user: IUserResponse): Promise<IResponse> => {
+  let response = {} as IResponse;
+  try {
+    const data = await api.patch(`/users/${user.id}`, { displayName: user.displayName });
+    response = {
+      status: data.status,
+      success: true,
+      message: "Perfil atualizado com sucesso",
+      data: data.data,
+    };
+  } catch (err: any) {
+    response = {
+      status: err.response?.status ?? 500,
+      success: false,
+      message: "Erro ao atualizar o perfil",
+      data: err.response?.data,
+    };
+  }
+  return response;
+};
+
 const AuthService = {
   signup,
   login,
   validateToken,
+  updateProfile,
 };
 export default AuthService;
