@@ -26,7 +26,7 @@ export const getAllOrdersPageable = async (
   size = 10
 ): Promise<IPage<IOrderResponse> | null> => {
   try {
-    const response = await api.get(`${route}?page=${page}&size=${size}`);
+    const response = await api.get(`${route}/page?page=${page}&size=${size}`);
     return normalizePage(response.data, page, size, mapApiToOrder);
   } catch (err) {
     console.error(`Erro ao buscar todos os pedidos na rota ${route}`, err);

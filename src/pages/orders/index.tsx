@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 const OrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<IOrderResponse[]>([]);
   const [totalElements, setTotalElements] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(4);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,8 +20,6 @@ const OrdersPage: React.FC = () => {
       if (response) {
         setOrders(response.content);
         setTotalElements(response.totalElements);
-        setCurrentPage(page);
-        setPageSize(size);
       }
     } catch (err) {
       setError(
@@ -34,30 +32,40 @@ const OrdersPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchOrders(0, 10);
-  }, []);
+    fetchOrders(0, rows);
+  }, [rows]);
 
-  const handlePageChange = (page: number, pageSize: number) => {
-    fetchOrders(page, pageSize);
+  const handlePageChange = (e: any) => {
+    const newFirst = e.first;
+    const newRows = e.rows;
+    setFirst(newFirst);
+    setRows(newRows);
+    
+    const pageIndex = Math.floor(newFirst / newRows);
+    fetchOrders(pageIndex, newRows);
   };
-
-  if (loading) {
-    return <div className="orders-page">Carregando pedidos...</div>;
-  }
-
-  if (error) {
-    return <div className="orders-page error">{error}</div>;
-  }
 
   return (
     <div className="orders-page">
-      <OrdersList
-        orders={orders}
-        totalElements={totalElements}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        onPageChange={handlePageChange}
-      />
+      {error && <div className="orders-page error">{error}</div>}
+
+      {loading ? (
+        <div className="orders-page">Carregando pedidos...</div>
+      ) : totalElements > 0 ? (
+        <>
+          <OrdersList
+            orders={orders}
+            totalElements={totalElements}
+            first={first}
+            rows={rows}
+            onPageChange={handlePageChange}
+          />
+      </>
+      ) : (
+        <div className="orders-page">Nenhum pedido encontrado.</div>
+      )}
+
+      
     </div>
   );
 };

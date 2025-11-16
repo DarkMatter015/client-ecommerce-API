@@ -10,70 +10,6 @@
     text-align: center;
 }
 
-.order-card {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: box-shadow 0.3s ease;
-}
-
-.order-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.order-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 1.5rem;
-    cursor: pointer;
-}
-
-.order-info {
-    flex: 1;
-}
-
-.order-info h3 {
-    margin: 0 0 0.5rem 0;
-    color: #333;
-    font-size: 1.25rem;
-}
-
-.order-meta {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
-    flex-wrap: wrap;
-}
-
-.order-meta span {
-    font-size: 0.9rem;
-    color: #666;
-    padding: 0.25rem 0.5rem;
-    background: #f8f9fa;
-    border-radius: 4px;
-}
-
-.order-total {
-    font-weight: bold;
-    color: #28a745 !important;
-}
-
-.order-address-summary {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 0.5rem;
-}
-
-.order-details {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-}
-
 .order-items-panel,
 .order-address-panel {
     margin-bottom: 1rem;
@@ -94,71 +30,6 @@
 .order-items-grid {
     display: grid;
     gap: 1rem;
-}
-
-.order-item-detail {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    background: #fafafa;
-}
-
-.item-image {
-    flex-shrink: 0;
-}
-
-.item-image img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-.item-info {
-    flex: 1;
-}
-
-.item-info h4 {
-    margin: 0 0 0.5rem 0;
-    color: #333;
-    font-size: 1.1rem;
-}
-
-.item-description {
-    color: #666;
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
-}
-
-.item-meta {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.item-meta span {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.85rem;
-    color: #666;
-    padding: 0.25rem 0.5rem;
-    background: #fff;
-    border-radius: 3px;
-    border: 1px solid #e0e0e0;
-}
-
-.item-total {
-    font-weight: bold;
-    color: #28a745;
-    font-size: 1rem;
-}
-
-.address-details {
-    line-height: 1.6;
 }
 
 .address-line {
@@ -186,27 +57,15 @@
     font-size: 1.1rem;
 }
 
-/* DataView customizations */
-.orders-dataview .p-dataview-content {
-    border: none;
-    background: transparent;
-}
-
-.orders-dataview .p-paginator {
-    justify-content: center;
-    padding: 1rem 0;
-    border-top: 1px solid #e0e0e0;
-    margin-top: 1rem;
-}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .order-header {
+    .order-card-header {
         flex-direction: column;
         gap: 1rem;
     }
 
-    .order-meta {
+    .order-card-meta {
         gap: 0.5rem;
     }
 
@@ -215,7 +74,7 @@
         text-align: center;
     }
 
-    .item-meta {
+    .order-item-meta {
         justify-content: center;
     }
 }

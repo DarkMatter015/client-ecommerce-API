@@ -1,31 +1,49 @@
 import { getAllProductsPageable } from "@/services/product-service";
 import React, { useEffect, useState } from "react";
 import { CardProduct } from "../card-product";
+import { Paginator } from "primereact/paginator";
 import type { IProduct } from "@/commons/types/types";
 
 import './homeProducts.style.css';
 
 export const HomeProducts: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
+    const [totalElements, setTotalElements] = useState(0);
+    const [first, setFirst] = useState(0);
+    const [rows, setRows] = useState(8);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                // TODO: fazer uma paginação de produtos ou "carregar mais" para buscar mais produtos
-                const response = await getAllProductsPageable(0, 10);
+    const fetchProducts = async (pageIndex: number, pageSize: number) => {
+        try {
+            setLoading(true);
+            const response = await getAllProductsPageable(pageIndex, pageSize);
+            
+            if (response) {
                 setProducts(response.content);
-            } catch (err) {
-                setError('Erro ao carregar produtos. Por favor, tente novamente mais tarde.');
-                console.error('Erro ao buscar produtos:', err);
-            } finally {
-                setLoading(false);
+                setTotalElements(response.totalElements);
             }
-        };
+        } catch (err) {
+            setError('Erro ao carregar produtos. Por favor, tente novamente mais tarde.');
+            console.error('Erro ao buscar produtos:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchProducts();
-    }, []);
+    useEffect(() => {
+        fetchProducts(0, rows);
+    }, [rows]);
+
+    const handlePageChange = (e: any) => {
+        const newFirst = e.first;
+        const newRows = e.rows;
+        setFirst(newFirst);
+        setRows(newRows);
+        
+        const pageIndex = Math.floor(newFirst / newRows);
+        fetchProducts(pageIndex, newRows);
+    };
 
     return (
         <section id="products" className="section products-section">
@@ -35,16 +53,33 @@ export const HomeProducts: React.FC = () => {
                     <p className="section-subtitle">Os melhores produtos feitos para você!</p>
                 </div>
 
-                {loading ? <div className="loading">Carregando produtos ...</div> : null}
+                {error && <div className="error">{error} <i className='pi pi-exclamation-circle'></i></div>}
                 
-                {error ? <div className="error">{error} <i className='pi pi-exclamation-circle'></i> </div> : null}
-                
-
-                <div id="products-container" className="products-grid" role="grid" aria-label="Grade de produtos">
-                        {products.map((product) => (
-                            <CardProduct key={product.id} product={product} />
-                        ))}
-                </div>
+                {loading ? (
+                    <div className="loading">Carregando produtos...</div>
+                ) : totalElements > 0 ? (
+                    <>
+                        <div className="products-grid">
+                            {products.map((product) => (
+                                <CardProduct key={product.id} product={product} />
+                            ))}
+                        </div>
+                        <div className="paginator-container">
+                            <Paginator
+                                first={first}
+                                rows={rows}
+                                totalRecords={totalElements}
+                                rowsPerPageOptions={[8, 16, 24, 32]}
+                                onPageChange={handlePageChange}
+                                template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <div className="no-products">
+                        <p>Nenhum produto disponível.</p>
+                    </div>
+                )}
             </div>
         </section>
     );
