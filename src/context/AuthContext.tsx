@@ -15,6 +15,7 @@ interface AuthContextType {
     authenticationResponse: IAuthenticationResponse
   ) => Promise<any>;
   handleLogout: () => void;
+  setAuthenticatedUser: (user: IAuthenticatedUser) => void;
 }
 
 interface AuthProviderProps {
@@ -106,13 +107,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const handleSetAuthenticatedUser = (user: IAuthenticatedUser) => {
+    setAuthenticatedUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
   if (loading) {
     return <div>Validando sessão ...</div>;
   }
 
   return (
     <AuthContext.Provider
-      value={{ authenticated, authenticatedUser, handleLogin, handleLogout }}
+      value={{ 
+        authenticated, 
+        authenticatedUser, 
+        handleLogin, 
+        handleLogout,
+        setAuthenticatedUser: handleSetAuthenticatedUser
+      }}
     >
       {children}
     </AuthContext.Provider>

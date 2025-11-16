@@ -144,6 +144,11 @@ const TopMenu: React.FC = () => {
 
   const userMenuItems = authenticated ? [
     {
+      label: "Meu Perfil",
+      icon: "pi pi-user",
+      command: () => navigate("/perfil")
+    },
+    {
       label: "Meus Pedidos",
       icon: "pi pi-box",
       command: () => navigate("/pedidos")
