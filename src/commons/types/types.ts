@@ -59,7 +59,7 @@ export interface IPayment {
 }
 
 export interface IAddress {
-  id: number;
+  id?: number;
   street?: string;
   number?: number | undefined;
   complement?: string;
