@@ -6,6 +6,7 @@ import { HomeTestimonials } from "@/components/HomeTestimonials";
 import { HomeAbout } from "@/components/HomeAbout";
 
 export const HomePage: React.FC = () => {
+  
   return (
     <main className="home-page">
       <HomeHero />

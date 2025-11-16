@@ -9,7 +9,7 @@ export const getAllCategoriesPageable = async (
   size = 10
 ): Promise<IPage<ICategory> | null> => {
   try {
-    const response = await api.get(`${route}?page=${page}&size=${size}`);
+    const response = await api.get(`${route}/page?page=${page}&size=${size}`);
     return response.data;
   } catch (err) {
     console.error(`Erro ao buscar todas as categorias na rota ${route}`, err);

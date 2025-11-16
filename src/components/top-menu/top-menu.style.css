@@ -453,7 +453,7 @@
 }
 
 .mobile-nav {
-  displ-ay: flex;
+  display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }

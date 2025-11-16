@@ -19,10 +19,10 @@ const mapApiToProduct = (item: ApiProduct): IProduct => {
 
 export const getAllProductsPageable = async (
   page = 0,
-  size = 10
+  size = 8
 ): Promise<IPage<IProduct>> => {
   try {
-    const response = await api.get(`${route}?page=${page}&size=${size}`);
+    const response = await api.get(`${route}/page?page=${page}&size=${size}`);
     return normalizePage(response.data, page, size, mapApiToProduct);
   } catch (err) {
     console.error(`Erro ao buscar produtos na rota ${route}`, err);

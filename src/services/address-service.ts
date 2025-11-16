@@ -25,7 +25,7 @@ export const getAllAddressesPageable = async (
   size = 10
 ): Promise<IPage<IAddress> | null> => {
   try {
-    const response = await api.get(`${route}?page=${page}&size=${size}`);
+    const response = await api.get(`${route}/page?page=${page}&size=${size}`);
     return normalizePage(response.data, page, size, mapApiToAddress);
   } catch (err) {
     console.error(`Erro ao buscar todos os endereços na rota ${route}`, err);

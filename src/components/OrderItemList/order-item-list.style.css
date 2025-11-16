@@ -1,0 +1,61 @@
+
+.order-item-detail {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: #fafafa;
+}
+
+.order-item-image {
+    flex-shrink: 0;
+}
+
+.order-item-image img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.order-item-info {
+    flex: 1;
+}
+
+.order-item-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.order-item-description {
+    color: #666;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.order-item-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.order-item-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    color: #666;
+    padding: 0.25rem 0.5rem;
+    background: #fff;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+.order-item-total {
+    font-weight: bold;
+    color: #28a745;
+    font-size: 1rem;
+}
