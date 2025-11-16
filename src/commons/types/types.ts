@@ -1,28 +1,28 @@
 export interface IResponse {
-    status?: number;
-    success?: boolean;
-    message?: string;
-    data?: object
+  status?: number;
+  success?: boolean;
+  message?: string;
+  data?: object;
 }
 
 export interface IPage<T> {
-    content: T[];
-    totalElements: number;
-    totalPages: number;
-    size: number;
-    number: number;
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
 }
 
 export interface IUserRegister {
-    email: string;
-    displayName: string;
-    password: string;
-    confirmPassword: string;
+  email: string;
+  displayName: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export interface IUserLogin {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 // Interfaces para os dados de autenticação
@@ -31,9 +31,16 @@ export interface IAuthorities {
 }
 
 export interface IAuthenticatedUser {
+  id: number;
   email: string;
   displayName: string;
   authorities: IAuthorities[];
+}
+
+export interface IUser {
+  id?: number;
+  displayName?: string | null;
+  password?: string | null;
 }
 
 export interface IAuthenticationResponse {
@@ -41,59 +48,52 @@ export interface IAuthenticationResponse {
   user: IAuthenticatedUser;
 }
 
-export interface IUserResponse {
-    id: number;
-    email: string;
-    displayName: string;
-}
-
-
 export interface ICategory {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface IPayment {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface IAddress {
-    id: number;
-    street?: string;
-    number?: number | undefined;
-    complement?: string;
-    neighborhood?: string;
-    city?: string;
-    state?: string;
-    cep: string;
+  id: number;
+  street?: string;
+  number?: number | undefined;
+  complement?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
+  cep: string;
 }
 
 export interface IProduct {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    urlImage: string;
-    category: ICategory;
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  urlImage: string;
+  category: ICategory;
 }
 
 export interface IItem {
-    id?: number;
-    product: IProduct;
-    totalPrice?: number;
-    quantity: number;
+  id?: number;
+  product: IProduct;
+  totalPrice?: number;
+  quantity: number;
 }
 
 export interface IOrderRequest {
-    id?: number;
-    paymentId: number;
-    address: IAddress;
-    orderItems: IItem[]
+  id?: number;
+  paymentId: number;
+  address: IAddress;
+  orderItems: IItem[];
 }
 export interface IOrderResponse {
-    id: number;
-    payment: IPayment;
-    address: IAddress;
-    orderItems: IItem[]
+  id: number;
+  payment: IPayment;
+  address: IAddress;
+  orderItems: IItem[];
 }

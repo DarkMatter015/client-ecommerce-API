@@ -1,9 +1,8 @@
 import type {
-  IAuthenticatedUser,
   IResponse,
   IUserLogin,
   IUserRegister,
-  IUserResponse,
+  IUser,
 } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
@@ -93,13 +92,16 @@ const validateToken = async (token: string | null): Promise<IResponse> => {
       message,
       data: err?.response?.data ?? null,
     };
-  };
+  }
 };
 
-const updateProfile = async (user: IUserResponse): Promise<IResponse> => {
+const updateProfile = async (user: IUser): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
-    const data = await api.patch(`/users/${user.id}`, { displayName: user.displayName });
+    const data = await api.patch(`/users/${user.id}`, {
+      displayName: user.displayName ? user.displayName : null,
+      password: user.password ? user.password : null,
+    });
     response = {
       status: data.status,
       success: true,

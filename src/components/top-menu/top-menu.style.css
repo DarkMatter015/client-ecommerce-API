@@ -453,7 +453,7 @@
 }
 
 .mobile-nav {
-  display: flex;
+  displ-ay: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
@@ -472,6 +472,7 @@
   transition: var(--navbar-transition);
   width: 100%;
   text-align: left;
+  text-decoration: none;
 }
 
 .mobile-menu-item i {

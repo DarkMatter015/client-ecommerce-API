@@ -7,6 +7,8 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import AuthService from "@/services/auth-service";
 import "./profile.style.css";
+import { Link } from "react-router-dom";
+import type { IUser } from "@/commons/types/types";
 
 const Profile: React.FC = () => {
   const { authenticatedUser, setAuthenticatedUser } = use(AuthContext);
@@ -44,11 +46,17 @@ const Profile: React.FC = () => {
       return;
     }
 
+    const updatedUser: IUser = {
+      id: authenticatedUser?.id,
+      displayName: editDisplayName,
+    };
+
+
     try {
       setIsSaving(true);
-      const response = await AuthService.updateProfile(authenticatedUser);
+      const response = await AuthService.updateProfile(updatedUser);
 
-      if (response.success) {
+      if (response.status == 200) {
         setAuthenticatedUser({
           ...authenticatedUser!,
           displayName: editDisplayName,
@@ -167,21 +175,7 @@ const Profile: React.FC = () => {
 
         {/* Additional Info Card */}
         <Card className="profile-card info-card">
-          <div className="info-section">
-            <div className="info-item">
-              <i className="pi pi-shield"></i>
-              <div>
-                <h4>Segurança</h4>
-                <p>Gerencie sua senha e opções de segurança</p>
-              </div>
-            </div>
-            <Button
-              icon="pi pi-arrow-right"
-              className="p-button-text"
-              disabled
-              title="Em desenvolvimento"
-            />
-          </div>
+          
 
           <div className="info-section">
             <div className="info-item">
@@ -207,12 +201,13 @@ const Profile: React.FC = () => {
                 <p>Acompanhe o status de seus pedidos</p>
               </div>
             </div>
-            <Button
-              icon="pi pi-arrow-right"
-              className="p-button-text"
-              disabled
-              title="Em desenvolvimento"
-            />
+            <Link to={"/pedidos"}>
+              <Button
+                icon="pi pi-arrow-right"
+                className="p-button-text"
+                title="Meus Pedidos"
+              />
+            </Link>
           </div>
         </Card>
       </div>
