@@ -97,3 +97,33 @@ export interface IOrderResponse {
   address: IAddress;
   orderItems: IItem[];
 }
+
+
+export interface IFreightRequest {
+  to: {
+    postal_code: string;
+  };
+  products: {
+    id?: number;
+    width?: number;
+    height?: number;
+    length?: number;
+    insurance_value?: number;
+    quantity?: number;
+  }[];
+}
+
+export interface IFreightResponse {
+    id: number;
+    name: string;
+    picture: string;
+    price: number;
+    currency: string;
+    delivery_time: number;
+    discount: number;
+    company: {
+        id: number;
+        name: string;
+        picture: string
+    };
+}

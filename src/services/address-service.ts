@@ -1,4 +1,4 @@
-import type { IAddress, IResponse } from "@/commons/types/types";
+import type { IAddress } from "@/commons/types/types";
 import type { IPage } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 import { normalizePage } from "@/utils/Utils";
@@ -44,27 +44,6 @@ export const getAddressById = async (id: string): Promise<IAddress | null> => {
     );
     return null;
   }
-};
-
-export const validateCep = async (cep: string): Promise<IResponse> => {
-  let response = {} as IResponse;
-  try {
-    const data = await api.get(`/cep/validate/${cep}`);
-    response = {
-      status: data.status,
-      success: true,
-      message: "CEP válido",
-      data: data.data,
-    };
-  } catch (err: any) {
-    response = {
-      status: err.response?.status ?? 400,
-      success: false,
-      message: err.response?.data?.message ?? "CEP inválido",
-      data: err.response?.data,
-    };
-  }
-  return response;
 };
 
 export const createAddress = async (

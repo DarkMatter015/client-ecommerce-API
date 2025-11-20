@@ -1,0 +1,158 @@
+.freight-list-container {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.freight-datatable {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.freight-datatable .p-datatable-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px;
+    font-weight: 600;
+    border: none;
+}
+
+.freight-datatable .p-datatable-thead > tr > th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    padding: 16px;
+    border: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.freight-datatable .p-datatable-tbody > tr {
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+}
+
+.freight-datatable .p-datatable-tbody > tr:hover {
+    background-color: #f8f9ff;
+}
+
+.freight-datatable .p-datatable-tbody > tr > td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border: none;
+    color: #333;
+}
+
+.freight-datatable .p-datatable-tbody > tr:last-child {
+    border-bottom: none;
+}
+
+.freight-datatable .p-datatable-emptymessage > tr > td {
+    padding: 40px 20px;
+    text-align: center;
+    color: #999;
+}
+
+/* Células customizadas */
+.company-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+}
+
+.company-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 4px;
+    background: #f5f5f5;
+    padding: 4px;
+}
+
+.delivery-badge {
+    display: inline-block;
+    background: #e8f4f8;
+    color: #0284c7;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.price-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.discounted-price {
+    color: #059669;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.discount-badge {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Botão de seleção */
+.select-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.select-button:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
+}
+
+.select-button:active {
+    transform: scale(0.95) !important;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .freight-datatable .p-datatable-thead > tr > th,
+    .freight-datatable .p-datatable-tbody > tr > td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    .company-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .company-cell span {
+        display: none;
+    }
+
+    .delivery-badge {
+        padding: 2px 8px;
+        font-size: 11px;
+    }
+
+    .price-cell {
+        align-items: flex-end;
+    }
+
+    .discounted-price {
+        font-size: 14px;
+    }
+}

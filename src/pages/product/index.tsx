@@ -11,13 +11,15 @@ import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProductById } from "@/services/product-service";
-import type { IProduct } from "@/commons/types/types";
+import type { IFreightRequest, IFreightResponse, IProduct } from "@/commons/types/types";
 import { CartContext } from "@/context/CartContext";
 import { ProductThumbnail } from "@/components/ProductThumbnail";
 import { ProductInfo } from "@/components/ProductInfo";
 import { CalcFrete } from "@/components/CalcFrete";
 import { ProductActions } from "@/components/ProductActions";
 import { ProductDescription } from "@/components/ProductDescription";
+import { calculateFreightByProducts } from "@/services/freight-service";
+import { FreightList } from "@/components/FreightList";
 
 const ProductPage: React.FC = () => {
   const navigate = useNavigate();
@@ -32,6 +34,9 @@ const ProductPage: React.FC = () => {
   const [cep, setCep] = useState<string>("");
   const [mainImage, setMainImage] = useState<string>(produto.urlImage);
   const [zoomVisible, setZoomVisible] = useState(false);
+
+  const [selectedFreight, setSelectedFreight] = useState<IFreightResponse | null>(null);
+  const [freightsData, setFreightsData] = useState<IFreightResponse[]>([]);
 
   const { addItem } = use(CartContext);
 
@@ -74,10 +79,55 @@ const ProductPage: React.FC = () => {
     [navigate, addItem]
   );
 
-  const handleCalculateCep = useCallback(() => {
-    // todo: replace with API call
-    alert(`Calculando frete para CEP: ${cep}`);
-  }, [cep]);
+  const handleCalculateFreight = useCallback(async () => {
+    if (cep && cep.length === 8) {
+      const cepFormat = cep.replace(/[^0-9]/g, '');
+
+      const freight: IFreightRequest = {
+        to: {
+          postal_code: cepFormat,
+        },
+        products: [
+          {
+            id: produto.id,
+            insurance_value: produto.price,
+            quantity: quantity, 
+          }
+        ]
+      };
+
+      try {
+        const response = await calculateFreightByProducts(freight);
+
+        toast.current?.show({
+          severity: "success",
+          summary: "Frete calculado",
+          detail: response?.data?.message,
+          life: 2000,
+        });
+
+        console.log(response);
+
+        setFreightsData(response.data);
+    } catch (error) {
+
+      toast.current?.show({
+        severity: "error",
+        summary: "Erro ao calcular frete",
+        detail: error.message,
+        life: 2000,
+      });
+    }
+      
+    } else {
+      toast.current?.show({
+        severity: "error",
+        summary: "CEP inválido",
+        detail: "Por favor, insira um CEP válido",
+        life: 2000,
+      });
+    }
+  }, [cep, produto.id, produto.price, quantity]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -155,11 +205,19 @@ const ProductPage: React.FC = () => {
               setQuantity={setQuantity}
               product={produto}
             />
+
             <CalcFrete
               cep={cep}
               setCep={setCep}
-              handleCalculateCep={handleCalculateCep}
+              handleCalculateCep={handleCalculateFreight}
             />
+
+            {freightsData.length > 0 && <FreightList 
+              freights={freightsData}
+              onSelectFreight={(freight) => setSelectedFreight(freight)}
+            />}
+
+
             <ProductActions
               produto={produto}
               quantity={quantity}
