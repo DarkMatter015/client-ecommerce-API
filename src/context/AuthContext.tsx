@@ -51,9 +51,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           const parsedUser = JSON.parse(storedUser);
           setAuthenticatedUser(parsedUser);
           setAuthenticated(true);
-          api.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${storedToken}`;
         } else {
           // token inválido -> manter dados no localStorage para possível reautenticação, apenas desautenticar
           console.warn(
@@ -96,8 +93,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       localStorage.setItem("token", token);
 
       localStorage.setItem("user", JSON.stringify(user));
-
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       setAuthenticatedUser(user);
       setAuthenticated(true);

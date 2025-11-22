@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, use } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Sidebar } from "primereact/sidebar";
 import { Menu } from "primereact/menu";
+import { createPortal } from 'react-dom';
+
 import "./top-menu.style.css";
 
 import { AutoComplete } from 'primereact/autocomplete';
@@ -9,6 +11,7 @@ import { getAllProductsPageable } from '@/services/product-service';
 import type { IProduct } from '@/commons/types/types';
 import { CartContext } from "@/context/CartContext";
 import { AuthContext } from "@/context/AuthContext";
+import { Button } from "primereact/button";
 
 interface ProductGroup {
   label: string;
@@ -239,6 +242,7 @@ const TopMenu: React.FC = () => {
                 showEmptyMessage={true}
                 emptyMessage="Nenhum produto encontrado"
                 loadingIcon="pi pi-spin pi-spinner"
+                panelStyle={{ position: 'fixed', zIndex: 2000 }}
               />
             </div>
 
@@ -259,7 +263,7 @@ const TopMenu: React.FC = () => {
             </button>
 
             <div className="navbar-user-section">
-              {authenticated ? (
+              {/* {authenticated ? (
                 <button
                   className="navbar-user-btn authenticated"
                   onClick={(e) => menuRef.current?.toggle(e)}
@@ -278,7 +282,7 @@ const TopMenu: React.FC = () => {
                   <i className="pi pi-user"></i>
                   <span className="auth-text">Entre ou Cadastre-se</span>
                 </button>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -291,9 +295,11 @@ const TopMenu: React.FC = () => {
             <i className="pi pi-bars"></i>
           </button>
 
-          {/* Menu Dropdown Usuário */}
-          <Menu ref={menuRef} model={userMenuItems} popup />
+          <div className="card flex justify-content-center" >
+            <Menu model={userMenuItems} popup ref={menuRef} id="popup_menu_left" />
+            <Button label="Show Left" icon="pi pi-align-left" className="mr-2" onClick={(event) => menuRef.current?.toggle(event)} aria-controls="popup_menu_left" aria-haspopup />
         </div>
+        </div>  
       </nav>
 
       {/* Sidebar Mobile */}
