@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import TopMenu from "@/components/top-menu";
-import Footer from "../footer";
+import TopMenu from "@/components/common/top-menu";
+import Footer from "../../components/common/footer";
 
 export function Layout() {
   const location = useLocation();

@@ -1,8 +1,9 @@
 .cart-summary {
-  position: relative;
+  position: sticky;
+  top: 2rem;
 }
 
-.summary-sticky {
+.cart-summary-sticky {
   position: sticky;
   top: var(--cart-sticky-top);
   display: flex;
@@ -10,7 +11,7 @@
   gap: 1rem;
 }
 
-.summary-card,
+.cart-summary-card,
 .payment-card,
 .address-card {
   background: var(--cart-card-bg);
@@ -19,7 +20,7 @@
   box-shadow: var(--cart-shadow);
 }
 
-.summary-card h3 {
+.cart-summary-card h3 {
   font-size: var(--cart-subheading-size);
   font-weight: 600;
   margin: 0 0 1rem 0;
@@ -38,8 +39,9 @@
 }
 
 /* Summary Lines */
-.summary-line {
+.cart-summary-line {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
@@ -47,17 +49,17 @@
   color: #555;
 }
 
-.summary-line.discount {
+.cart-summary-line.discount {
   color: var(--cart-discount-color);
 }
 
-.summary-divider {
+.cart-summary-divider {
   height: 1px;
   background: var(--cart-border-color);
   margin: 1rem 0;
 }
 
-.summary-total {
+.cart-summary-total {
   display: flex;
   justify-content: space-between;
   align-items: center;

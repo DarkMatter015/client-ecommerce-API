@@ -110,21 +110,6 @@
     font-weight: 600;
 }
 
-/* Botão de seleção */
-.select-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    border: none !important;
-    transition: all 0.3s ease !important;
-}
-
-.select-button:hover {
-    transform: scale(1.1) !important;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
-}
-
-.select-button:active {
-    transform: scale(0.95) !important;
-}
 
 /* Responsivo */
 @media (max-width: 768px) {

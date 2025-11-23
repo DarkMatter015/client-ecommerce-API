@@ -23,14 +23,16 @@ export const RegisterAddressDialog: React.FC<{
     savingAddress,
 }) => {
     const handleBlurCep = async (cep: string) => {
-        if (cep.length === 8) {
+        if (cep.length === 9) {
             try {
+                cep = cep.replace(/[^0-9]/g, '')
                 const response = await validateCep(cep);
                 if (response.success) {
                     const data = response.data as IAddress;
 
                     setNewAddress({
                         ...newAddress,
+                        cep: data?.cep,
                         neighborhood: data?.neighborhood,
                         street: data?.street,
                         city: data?.city,

@@ -10,7 +10,7 @@ import {
     createAddress,
 } from "@/services/address-service";
 import { postOrder } from "@/services/order-service";
-import { CheckoutContainer } from "@/components/CheckoutContainer";
+import { CheckoutContainer } from "@/components/Checkout/CheckoutContainer";
 
 const TOAST_MESSAGES = {
     noAddress: {

@@ -1,10 +1,10 @@
 import React from "react";
 import { ItemCartCheckout } from "../ItemCartCheckout";
 import { Button } from "primereact/button";
-import { RegisterAddressDialog } from "../RegisterAddressDialog";
-import { AddressList } from "../AddressList";
+import { RegisterAddressDialog } from "../../Address/RegisterAddressDialog";
+import { AddressList } from "../../Address/AddressList";
 import { CheckoutPaymentMethod } from "../CheckoutPaymentMethod";
-import { CheckoutSummary } from "../CheckoutSummary";
+import { Summary } from "../../Summary";
 import type { IItem } from "@/commons/types/types";
 
 export const CheckoutContainer: React.FC<{
@@ -103,7 +103,7 @@ export const CheckoutContainer: React.FC<{
                 </div>
             </div>
 
-            <CheckoutSummary
+            <Summary
                 cartMetrics={cartMetrics}
                 handlePlaceOrder={handleFinalize}
                 handleGoBack={handleGoBack}
