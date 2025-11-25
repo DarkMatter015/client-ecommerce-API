@@ -1,10 +1,11 @@
-import { getAllProductsPageable } from "@/services/product-service";
-import React, { useEffect, useState } from "react";
+import { getAllProductsFiltered } from "@/services/product-service";
+import React, { useCallback, useEffect, useState } from "react";
 import { CardProduct } from "../card-product";
 import { Paginator } from "primereact/paginator";
-import type { IProduct } from "@/commons/types/types";
+import type { ICategory, IProduct } from "@/commons/types/types";
 
 import './homeProducts.style.css';
+import { CategoryDropdown } from "@/components/Category/CategoryDropdown";
 
 export const HomeProducts: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -13,27 +14,36 @@ export const HomeProducts: React.FC = () => {
     const [rows, setRows] = useState(8);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [category, setCategory] = useState<ICategory | null>(null);
 
-    const fetchProducts = async (pageIndex: number, pageSize: number) => {
+    const fetchProducts = useCallback(async (pageIndex: number, pageSize: number) => {
         try {
             setLoading(true);
-            const response = await getAllProductsPageable(pageIndex, pageSize);
-            
+            const response = await getAllProductsFiltered(
+                pageIndex,
+                pageSize,
+                undefined,
+                category?.name
+            );
+
             if (response) {
                 setProducts(response.content);
                 setTotalElements(response.totalElements);
             }
         } catch (err) {
-            setError('Erro ao carregar produtos. Por favor, tente novamente mais tarde.');
-            console.error('Erro ao buscar produtos:', err);
+            setError(
+                "Erro ao carregar produtos. Por favor, tente novamente mais tarde."
+            );
+            console.error("Erro ao buscar produtos:", err);
         } finally {
             setLoading(false);
         }
-    };
+    }, [category]);
 
     useEffect(() => {
-        fetchProducts(0, rows);
-    }, [rows]);
+        
+    fetchProducts(0, 10);
+    }, [rows, category, fetchProducts]);
 
     const handlePageChange = (e: any) => {
         const newFirst = e.first;
@@ -51,6 +61,14 @@ export const HomeProducts: React.FC = () => {
                 <div className="section-header">
                     <h2 className="section-title">Produtos</h2>
                     <p className="section-subtitle">Os melhores produtos feitos para você!</p>
+                </div>
+
+                <div className="category-dropdown-container">
+                    <CategoryDropdown
+                    value={category}
+                    onChange={setCategory}
+                    placeholder="Selecione uma categoria"
+                    />
                 </div>
 
                 {error && <div className="error">{error} <i className='pi pi-exclamation-circle'></i></div>}

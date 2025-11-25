@@ -6,7 +6,7 @@ import { Menu } from "primereact/menu";
 import "./top-menu.style.css";
 
 import { AutoComplete } from "primereact/autocomplete";
-import { getAllProductsPageable } from "@/services/product-service";
+import { getAllProductsFiltered } from "@/services/product-service";
 import type { IProduct } from "@/commons/types/types";
 import { CartContext } from "@/context/CartContext";
 import { AuthContext } from "@/context/AuthContext";
@@ -99,34 +99,44 @@ const TopMenu: React.FC = () => {
         );
     };
 
-    // search method emulating network latency (matches TemplateDemo)
+    // search method with debounce
     let searchTimeout: number | undefined;
-    const search = (event: { query: string }) => {
+    const search = (event: any) => {
         window.clearTimeout(searchTimeout);
-        searchTimeout = window.setTimeout(() => {
-            const q = (event.query || "").toLowerCase();
-            let filtered: IProduct[] = [];
-            if (!q.trim().length) {
-                filtered = [...products];
-            } else {
-                filtered = products.filter((p) =>
-                    p.name.toLowerCase().includes(q)
-                );
-            }
+        const query = event.query || "";
+        searchTimeout = window.setTimeout(async () => {
+            const q = query.trim();
+            try {
+                let filtered: IProduct[] = [];
+                if (!q.length) {
+                    filtered = [...products];
+                } else {
+                    const response = await getAllProductsFiltered(
+                        0,
+                        20,
+                        q,
+                        undefined
+                    );
+                    filtered = response.content || [];
+                }
 
-            // group by category
-            const groups: ProductGroup[] = [];
-            const map = new Map<string, IProduct[]>();
-            filtered.forEach((p) => {
-                const cat = p.category?.name ?? "Outros";
-                if (!map.has(cat)) map.set(cat, []);
-                map.get(cat)!.push(p);
-            });
-            for (const [label, items] of map.entries()) {
-                groups.push({ label, items });
-            }
+                // group by category
+                const groups: ProductGroup[] = [];
+                const map = new Map<string, IProduct[]>();
+                filtered.forEach((p) => {
+                    const cat = p.category?.name ?? "Outros";
+                    if (!map.has(cat)) map.set(cat, []);
+                    map.get(cat)!.push(p);
+                });
+                for (const [label, items] of map.entries()) {
+                    groups.push({ label, items });
+                }
 
-            setFilteredProducts(groups);
+                setFilteredProducts(groups);
+            } catch (err) {
+                console.error("Erro ao buscar produtos filtrados", err);
+                setFilteredProducts([]);
+            }
         }, 250);
     };
 
@@ -134,7 +144,12 @@ const TopMenu: React.FC = () => {
         let mounted = true;
         const load = async () => {
             try {
-                const resp = await getAllProductsPageable();
+                const resp = await getAllProductsFiltered(
+                    0,
+                    20,
+                    undefined,
+                    undefined
+                );
                 if (!mounted) return;
                 setProducts(resp.content || []);
             } catch (err) {

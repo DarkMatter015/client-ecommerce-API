@@ -33,3 +33,13 @@
 .data-view-products .p-dataview-content {
   background-color: transparent;
 }
+
+.category-dropdown-container {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1rem;
+}
+
+.paginator-container {
+  margin-top: 1rem;
+}
