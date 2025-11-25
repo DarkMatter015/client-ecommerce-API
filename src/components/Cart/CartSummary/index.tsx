@@ -12,11 +12,11 @@ export const CartSummary: React.FC<{
     const { cartItems, cartMetrics } = use(CartContext);
 
     return (
-        <aside className="cart-summary" aria-label="Resumo da compra">
-            <div className="cart-summary-sticky">
+        <aside className="summary" aria-label="Resumo da compra">
+            <div className="summary-sticky">
                 <section className="summary-card">
                     <h3>Resumo da Compra</h3>
-                    <div className="cart-summary-line">
+                    <div className="summary-line">
                         <span>
                             Total (
                             {getItemCountText(cartMetrics?.totalItems || 0)})
@@ -24,7 +24,7 @@ export const CartSummary: React.FC<{
                     </div>
 
                     {cartMetrics && cartMetrics?.totalItems > 0 && (
-                        <div className="cart-summary-line">
+                        <div className="summary-line">
                             <CalcFreight
                                 cep={cep}
                                 setCep={setCep}
@@ -33,8 +33,8 @@ export const CartSummary: React.FC<{
                             {/* <span>{cartMetrics.frete > 0 ? `R$ ${formatCurrency(cartMetrics.frete)}` : 'Calcular'}</span> */}
                         </div>
                     )}
-                    <div className="cart-summary-divider" role="separator"></div>
-                    <div className="cart-summary-total">
+                    <div className="summary-divider" role="separator"></div>
+                    <div className="summary-total">
                         <span>Total</span>
                         <span className="total-value">
                             R$ {formatCurrency((cartMetrics?.total || 0) + (cartMetrics?.freightValue || 0))}

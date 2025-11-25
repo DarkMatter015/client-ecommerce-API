@@ -90,12 +90,14 @@ export interface IOrderRequest {
   paymentId: number;
   address: IAddress;
   orderItems: IItem[];
+  shipment: IFreightResponse;
 }
 export interface IOrderResponse {
   id: number;
   payment: IPayment;
   address: IAddress;
   orderItems: IItem[];
+  shipment: IFreightResponse;
 }
 
 

@@ -46,7 +46,7 @@ const TOAST_MESSAGES = {
 } as const;
 
 const CheckoutPage: React.FC = () => {
-    const { cartItems, cartMetrics, cleanCart } = use(CartContext);
+    const { cartItems, cartMetrics, cleanCart, freight } = use(CartContext);
 
     const [payments, setPayments] = useState<IPayment[]>([]);
     const [paymentMethod, setPaymentMethod] = useState<null>(null);
@@ -112,7 +112,8 @@ const CheckoutPage: React.FC = () => {
             const response = await postOrder(
                 cartItems,
                 selectedAddress,
-                paymentMethod
+                paymentMethod,
+                freight
             );
 
             if (response?.status != 201) {

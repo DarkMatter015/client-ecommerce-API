@@ -70,6 +70,35 @@ export const OrderCard: React.FC<{
               </div>
             </div>
           </Panel>
+
+          <Panel header="Frete" className="order-freight-panel">
+            <div className="freight-details">
+              <div className="freight-company">
+                {order.shipment.company.picture && (
+                  <img 
+                    src={order.shipment.company.picture} 
+                    alt={order.shipment.company.name}
+                    className="freight-company-logo"
+                  />
+                )}
+                <strong>{order.shipment.company.name}</strong>
+              </div>
+              <div className="freight-line">
+                <strong>Transportadora:</strong> {order.shipment.name}
+              </div>
+              <div className="freight-line">
+                <strong>Preço:</strong> R$ {formatCurrency(order.shipment.price)}
+              </div>
+              {order.shipment.discount > 0 && (
+                <div className="freight-line freight-discount">
+                  <strong>Desconto:</strong> -R$ {formatCurrency(order.shipment.discount)}
+                </div>
+              )}
+              <div className="freight-line">
+                <strong>Prazo de Entrega:</strong> {order.shipment.delivery_time} dias
+              </div>
+            </div>
+          </Panel>
         </div>
       )}
     </div>
