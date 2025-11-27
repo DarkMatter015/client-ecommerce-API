@@ -16,6 +16,7 @@ export interface IPage<T> {
 export interface IUserRegister {
   email: string;
   displayName: string;
+  cpf: string;
   password: string;
   confirmPassword: string;
 }

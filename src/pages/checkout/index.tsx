@@ -46,7 +46,7 @@ const TOAST_MESSAGES = {
 } as const;
 
 const CheckoutPage: React.FC = () => {
-    const { cartItems, cartMetrics, cleanCart, freight } = use(CartContext);
+    const { cartItems, cartMetrics, freight } = use(CartContext);
 
     const [payments, setPayments] = useState<IPayment[]>([]);
     const [paymentMethod, setPaymentMethod] = useState<null>(null);
@@ -128,16 +128,14 @@ const CheckoutPage: React.FC = () => {
 
             toast.current?.show({
                 severity: "success",
-                summary: "Pedido Confirmado!",
-                detail: "Seu pedido foi realizado com sucesso e em breve será enviado.",
+                summary: "Pedido Realizado com sucesso!!",
+                detail: "Você será redirecionado para a página de pedidos ...",
                 life: 3000,
             });
 
-            cleanCart();
-
             setTimeout(() => {
                 navigate("/pedidos");
-            }, 3000);
+            }, 2000);
         } catch (error) {
             console.error("Erro ao realizar o pedido:", error);
         }
