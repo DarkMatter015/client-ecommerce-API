@@ -76,6 +76,7 @@ export interface IProduct {
   description: string;
   price: number;
   urlImage: string;
+  quantityAvailableInStock: number;
   category: ICategory;
 }
 

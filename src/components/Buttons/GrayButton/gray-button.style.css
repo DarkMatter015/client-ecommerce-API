@@ -1,0 +1,18 @@
+.gray-button{
+  text-decoration: none;
+  border-radius: 0.4em;
+  border: none;
+  padding: 0.4rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.gray-button {
+    background: var(--gray-bg);
+    color: var(--text-color);
+}
+
+.gray-button:hover {
+  background: var(--gray-bg-hover);
+  opacity: 0.9;
+}

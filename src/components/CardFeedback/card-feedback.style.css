@@ -1,0 +1,27 @@
+.card-feedback {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: center;
+  background: var(--card-bg);
+  padding: var(--gap-md);
+  border-radius: 0.75rem;
+  box-shadow: var(--card-shadow);
+}
+
+.feedback-image {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.feedback-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.feedback-rating {
+  color: #fbbf24;
+}

@@ -1,10 +1,10 @@
 import { getAllProductsFiltered } from "@/services/product-service";
 import React, { useCallback, useEffect, useState } from "react";
-import { CardProduct } from "../card-product";
+import { CardProduct } from "../../CardProduct";
 import { Paginator } from "primereact/paginator";
 import type { ICategory, IProduct } from "@/commons/types/types";
 
-import './homeProducts.style.css';
+import './home-products.style.css';
 import { CategoryDropdown } from "@/components/Category/CategoryDropdown";
 
 export const HomeProducts: React.FC = () => {

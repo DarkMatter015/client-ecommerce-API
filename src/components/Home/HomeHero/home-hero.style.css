@@ -3,8 +3,6 @@
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: var(--gap-lg);
-  padding: var(--gap-lg) 1rem;
-  min-height: calc(100vh - 70px);
 }
 
 .hero-content {
@@ -30,14 +28,9 @@
   margin-top: 0.25rem;
 }
 
-.hero-subtitle {
-  color: var(--text-muted);
-  margin-bottom: var(--gap-md);
-}
-
 .hero-actions {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--gap-md);
   margin-bottom: var(--gap-md);
 }
 

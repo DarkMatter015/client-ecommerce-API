@@ -36,9 +36,6 @@
 =========================== */
 .footer-logo-section {
   text-align: center;
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-logo-link {
@@ -54,7 +51,6 @@
 .footer-logo {
   height: var(--footer-logo-height);
   width: auto;
-  margin-bottom: 1rem;
 }
 
 .footer-tagline {
@@ -139,6 +135,11 @@
   font-size: 1rem;
 }
 
+.social-links {
+  display: flex;
+  justify-content: start;
+}
+
 /* ===========================
    MÉTODOS DE PAGAMENTO
 =========================== */
@@ -169,47 +170,9 @@
 }
 
 /* ===========================
-   REDES SOCIAIS
-=========================== */
-.footer-social {
-  margin-bottom: 1rem;
-}
-
-.social-links {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.social-link {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--footer-text);
-  transition: var(--footer-transition);
-  text-decoration: none;
-}
-
-.social-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.social-link i {
-  font-size: var(--footer-icon-size);
-}
-
-/* ===========================
    FOOTER BOTTOM
 =========================== */
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 2rem;
   text-align: center;
   display: flex;
   flex-direction: column;
