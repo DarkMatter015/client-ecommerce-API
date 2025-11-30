@@ -4,6 +4,8 @@
 :root {
   /* Layout */
   --home-section-height: calc(100vh - 83px);
+  --page-max-width: 1500px;
+
   --gap-sm: .5rem;
   --gap-md: 1rem;
   --gap-lg: 1.5rem;
@@ -19,17 +21,36 @@
   /* Typography */
   --title-size: 4rem;
   --subtitle-size: 2rem;
-  --body-size: 1.2rem;
+  --body-size: 1.5rem;
+  
+  --section-title-size: 2.5rem;
+  --section-subtitle-size: 1.5rem;
 }
 
-/* ===========================
-   LAYOUT & STRUCTURE
-   =========================== */
+.section {
+  padding: var(--gap-lg) 1rem;
+  min-height: calc(100vh - 70px);
+  width: 90%;
+  max-width: var(--page-max-width, 1300px);
+}
+
+.section-title {
+  color: var(--primary);
+  font-size: var(--section-title-size);
+  margin-bottom: 0.25rem;
+}
+
+.section-subtitle {
+  margin: 0 0 var(--gap-md) 0;
+  font-size: var(--section-subtitle-size);
+  color: var(--text-color);
+}
+
 /* Page wrapper */
 .home-page {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  align-items: center;
 }
 
 /* Loading & Error States */
@@ -53,7 +74,12 @@
 @media (max-width: 991px) {
   :root {
     --title-size: 3rem;
-    --subtitle-size: 1.6rem;
+    --subtitle-size: 1rem;
+
+    --section-title-size: 2rem;
+    --section-subtitle-size: 1.2rem;
+
+    --body-size: 1rem;
   }
 
   .hero-section {
@@ -83,13 +109,22 @@
     flex-direction: column;
   }
 
-  .about-section .section-inner { grid-template-columns: 1fr; }
+  .about-section .section-inner {
+    flex-direction: column;
+  }
+
+  .about-text, .about-image {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
   :root {
     --title-size: 2.2rem;
     --subtitle-size: 1.2rem;
+
+    --section-title-size: 1.8rem;
+    --section-subtitle-size: 1rem;
   }
 
   .hero-line { font-size: 1.6rem; }

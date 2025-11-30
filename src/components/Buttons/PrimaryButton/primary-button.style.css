@@ -1,0 +1,17 @@
+/* BOTÃO VERMELHO PADRÃO */
+.primary-button {
+    text-decoration: none;
+    border: none;
+    background-color: var(--primary-color-darker);
+    color: #F7F5F2;
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-weight: 500;
+    box-shadow: 0px 0px 10px 2px rgb(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.primary-button:hover {
+    background-color: var(--primary-color-darker-hover);
+    box-shadow: 0px 0px 10px 4px rgb(0, 0, 0, 0.1);
+}

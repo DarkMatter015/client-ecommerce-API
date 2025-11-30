@@ -1,4 +1,4 @@
-import type { IItem } from "@/commons/types/types";
+import type { IFreightResponse, IItem } from "@/commons/types/types";
 import {
   createContext,
   useEffect,
@@ -9,11 +9,13 @@ import {
 
 interface CartContextType {
   cartItems?: IItem[];
-  cartMetrics?: { totalItems: number; total: number };
+  cartMetrics?: { totalItems: number; total: number; freightValue: number};
   addItem: (item: IItem) => void;
   deleteItem: (item: IItem) => void;
   handleUpdateQuantity: (id: number, newQuantity: number) => void;
   cleanCart: () => void;
+  freight: IFreightResponse | null;
+  onSetFreight: (freight: IFreightResponse) => void;
 }
 
 interface CartProviderProps {
@@ -31,6 +33,8 @@ export function CartProvider({ children }: CartProviderProps) {
     savedItems ? JSON.parse(savedItems) : []
   );
 
+  const [freight, setFreight] = useState<IFreightResponse | null>(null);
+
   useEffect(() => {
     localStorage.setItem(CART_ITEMS, JSON.stringify(cartItems));
   }, [cartItems]);
@@ -45,12 +49,12 @@ export function CartProvider({ children }: CartProviderProps) {
       0
     );
     // TODO: ADICIONAR CAMPO DE CEP PARA CALCULAR FRETE COM OS PRODUTOS DO CARRINHO
-    // const frete = address ? SHIPPING_COST : 0;
+    const freightValue = freight?.price || 0;
     // const total = subtotal - descontos + frete;
 
     // return { totalItems, subtotal, descontos, frete, total };
-    return { totalItems, total };
-  }, [cartItems]);
+    return { totalItems, total, freightValue };
+  }, [cartItems, freight]);
 
   const calculateTotalPrice = (item: IItem) => {
     return item.product.price * item.quantity;
@@ -101,6 +105,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const cleanCart = () => {
     setCartItems([]);
+    setFreight(null);
   };
 
   const handleUpdateQuantity = (id: number, newQuantity: number) => {
@@ -118,6 +123,12 @@ export function CartProvider({ children }: CartProviderProps) {
     );
   };
 
+  const onSetFreight = (freight: IFreightResponse) => {
+    setFreight(freight);
+    console.log(freight);
+    
+  };
+
   return (
     <CartContext
       value={{
@@ -127,6 +138,8 @@ export function CartProvider({ children }: CartProviderProps) {
         deleteItem,
         handleUpdateQuantity,
         cleanCart,
+        freight,
+        onSetFreight
       }}
     >
       {children}

@@ -12,11 +12,13 @@ import AuthService from "@/services/auth-service";
 
 import "@/styles/form.css";
 import "./register.style.css";
+import { InputMask } from "primereact/inputmask";
 
 // Constantes
 const FORM_DEFAULT_VALUES: IUserRegister = {
   displayName: "",
   email: "",
+  cpf: "",
   password: "",
   confirmPassword: "",
 };
@@ -45,6 +47,13 @@ const VALIDATION_RULES = {
     pattern: {
       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
       message: "Email inválido",
+    },
+  },
+  cpf: {
+    required: "Cpf é obrigatório",
+    pattern: {
+      value: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+      message: "Cpf inválido",
     },
   },
   password: {
@@ -210,6 +219,42 @@ export const RegisterPage = () => {
                   </div>
                   {fieldState.error && (
                     <small id="email-error" className="p-error block mt-1">
+                      {fieldState.error.message}
+                    </small>
+                  )}
+                </>
+              )}
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="cpf" className="block mb-2">
+              Cpf
+            </label>
+            <Controller
+              name="cpf"
+              control={control}
+              rules={VALIDATION_RULES.cpf}
+              render={({ field, fieldState }) => (
+                <>
+                  <div className="p-inputgroup">
+                    <InputMask
+                      id="cpf"
+                      type="text"
+                      autoComplete="cpf"
+                      mask="999.999.999-99"
+                      placeholder="000.000.000-00"
+                      aria-describedby="cpf-error"
+                      aria-invalid={!!fieldState.error}
+                      className={classNames({ "p-invalid": fieldState.error })}
+                      {...field}
+                    />
+                    <span className="p-inputgroup-addon">
+                      <i className="pi pi-envelope" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  {fieldState.error && (
+                    <small id="cpf-error" className="p-error block mt-1">
                       {fieldState.error.message}
                     </small>
                   )}

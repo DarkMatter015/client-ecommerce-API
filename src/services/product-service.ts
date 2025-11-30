@@ -30,6 +30,24 @@ export const getAllProductsPageable = async (
   }
 };
 
+
+export const getAllProductsFiltered = async (
+  page = 0,
+  size = 8,
+  name: string | undefined,
+  category: string | undefined
+): Promise<IPage<IProduct>> => {
+  try {
+    const searchParam = category ? `&category=${category}` : "";
+    const searchParamName = name ? `&name=${name}` : "";
+    const response = await api.get(`${route}/filter?page=${page}&size=${size}${searchParamName}${searchParam}`);
+    return normalizePage(response.data, page, size, mapApiToProduct);
+  } catch (err) {
+    console.error(`Erro ao buscar produtos com a categoria de ${category} na rota ${route}`, err);
+    throw err;
+  }
+};
+
 export const getProductById = async (id: string): Promise<IProduct> => {
   try {
     const response = await api.get(`${route}/${id}`);

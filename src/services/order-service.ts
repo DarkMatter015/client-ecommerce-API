@@ -1,5 +1,6 @@
 import type {
   IAddress,
+  IFreightResponse,
   IItem,
   IOrderResponse,
   IPage,
@@ -18,6 +19,7 @@ const mapApiToOrder = (order: ApIOrderRequest): IOrderResponse => {
     payment: order.payment,
     address: order.address,
     orderItems: order.orderItems,
+    shipment: order.shipment,
   };
 };
 
@@ -52,7 +54,8 @@ export const getOrderById = async (
 export const postOrder = async (
   cartItems: IItem[] | undefined,
   selectedAddress: IAddress | null,
-  paymentMethod: IPayment | null
+  paymentMethod: IPayment | null,
+  shipment: IFreightResponse | null
 ) => {
   try {
     const response = await api.post("/orders", {
@@ -62,6 +65,7 @@ export const postOrder = async (
       })),
       address: selectedAddress,
       paymentId: paymentMethod?.id,
+      shipment: shipment,
     });
     return response;
   } catch (err) {

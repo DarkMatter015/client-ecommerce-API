@@ -46,7 +46,9 @@ export const getAddressById = async (id: string): Promise<IAddress | null> => {
   }
 };
 
-export const createAddress = async (address: Partial<IAddress>): Promise<IAddress | null> => {
+export const createAddress = async (
+  address: Partial<IAddress>
+): Promise<IAddress | null> => {
   try {
     const response = await api.post(route, address);
     return mapApiToAddress(response.data);

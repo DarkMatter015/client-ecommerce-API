@@ -1,9 +1,9 @@
 import React from "react";
 import "./home.style.css";
-import { HomeHero } from "@/components/HomeHero";
-import { HomeProducts } from "@/components/HomeProducts";
-import { HomeTestimonials } from "@/components/HomeTestimonials";
-import { HomeAbout } from "@/components/HomeAbout";
+import { HomeHero } from "@/components/Home/HomeHero";
+import { HomeProducts } from "@/components/Home/HomeProducts";
+import { HomeTestimonials } from "@/components/Home/HomeTestimonials";
+import { HomeAbout } from "@/components/Home/HomeAbout";
 
 export const HomePage: React.FC = () => {
   
