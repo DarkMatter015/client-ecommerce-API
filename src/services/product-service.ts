@@ -14,6 +14,7 @@ const mapApiToProduct = (item: ApiProduct): IProduct => {
     price: Number(item.price ?? 0),
     urlImage: item.urlImage ?? "",
     category: item.category ?? { id: 0, name: "" },
+    quantityAvailableInStock: Number(item.quantityAvailableInStock ?? 0),
   };
 };
 
@@ -49,13 +50,18 @@ export const getAllProductsFiltered = async (
 };
 
 export const getProductById = async (id: string): Promise<IProduct> => {
+  const idFormated = id.trim().replace(/[^0-9]/g, "");
   try {
-    const response = await api.get(`${route}/${id}`);
-    return response.data;
+    if (idFormated && idFormated !== "") {
+      const response = await api.get(`${route}/${idFormated}`);
+      return response.data;
+    }
+    throw new Error("ID inválido");
   } catch (err) {
     console.error(
-      `Erro ao buscar o produto com ${id} na rota ${route}/${id}`,
-      err
+      `Erro ao buscar o produto com %s na rota ${route}`,
+      err,
+      idFormated
     );
     throw err;
   }
