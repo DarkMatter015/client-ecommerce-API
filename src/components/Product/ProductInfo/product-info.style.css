@@ -1,4 +1,3 @@
-
 .product-title {
   font-size: 1.5rem;
   margin: 0.25rem 0;
@@ -11,15 +10,19 @@
   align-items: baseline;
   gap: 0.5rem;
 }
-.price-label {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
 .price-value {
   font-size: 1.5rem;
-  color: var(--accent-2);
+  color: var(--green);
   font-weight: 700;
 }
 .w-6rem {
   width: 6rem;
+}
+
+.product-rating span {
+    font-size: 1.5rem;
+}
+
+.product-rating .avaliations {
+    font-size: 1rem;
 }

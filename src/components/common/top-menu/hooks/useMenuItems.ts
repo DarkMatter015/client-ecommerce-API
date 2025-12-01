@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/hooks/use-auth";
 
 interface MenuItem {
     label: string;
@@ -17,7 +16,7 @@ interface UserMenuItem {
 
 export const useMenuItems = () => {
     const navigate = useNavigate();
-    const { authenticated, handleLogout } = useContext(AuthContext);
+    const { authenticated, handleLogout } = useAuth();
 
     const menuItems: MenuItem[] = [
         { label: "Home", path: "/", hash: "home", icon: "pi pi-home" },

@@ -4,8 +4,7 @@ import { Column } from "primereact/column";
 import { formatCurrency } from "@/utils/Utils";
 import type { IFreightResponse } from "@/commons/types/types";
 import "./freight-list.style.css";
-import { CartContext } from "@/context/CartContext";
-import { use, useState } from "react";
+import { useCart } from "@/context/hooks/use-cart";
 
 export const FreightList: React.FC<{
     freights: IFreightResponse[];
@@ -62,7 +61,7 @@ export const FreightList: React.FC<{
         );
     };
 
-    const { freight, onSetFreight } = use(CartContext);
+    const { freight, onSetFreight } = useCart();
 
     return (
         <div className="freight-list-container">
@@ -70,7 +69,7 @@ export const FreightList: React.FC<{
             <DataTable
                 value={freights}
                 emptyMessage="Nenhuma opção de frete disponível"
-                selectionMode="single" selection={freight} onSelectionChange={(e) => onSetFreight(e.value)} dataKey="id" metaKeySelection={false}
+                selectionMode="single" selection={freight} onSelectionChange={(e) => onSetFreight(e.value as IFreightResponse)} dataKey="id" metaKeySelection={false}
             >
                 <Column
                     header="Transportadora"

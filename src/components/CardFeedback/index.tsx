@@ -18,7 +18,7 @@ export const CardFeedback = ({
             <img className="feedback-image" src={image} alt="Cliente 1" />
             <div className="feedback-body">
                 <strong>{name}</strong>
-                <div className="feedback-rating" aria-hidden>
+                <div className="rating" aria-hidden>
                     {rating}
                 </div>
                 <p>{text}</p>

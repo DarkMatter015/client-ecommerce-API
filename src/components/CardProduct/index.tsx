@@ -1,36 +1,17 @@
 import type { IProduct } from "@/commons/types/types";
 import { Link } from "react-router-dom";
 import "./card-product.style.css";
-import React, { use, useCallback, useRef } from "react";
-import { CartContext } from "@/context/CartContext";
-import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
+import { useProduct } from "@/hooks/useProduct";
 
 export const CardProduct: React.FC<{
     product: IProduct;
 }> = ({ product }) => {
-    const { addItem } = use(CartContext);
-    const toast = useRef<Toast | null>(null);
 
-    const handleaAddToCart = useCallback(
-        (product: IProduct, quantity: number) => {
-            addItem({
-                product,
-                quantity,
-            });
-            toast.current?.show({
-                severity: "success",
-                summary: "Adicionado",
-                detail: `${product.name} adicionado ao carrinho`,
-                life: 2000,
-            });
-        },
-        [addItem]
-    );
+    const { handleAddToCart } = useProduct();
 
     return (
         <article key={product.id} className="card-product">
-            <Toast ref={toast} />
             <Link
                 to={`/produto/${product.id}`}
                 className="card-image text-center"
@@ -83,7 +64,7 @@ export const CardProduct: React.FC<{
                         outlined
                         rounded
                         icon="pi pi-cart-plus"
-                        onClick={() => handleaAddToCart(product, 1)}
+                        onClick={() => handleAddToCart(product, 1)}
                         severity="success"
                     />
                 </div>

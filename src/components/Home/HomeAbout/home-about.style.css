@@ -15,7 +15,7 @@
 
 .about-text p {
     color: var(--text-color);
-    font-size: var(--body-size);
+    font-size: 1rem;
 }
 
 .about-image {

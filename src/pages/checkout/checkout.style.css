@@ -114,7 +114,7 @@
 
 .order-item-price {
   font-weight: 600;
-  color: #333;
+  color: var(--green);
   text-align: right;
 }
 
@@ -177,9 +177,10 @@
   }
 
   .order-item {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
     gap: 0.5rem;
+    align-items: flex-start;
   }
 
   .order-item-price {

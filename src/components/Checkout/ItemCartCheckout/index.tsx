@@ -14,11 +14,11 @@ export const ItemCartCheckout: React.FC<{
                 </div>
                 <div className="order-item-details">
                     <h4 className="order-item-name">{item.product.name}</h4>
-                    <p className="order-item-meta">{item.product.category.name}</p>
+                    <p className="order-item-category">{item.product.category.name}</p>
                     <p className="order-item-quantity">Quantidade: {item.quantity}</p>
                 </div>
                 <div className="order-item-price">
-                    <span>R$ {formatCurrency(item.totalPrice)}</span>
+                    <span>R$ {formatCurrency(item.totalPrice || 0)}</span>
                 </div>
             </article>
         );

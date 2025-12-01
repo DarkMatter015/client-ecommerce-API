@@ -43,6 +43,7 @@ export const MobileSearch: React.FC<MobileSearchProps> = ({
                 emptyMessage="Nenhum produto encontrado"
                 loadingIcon="pi pi-spin pi-spinner"
                 className="w-full"
+                inputClassName="mobile-input"
             />
         </div>
     );

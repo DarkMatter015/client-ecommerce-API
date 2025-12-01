@@ -14,15 +14,18 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
 import "./index.css";
+import { ToastProvider } from "./context/ToastContext";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <BrowserRouter>
             <PrimeReactProvider>
                 <AuthProvider>
-                    <CartProvider>
-                        <App />
-                    </CartProvider>
+                        <ToastProvider>
+                            <CartProvider>
+                                <App />
+                            </CartProvider>
+                        </ToastProvider>
                 </AuthProvider>
             </PrimeReactProvider>
         </BrowserRouter>

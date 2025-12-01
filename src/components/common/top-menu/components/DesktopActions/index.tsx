@@ -1,9 +1,9 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu } from "primereact/menu";
-import { CartContext } from "@/context/CartContext";
-import { AuthContext } from "@/context/AuthContext";
 import "./desktop-actions.css";
+import { useCart } from "@/context/hooks/use-cart";
+import { useAuth } from "@/context/hooks/use-auth";
 
 interface UserMenuItem {
     label: string;
@@ -20,8 +20,8 @@ export const DesktopActions: React.FC<DesktopActionsProps> = ({
 }) => {
     const navigate = useNavigate();
     const menuRef = useRef<Menu>(null);
-    const { cartMetrics } = useContext(CartContext);
-    const { authenticated, authenticatedUser } = useContext(AuthContext);
+    const { cartMetrics } = useCart();
+    const { authenticated, authenticatedUser } = useAuth();
 
     const cartItemsCount = cartMetrics?.totalItems ? cartMetrics.totalItems : 0;
 

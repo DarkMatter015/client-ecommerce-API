@@ -1,11 +1,11 @@
-import React, { useRef, useCallback, useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 
 import type { IItem } from "@/commons/types/types";
-import { CartContext } from "@/context/CartContext";
+import { useCart } from "@/context/hooks/use-cart";
+import { useToast } from "@/context/hooks/use-toast";
 
 import "./cart.style.css";
 
@@ -14,31 +14,12 @@ import { CartHeader } from "@/components/Cart/CartHeader";
 import { EmptyCart } from "@/components/Cart/EmptyCart";
 import { ItemCart } from "@/components/Cart/ItemCart";
 
-const TOAST_MESSAGES = {
-    emptyCart: {
-        severity: "warn" as const,
-        summary: "Carrinho Vazio",
-        detail: "Seu carrinho está vazio. Adicione produtos para continuar.",
-        life: 3000,
-    },
-    itemRemoved: {
-        severity: "info" as const,
-        summary: "Produto Removido",
-        detail: "O produto foi removido do carrinho.",
-        life: 3000,
-    },
-} as const;
-
 const CartPage: React.FC = () => {
     const navigate = useNavigate();
-    const toast = useRef<Toast>(null);
+    const { showToast } = useToast();
 
     const { cartItems, cartMetrics, deleteItem, handleUpdateQuantity } =
-        useContext(CartContext);
-
-    const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
-        toast.current?.show(TOAST_MESSAGES[type]);
-    }, []);
+        useCart();
 
     const handleRemoveItem = (item: IItem) => {
         confirmDialog({
@@ -50,7 +31,12 @@ const CartPage: React.FC = () => {
             acceptClassName: "p-button-danger",
             accept: () => {
                 deleteItem(item);
-                showToast("itemRemoved");
+                showToast(
+                    "info",
+                    "Produto Removido",
+                    "O produto foi removido do carrinho.",
+                    3000
+                );
             },
         });
     };
@@ -59,13 +45,14 @@ const CartPage: React.FC = () => {
         navigate(`/produto/${productId}`);
     };
 
-    const handleContinueShopping = () => {
-        navigate("/");
-    };
-
     const handleFinalize = () => {
         if (!cartItems || cartItems.length === 0) {
-            showToast("emptyCart");
+            showToast(
+                "warn",
+                "Carrinho Vazio",
+                "Seu carrinho está vazio. Adicione produtos para continuar.",
+                3000
+            );
             return;
         }
 
@@ -74,7 +61,6 @@ const CartPage: React.FC = () => {
 
     return (
         <div className="cart-page">
-            <Toast ref={toast} />
             <ConfirmDialog />
 
             <div className="cart-container">
@@ -87,9 +73,7 @@ const CartPage: React.FC = () => {
                     />
 
                     {cartItems?.length === 0 ? (
-                        <EmptyCart
-                            onContinueShopping={handleContinueShopping}
-                        />
+                        <EmptyCart />
                     ) : (
                         <>
                             <div className="cart-items">
@@ -107,15 +91,14 @@ const CartPage: React.FC = () => {
                             </div>
 
                             <Button
-                                className="btn-gray btn-continue-shopping"
-                                onClick={handleContinueShopping}
-                            >
-                                <i
-                                    className="pi pi-arrow-left me-2"
-                                    aria-hidden="true"
-                                ></i>
-                                Continuar Comprando
-                            </Button>
+                                outlined
+                                severity="secondary"
+                                icon="pi pi-arrow-left"
+                                label="Continuar Comprando"
+                                aria-label="Continuar Comprando"
+                                className="btn-continue-shopping"
+                                onClick={() => navigate("/")}
+                            />
                         </>
                     )}
                 </section>

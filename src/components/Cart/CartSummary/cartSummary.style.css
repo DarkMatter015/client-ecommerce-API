@@ -38,28 +38,17 @@
   gap: 0.5rem;
 }
 
-/* Summary Lines */
-.cart-summary-line {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
-  color: #555;
-}
-
-.cart-summary-line.discount {
+.summary-line.discount {
   color: var(--cart-discount-color);
 }
 
-.cart-summary-divider {
+.summary-divider {
   height: 1px;
   background: var(--cart-border-color);
   margin: 1rem 0;
 }
 
-.cart-summary-total {
+.summary-total {
   display: flex;
   justify-content: space-between;
   align-items: center;

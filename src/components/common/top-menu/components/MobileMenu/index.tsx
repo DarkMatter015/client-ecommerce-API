@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Sidebar } from "primereact/sidebar";
-import { CartContext } from "@/context/CartContext";
-import { AuthContext } from "@/context/AuthContext";
 import { scrollIntoView } from "@/utils/Utils";
 import { MobileSearch } from "../MobileSearch";
 import { MobileMenuLinks } from "../MobileMenuLinks";
 import { MobileUserSection } from "../MobileUserSection";
 import { MobileCartButton } from "../MobileCartButton";
 import "./mobile-menu.css";
+import { useCart } from "@/context/hooks/use-cart";
+import { useAuth } from "@/context/hooks/use-auth";
 
 interface MenuItem {
     label: string;
@@ -51,8 +51,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { cartMetrics } = useContext(CartContext);
-    const { authenticated, authenticatedUser } = useContext(AuthContext);
+    const { cartMetrics } = useCart();
+    const { authenticated, authenticatedUser } = useAuth();
 
     const cartItemsCount = cartMetrics?.totalItems ? cartMetrics.totalItems : 0;
 

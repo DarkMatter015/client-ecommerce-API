@@ -1,16 +1,15 @@
-import { useContext } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/hooks/use-auth";
 
 export function RequireAuth() {
-  const { authenticated } = useContext(AuthContext);
-  const location = useLocation();
+    const { authenticated } = useAuth();
+    const location = useLocation();
 
-  return authenticated ? (
-    <>
-      <Outlet />
-    </>
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+    return authenticated ? (
+        <>
+            <Outlet />
+        </>
+    ) : (
+        <Navigate to="/login" state={{ from: location }} replace />
+    );
 }

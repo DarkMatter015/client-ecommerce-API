@@ -480,10 +480,7 @@
         gap: 0.8rem;
     }
 
-    /* Oculta mobile, exibe desktop */
-    .navbar-mobile-toggle {
-        display: none !important;
-    }
+    
 
     .navbar-menu-desktop,
     .navbar-search-desktop {
@@ -495,10 +492,7 @@
         gap: 0.4rem;
     }
 
-    /* Oculta sidebar mobile em desktop */
-    .mobile-sidebar {
-        display: none !important;
-    }
+    
 
     .navbar-icon-btn {
         width: 40px;

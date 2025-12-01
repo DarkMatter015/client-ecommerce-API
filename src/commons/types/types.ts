@@ -100,6 +100,7 @@ export interface IOrderResponse {
   address: IAddress;
   orderItems: IItem[];
   shipment: IFreightResponse;
+  status: string;
 }
 
 

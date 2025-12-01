@@ -1,40 +1,35 @@
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import type React from "react";
 
 import "./CalcFreight.style.css";
 import type { IItem } from "@/commons/types/types";
 import { FreightList } from "../FreightList";
-import { Toast } from "primereact/toast";
 import { useFreight } from "@/hooks/useFreight";
+import { InputMask } from "primereact/inputmask";
+import { Button } from "primereact/button";
 
 export const CalcFreight: React.FC<{
     cep: string;
     setCep: (cep: string) => void;
     produtos: IItem[];
 }> = ({ cep, setCep, produtos }) => {
-    const { handleCalculateFreight, freightsData, toast } = useFreight(
-        cep,
-        produtos
-    );
+    const { handleCalculateFreight, freightsData } = useFreight(cep, produtos);
 
     return (
         <>
-            <Toast ref={toast} />
-
-            <div className="mb-3 mt-3">
+            <div className="mb-3 mt-3 container-input">
                 <label htmlFor="cep" className="form-label">
                     <strong>Calcular Frete e Prazo</strong>
                 </label>
                 <div className="input-group mb-1">
-                    <InputText
+                    <InputMask
                         type="text"
                         id="cep"
                         className="p-inputtext"
                         name="cep"
                         placeholder="Insira seu CEP"
                         value={cep}
-                        onChange={(e) => setCep(e.currentTarget.value)}
+                        onChange={(e) => setCep(e.target.value || "")}
+                        mask="99999-999"
                         aria-label="CEP"
                     />
                     <Button

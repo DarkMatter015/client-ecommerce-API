@@ -3,7 +3,7 @@ import { formatCurrency } from "@/utils/Utils";
 import { InputNumber } from "primereact/inputnumber";
 import type React from "react";
 
-import "./productInfo.style.css";
+import "./product-info.style.css";
 
 export const ProductInfo: React.FC<{
     product: IProduct,
@@ -18,25 +18,23 @@ export const ProductInfo: React.FC<{
 }) => {
         return (
             <>
-                <div>
+                <div className="product-info">
                     <h1 className="product-title">{product.name}</h1>
                     <p className="mb-0"><i>{product.name} - {product.category.name}</i></p>
-                    <div className="mb-2 h6">
-                        <span className="text-warning h4" aria-hidden>★★★★★</span>
-                        <span className="sr-only">5 de 5 estrelas</span>
-                        <span className="visually-hidden"> +500 avaliações</span>
+                    <div className="mb-2 product-rating">
+                        <span className="rating" aria-hidden>★★★★★</span>
+                        <span className="avaliations"> +500 avaliações</span>
                     </div>
                     <p>Código Nº: {product.id}</p>
                 </div>
 
                 <div className="product-price-section">
                     <div className="product-price">
-                        <span className="price-label">Preço:</span>
                         <span className="price-value">R$ {formatCurrency(pricePerUnit)}</span>
                     </div>
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 container-input">
                     <label htmlFor="quantity" className="form-label"><strong>Quantidade</strong></label>
                     <InputNumber
                         inputId='quantity'

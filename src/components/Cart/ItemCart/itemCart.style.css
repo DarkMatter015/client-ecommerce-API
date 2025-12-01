@@ -67,7 +67,7 @@
 
 .cart-item-price-unit {
   font-size: 0.95rem;
-  color: #888;
+  color: var(--cart-price-color);
   margin-top: 0.25rem;
 }
 

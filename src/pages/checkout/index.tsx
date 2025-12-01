@@ -1,52 +1,19 @@
-import React, { use, useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Toast } from "primereact/toast";
 import "./checkout.style.css";
 import { getAllPaymentsPageable } from "@/services/payment-service";
 import type { IAddress, IPayment } from "@/commons/types/types";
-import { CartContext } from "@/context/CartContext";
 import {
-    getAllAddressesPageable,
     createAddress,
+    getAllAddressesPageable,
 } from "@/services/address-service";
 import { postOrder } from "@/services/order-service";
 import { CheckoutContainer } from "@/components/Checkout/CheckoutContainer";
-
-const TOAST_MESSAGES = {
-    noAddress: {
-        severity: "warn" as const,
-        summary: "Endereço Necessário",
-        detail: "Por favor, adicione um endereço de entrega.",
-        life: 3000,
-    },
-    noPayment: {
-        severity: "warn" as const,
-        summary: "Método de Pagamento",
-        detail: "Por favor, selecione um método de pagamento.",
-        life: 3000,
-    },
-    orderSuccess: {
-        severity: "success" as const,
-        summary: "Compra Finalizada",
-        detail: "Seu pedido foi realizado com sucesso!",
-        life: 4000,
-    },
-    addressDeleted: {
-        severity: "info" as const,
-        summary: "Endereço Removido",
-        detail: "O endereço foi removido com sucesso.",
-        life: 3000,
-    },
-    addressSaved: {
-        severity: "success" as const,
-        summary: "Endereço Salvo",
-        detail: "Endereço salvo com sucesso!",
-        life: 3000,
-    },
-} as const;
+import { useCart } from "@/context/hooks/use-cart";
+import { useToast } from "@/context/hooks/use-toast";
 
 const CheckoutPage: React.FC = () => {
-    const { cartItems, cartMetrics, freight } = use(CartContext);
+    const { cartItems, freight } = useCart();
 
     const [payments, setPayments] = useState<IPayment[]>([]);
     const [paymentMethod, setPaymentMethod] = useState<null>(null);
@@ -69,7 +36,7 @@ const CheckoutPage: React.FC = () => {
     const [savingAddress, setSavingAddress] = useState(false);
 
     const navigate = useNavigate();
-    const toast = useRef<Toast>(null);
+    const { showToast } = useToast();
 
     useEffect(() => {
         if (!cartItems || cartItems.length === 0) {
@@ -101,11 +68,13 @@ const CheckoutPage: React.FC = () => {
 
         fetchPayments();
         fetchAddress();
-    }, [cartItems, navigate]);
-
-    const showToast = useCallback((type: keyof typeof TOAST_MESSAGES) => {
-        toast.current?.show(TOAST_MESSAGES[type]);
-    }, []);
+    }, [
+        cartItems,
+        navigate,
+        selectedAddress,
+        setShowAddressDialog,
+        setAddresses,
+    ]);
 
     const handlePlaceOrder = async () => {
         try {
@@ -113,7 +82,7 @@ const CheckoutPage: React.FC = () => {
                 cartItems,
                 selectedAddress,
                 paymentMethod,
-                freight
+                freight?.id || null
             );
 
             if (response?.status != 201) {
@@ -126,12 +95,12 @@ const CheckoutPage: React.FC = () => {
                 paymentMethod,
             });
 
-            toast.current?.show({
-                severity: "success",
-                summary: "Pedido Realizado com sucesso!!",
-                detail: "Você será redirecionado para a página de pedidos ...",
-                life: 3000,
-            });
+            showToast(
+                "success",
+                "Pedido Realizado com sucesso!!",
+                "Você será redirecionado para a página de pedidos ...",
+                3000
+            );
 
             setTimeout(() => {
                 navigate("/pedidos");
@@ -147,11 +116,27 @@ const CheckoutPage: React.FC = () => {
 
     const handleFinalize = () => {
         if (!selectedAddress) {
-            showToast("noAddress");
+            showToast(
+                "warn",
+                "Endereço Necessário",
+                "Por favor, adicione um endereço de entrega."
+            );
             return;
         }
         if (!paymentMethod) {
-            showToast("noPayment");
+            showToast(
+                "warn",
+                "Método de Pagamento Necessário",
+                "Por favor, selecione um método de pagamento."
+            );
+            return;
+        }
+        if (!freight) {
+            showToast(
+                "warn",
+                "Frete Necessário",
+                "Por favor, selecione um frete."
+            );
             return;
         }
 
@@ -166,12 +151,11 @@ const CheckoutPage: React.FC = () => {
             !newAddress.state ||
             !newAddress.cep
         ) {
-            toast.current?.show({
-                severity: "warn",
-                summary: "Campos Obrigatórios",
-                detail: "Preencha todos os campos obrigatórios.",
-                life: 3000,
-            });
+            showToast(
+                "warn",
+                "Campos Obrigatórios",
+                "Preencha todos os campos obrigatórios."
+            );
             return;
         }
 
@@ -191,16 +175,20 @@ const CheckoutPage: React.FC = () => {
                     state: "",
                     cep: "",
                 });
-                showToast("addressSaved");
+                showToast(
+                    "success",
+                    "Endereço Adicionado",
+                    "Endereço adicionado com sucesso!"
+                );
             }
         } catch (error) {
             console.error("Erro ao adicionar endereço:", error);
-            toast.current?.show({
-                severity: "error",
-                summary: "Erro",
-                detail: "Erro ao adicionar o endereço. Tente novamente.",
-                life: 3000,
-            });
+            showToast(
+                "error",
+                "Erro",
+                "Erro ao adicionar o endereço. Tente novamente.",
+                3000
+            );
         } finally {
             setSavingAddress(false);
         }
@@ -221,11 +209,8 @@ const CheckoutPage: React.FC = () => {
 
     return (
         <div className="checkout-page">
-            <Toast ref={toast} />
-
             <CheckoutContainer
                 cartItems={cartItems}
-                cartMetrics={cartMetrics}
                 handleAddAddress={handleAddAddress}
                 handleAddressDialogHide={handleAddressDialogHide}
                 handleFinalize={handleFinalize}
