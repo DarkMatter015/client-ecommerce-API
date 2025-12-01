@@ -18,6 +18,8 @@ const mapApiToOrder = (order: ApIOrderRequest): IOrderResponse => {
     payment: order.payment,
     address: order.address,
     orderItems: order.orderItems,
+    shipment: order.shipment,
+    status: order.status,
   };
 };
 
@@ -52,7 +54,8 @@ export const getOrderById = async (
 export const postOrder = async (
   cartItems: IItem[] | undefined,
   selectedAddress: IAddress | null,
-  paymentMethod: IPayment | null
+  paymentMethod: IPayment | null,
+  shipmentId: number | null
 ) => {
   try {
     const response = await api.post("/orders", {
@@ -62,6 +65,7 @@ export const postOrder = async (
       })),
       address: selectedAddress,
       paymentId: paymentMethod?.id,
+      shipmentId: shipmentId,
     });
     return response;
   } catch (err) {

@@ -1,0 +1,41 @@
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--gap-lg);
+}
+
+.hero-content {
+  max-width: 700px;
+}
+
+.hero-title {
+  margin: 0 0 var(--gap-md) 0;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.hero-line {
+  display: block;
+  font-size: calc(var(--title-size) - 0.4rem);
+}
+
+.hero-accent {
+  display: block;
+  font-size: calc(var(--title-size) - 0.1rem);
+  color: var(--primary);
+  margin-top: 0.25rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-md);
+}
+
+.hero-visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+}

@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
 
 /* VARIAVEIS */
 :root {
-    --primary-color: #D91E2E;
+    --primary-color: #d91e2e;
     --primary-color-darker: #79131c;
     --primary-color-darker-hover: #550d13;
 
@@ -12,9 +12,9 @@
     --box-shadow: rgb(0, 0, 0, 0.1);
 
     --background-color: #fffbe2;
-    --gray-bg: #EEEEEE;
+    --gray-bg: #eeeeee;
     --gray-bg-hover: #c4c4c4;
-    --gray-secondary-bg: #F1F3F6;
+    --gray-secondary-bg: #f1f3f6;
 
     --green: #008000;
     --green-hover: #006100;
@@ -22,15 +22,13 @@
     --black: #000000;
 }
 
-
 /* ESTILIZACAO GLOBAL */
-
 body {
     background-color: var(--background-color);
     overflow-x: hidden;
     margin: 0;
     padding: 0;
-    font-family: 'Sora', sans-serif;
+    font-family: "Sora", sans-serif;
 }
 
 .home-main {
@@ -39,88 +37,40 @@ body {
     display: block;
 }
 
-
-
-/* BOTOES */
-/* BOTÃO VERMELHO PADRÃO */
-.btn-default {
-    text-decoration: none;
-    border: none;
-    background-color: var(--primary-color-darker);
-    color: #F7F5F2;
-    border-radius: 12px;
-    padding: 8px 14px;
-    font-weight: 500;
-    box-shadow: 0px 0px 10px 2px rgb(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+.rating {
+  color: #fbbf24;
 }
 
-.btn-default:hover {
-    background-color: var(--primary-color-darker-hover);
-    box-shadow: 0px 0px 10px 4px rgb(0, 0, 0, 0.1);
-}
-
-/* BOTÃO OUTLINE */
-.btn-outline {
-    text-decoration: none;
-    border: 1px solid var(--black);
-    background-color: var(--white);
-    color: var(--text-color);
-    border-radius: 12px;
-    padding: 8px 14px;
-    font-weight: 500;
-    box-shadow: 0px 0px 10px 2px rgb(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.btn-outline:hover {
-    color: var(--white);
-    background-color: var(--primary-color-darker-hover);
-    box-shadow: 0px 0px 10px 4px rgb(0, 0, 0, 0.1);
-}
-
-/* BOTÃO CINZA */
-.btn-gray{
-  text-decoration: none;
-  border-radius: 0.4em;
-  border: none;
-  padding: 0.4rem;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
-
-.btn-gray {
-    background: var(--gray-bg);
-    color: var(--text-color);
-}
-
-.btn-gray:hover {
-  background: var(--gray-bg-hover);
-  opacity: 0.9;
-}
-
-
-/* SOCIAL MEDIA BUTTONS */
-.social-media-buttons {
+.container-input {
+    margin-top: 1rem;
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
 }
 
-.social-media-buttons a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 40px;
-    background-color: #fff;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    color: #1d1d1dad !important;
-    box-shadow: 0px 0px 12px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-.social-media-buttons a:hover {
-    box-shadow: 0px 0px 10px 8px rgba(0, 0, 0, 0.1);
+/* Animação de spin para ícones */
+.pi-spin,
+.pi.pi-spin,
+i.pi-spin {
+    animation: spin 1s linear infinite !important;
+    display: inline-block !important;
+}
+
+/* Spinner específico */
+.pi-spinner {
+    animation: spin 1s linear infinite !important;
+}
+
+.pi.pi-spin.pi-spinner {
+    animation: spin 1s linear infinite !important;
 }

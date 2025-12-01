@@ -1,5 +1,5 @@
 import type { IOrderResponse } from "@/commons/types/types";
-import { OrdersList } from "@/components/OrdersList";
+import { OrdersList } from "@/components/Order/OrdersList";
 import { getAllOrdersPageable } from "@/services/order-service";
 import type React from "react";
 import { useEffect, useState } from "react";

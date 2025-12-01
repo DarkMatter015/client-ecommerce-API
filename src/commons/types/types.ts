@@ -16,6 +16,7 @@ export interface IPage<T> {
 export interface IUserRegister {
   email: string;
   displayName: string;
+  cpf: string;
   password: string;
   confirmPassword: string;
 }
@@ -59,7 +60,7 @@ export interface IPayment {
 }
 
 export interface IAddress {
-  id: number;
+  id?: number;
   street?: string;
   number?: number | undefined;
   complement?: string;
@@ -75,6 +76,7 @@ export interface IProduct {
   description: string;
   price: number;
   urlImage: string;
+  quantityAvailableInStock: number;
   category: ICategory;
 }
 
@@ -90,10 +92,43 @@ export interface IOrderRequest {
   paymentId: number;
   address: IAddress;
   orderItems: IItem[];
+  shipment: IFreightResponse;
 }
 export interface IOrderResponse {
   id: number;
   payment: IPayment;
   address: IAddress;
   orderItems: IItem[];
+  shipment: IFreightResponse;
+  status: string;
+}
+
+
+export interface IFreightRequest {
+  to: {
+    postal_code: string;
+  };
+  products: {
+    id?: number;
+    width?: number;
+    height?: number;
+    length?: number;
+    insurance_value?: number;
+    quantity?: number;
+  }[];
+}
+
+export interface IFreightResponse {
+    id: number;
+    name: string;
+    picture: string;
+    price: number;
+    currency: string;
+    delivery_time: number;
+    discount: number;
+    company: {
+        id: number;
+        name: string;
+        picture: string
+    };
 }

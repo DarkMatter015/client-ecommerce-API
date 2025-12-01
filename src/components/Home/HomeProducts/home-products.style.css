@@ -1,0 +1,23 @@
+.section-inner {
+  padding: 0 1rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--gap-lg);
+}
+
+.data-view-products .p-dataview-content {
+  background-color: transparent;
+}
+
+.category-dropdown-container {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1rem;
+}
+
+.paginator-container {
+  margin-top: 1rem;
+}
