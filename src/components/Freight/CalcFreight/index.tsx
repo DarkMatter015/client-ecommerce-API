@@ -1,6 +1,6 @@
 import type React from "react";
 
-import "./CalcFreight.style.css";
+import "./calcFreight.style.css";
 import type { IItem } from "@/commons/types/types";
 import { FreightList } from "../FreightList";
 import { useFreight } from "@/hooks/useFreight";

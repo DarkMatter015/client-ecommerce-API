@@ -14,7 +14,7 @@ export const CheckoutPaymentMethod: React.FC<{
             <select 
             className="payment-select" 
             value={paymentMethod?.id}
-            onChange={(e) => setPaymentMethod(payments?.find(method => method.id == e.target.value))}
+            onChange={(e) => setPaymentMethod(payments?.find(method => String(method.id) === e.target.value))}
             aria-label="Selecione o método de pagamento"
             >
             <option value="" disabled >Selecione o método</option>
